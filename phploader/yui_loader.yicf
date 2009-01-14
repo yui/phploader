@@ -1,0 +1,55 @@
+#!/usr/bin/env python
+import os
+
+def main():
+
+    name   = ''
+    ver    = ''
+    config = 'config.php'
+    
+    if 'PHP' in os.environ:
+        ver = os.environ['PHP']
+
+    if ver=='php4':
+        name     = 'yui_loader_php4'
+        requires = 'yapache_libphp 4.3.0 5.9999.9999'
+        # config   = 'config.php4'
+    else:
+        name     = 'yui_loader'
+        requires = 'yphp'
+        # config   = 'config.php5'
+
+    print """
+
+VERSION      = `grep '^Version' ./README.yui_loader | head -1 | awk '{print $2;}'`
+
+PRODUCT_NAME = %s
+CUSTODIAN    = yui-team@yahoo-inc.com http://twiki.corp.yahoo.com/view/Devel/YuiLoader
+
+SHORT_DESC = `head -1 README.yui_loader` 
+LONG_DESC  = `cat README.yui_loader`
+
+PACKAGE_OS_SPECIFIC = no
+
+YINST started-by yapache
+
+YINST requires pkg %s
+
+YINST requires pkg yui_module_info 2.0.0 2.9999.9999
+
+OWNER = root
+GROUP = wheel
+PERM  = 0444
+
+f 0444 - - share/pear/Yahoo/YUI/loader.php loader.php
+f 0444 - - share/pear/Yahoo/YUI/test/test-loader.php test/test-loader.php
+f 0444 - - share/pear/Yahoo/YUI/test/loader-inc.php test/loader-inc.php
+
+f - - - conf/yapache/include/yui_loader.conf yui_loader.conf
+
+YINST post-install echo $YINST_INSTALLER successfully installed yui_loader
+
+""" %(name, requires)
+
+if __name__ == '__main__':
+    main()

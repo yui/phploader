@@ -1,0 +1,24 @@
+
+These instructions are only needed if your machine does not have yinst (e.g., Macs)
+
+----------------------------------------------------------
+New install
+----------------------------------------------------------
+
+1) If not already created, create the /home/y directory structure:
+
+    sudo mkdir -p /home/y/share/pear/Yahoo/YUI
+
+2) Copy/link loader.php, config.php, to that directory
+
+    sudo cp ~/dev/yahoo/presentation/tools/yui_loader/*.php /home/y/share/pear/Yahoo/YUI
+
+3) Restart Apache
+
+----------------------------------------------------------
+Updating
+----------------------------------------------------------
+
+Update cvs and repeat steps 2 and 3.  If you link to the cvsroot files rather than copy them,
+this becomes unnecessary.
+

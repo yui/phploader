@@ -1,0 +1,62 @@
+Yahoo UI Library Loader
+
+Provides a PHP include file that will allow you to specify package
+javascript and css module requirements.  It maintains a dependency
+tree for these modules so when a module is requested, all of the
+other modules it depends on are included as well.  By default, the
+YUI Library is configured, and other modules and their dependencies 
+can be added via PHP.
+
+ChangeLog
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Version 2.0.4 (08/06/08, adamoore)
+ - Fixed incorrect canEmbed() function referece that prevented raw output.
+
+Version 2.0.3 (05/06/08, adamoore)
+ - APC ttl is now off by default
+
+Version 2.0.2 (02/26/08, adamoore)
+ - CSS files that depend on skinnable components will load after the corresponding skin.
+
+Version 2.0.1 (12/04/07, adamoore)
+ - YUI 2.4.0 release
+ - Config has moved into yui_module_info
+
+Version 2.0.0 (11/30/07, adamoore)
+
+ - The 2.0 release of loader offers improved performance, and it is a
+   recommended upgrade for all current users.  There will be one more
+   release of the 1.x version of loader, which will be released when
+   YUI 2.4.0 is released.  Future YUI releases will require an upgrade
+   to the 2.x version of the loader.
+
+   Migrating from 1.x:
+
+   Most common usages of the utility will work with no change.  Your
+   implementation will need to change if:
+
+     - You pass in a list of required modules to the constructor:
+
+       $loader = new YAHOO_util_Loader("dragdrop", "tabview");
+
+       This is no longer supported.  You must use the load method:
+        
+       $loader = new YAHOO_util_Loader();
+       $loader->("dragdrop", "tabview");
+
+     - You use the target property to switch between debug/raw/production
+       sources:
+
+       $loader->target = $yui_load_manager->DEBUG;
+
+       This is configured in a different manner now:
+
+       $loader->base = "/yui/" // Use this base path instead of http://yui.yahooapis.com/2.4.0/build/
+       $loader->filter = YUI_DEBUG; // use -debug files instead of -min.  YUI_RAW is a valid option too.
+
+     - If you add your own dependencies, or do anything that used or modified 
+       $yui_config:
+
+       The configuration mechanism has completely changed.  See the documentation
+       for information about custom configurations.
+

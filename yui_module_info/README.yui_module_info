@@ -1,0 +1,32 @@
+Yahoo UI Library Module Info
+
+Provides Apache environment variables for the paths to all of the current
+JavaScript and CSS files that are part of the Yahoo UI Library.
+
+ChangeLog
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Version 2.0.4 (06/11/08, adamoore)
+-------------
+ - Updated paths for release 2.5.2.
+
+Version 2.0.3 (03/21/08, adamoore)
+-------------
+ - Updated paths for release 2.5.1.
+ - Supports 'after' property for specifying a set of components that
+   are not dependencies, but must be sorted above the module if
+   present.
+
+Version 2.0.2 (02/22/08, adamoore)
+-------------
+ - Updated paths for release 2.5.0.
+
+Version 2.0.1 (12/21/07, adamoore)
+-------------
+ - Updated paths for release 2.4.1.
+ - $yui_config is a global.
+
+Version 2.0.0 (12/04/07, adamoore)
+-------------
+ - Updated paths for release 2.4.0
+ - Now includes config.php for yui_loader so that the library version is
+   completely separate from the yui_loader utility.

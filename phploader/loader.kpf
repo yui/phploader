@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project kpf_version="3" id="5b0d472e-a4dc-11db-86e4-00112435e77a" name="loader.kpf">
+<preference-set idref="5b0d472e-a4dc-11db-86e4-00112435e77a">
+  <boolean id="import_live">1</boolean>
+</preference-set>
+<preference-set idref="5b0d472e-a4dc-11db-86e4-00112435e77a/test/UITest.php">
+  <string id="lastInvocation">default</string>
+<preference-set id="Invocations">
+<preference-set id="default">
+  <string id="cwd"></string>
+  <string id="postparams"></string>
+  <string id="language">PHP</string>
+  <string id="getparams"></string>
+  <string id="phpInterpreterType">php-cgi</string>
+  <boolean id="use-console">0</boolean>
+  <string relative="path" id="filename">test/UITest.php</string>
+  <string id="mpostparams"></string>
+  <boolean id="show-dialog">1</boolean>
+  <string id="request-method">GET</string>
+  <string id="params"></string>
+  <string id="executable-params"></string>
+  <string id="posttype">application/x-www-form-urlencoded</string>
+  <string id="documentRoot"></string>
+  <string id="cookieparams"></string>
+  <boolean id="enableImplicitFlush">1</boolean>
+  <string id="userEnvironment"></string>
+  <boolean id="sim-cgi">0</boolean>
+  <boolean id="disableOutputBuffering">1</boolean>
+  <string id="userCGIEnvironment"></string>
+</preference-set>
+</preference-set>
+</preference-set>
+</project>
