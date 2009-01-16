@@ -71,7 +71,7 @@
       array (
         0 => 'animation',
       ),
-      'path' => 'carousel/carousel-beta-min.js',
+      'path' => 'carousel/carousel-min.js',
       'requires' => 
       array (
         0 => 'element',
@@ -81,7 +81,7 @@
     ),
     'charts' => 
     array (
-      'path' => 'charts/charts-experimental-min.js',
+      'path' => 'charts/charts-min.js',
       'requires' => 
       array (
         0 => 'element',
@@ -282,7 +282,7 @@
     ),
     'imagecropper' => 
     array (
-      'path' => 'imagecropper/imagecropper-beta-min.js',
+      'path' => 'imagecropper/imagecropper-min.js',
       'requires' => 
       array (
         0 => 'dom',
@@ -504,7 +504,7 @@
     ),
     'uploader' => 
     array (
-      'path' => 'uploader/uploader-experimental.js',
+      'path' => 'uploader/uploader.js',
       'requires' => 
       array (
         0 => 'element',
