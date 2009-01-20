@@ -493,6 +493,10 @@
     ),
     'treeview' => 
     array (
+      'optional' => 
+      array (
+        0 => 'json',
+      ),
       'path' => 'treeview/treeview-min.js',
       'requires' => 
       array (
