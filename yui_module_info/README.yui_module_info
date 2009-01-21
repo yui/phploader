@@ -5,6 +5,11 @@ JavaScript and CSS files that are part of the Yahoo UI Library.
 
 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Version 2.1.0
+-------------
+ - Removed server variables required for the 1.x version of the loader,
+   which has been retired.  1.x metadata support ended at YUI 2.5.0.
+
 Version 2.0.4 (06/11/08, adamoore)
 -------------
  - Updated paths for release 2.5.2.

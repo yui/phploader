@@ -13,6 +13,5 @@ YINST started-by yapache
 OWNER=root
 GROUP=wheel
 
-f - - - conf/yapache/include/yui_module_info.conf yui_module_info.conf
 f 0444 - - share/pear/Yahoo/YUI/config.php config.php
 

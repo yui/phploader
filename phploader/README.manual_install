@@ -11,7 +11,8 @@ New install
 
 2) Copy/link loader.php, config.php, to that directory
 
-    sudo cp ~/dev/yahoo/presentation/tools/yui_loader/*.php /home/y/share/pear/Yahoo/YUI
+    sudo cp ~/src/phploader/phploader/*.php /home/y/share/pear/Yahoo/YUI
+    sudo cp ~/src/phploader/yui_module_info/*.php /home/y/share/pear/Yahoo/YUI
 
 3) Restart Apache
 
