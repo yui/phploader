@@ -477,6 +477,15 @@
       'skinnable' => true,
       'type' => 'js',
     ),
+    'stylesheet' => 
+    array (
+      'path' => 'stylesheet/stylesheet-min.js',
+      'requires' => 
+      array (
+        0 => 'yahoo',
+      ),
+      'type' => 'js',
+    ),
     'tabview' => 
     array (
       'optional' => 
