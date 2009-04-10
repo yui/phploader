@@ -1,259 +1,50 @@
 <?php $GLOBALS['yui_current'] = array (
   'base' => 'http://yui.yahooapis.com/3.0.0b1/build/',
+  'skin' => 
+  array (
+    'after' => 
+    array (
+      0 => 'reset',
+      1 => 'fonts',
+      2 => 'grids',
+      3 => 'base',
+    ),
+    'path' => 'skin.css',
+    'base' => 'assets/skins/',
+    'defaultSkin' => 'sam',
+  ),
   'moduleInfo' => 
   array (
-    'anim' => 
+    'cssfonts-context' => 
     array (
+      'path' => 'cssfonts/fonts-context-min.css',
+      'type' => 'css',
       'ext' => false,
-      'name' => 'anim',
-      'path' => 'anim/anim-min.js',
+      'name' => 'cssfonts-context',
       'requires' => 
       array (
-        0 => 'base',
-        1 => 'node',
       ),
-      'rollup' => 4,
-      'submodules' => 
-      array (
-        'anim-base' => 
-        array (
-          'ext' => false,
-          'name' => 'anim-base',
-          'path' => 'anim/anim-base-min.js',
-          'requires' => 
-          array (
-            0 => 'base',
-            1 => 'node-style',
-          ),
-          'type' => 'js',
-        ),
-        'anim-color' => 
-        array (
-          'ext' => false,
-          'name' => 'anim-color',
-          'path' => 'anim/anim-color-min.js',
-          'requires' => 
-          array (
-            0 => 'anim-base',
-          ),
-          'type' => 'js',
-        ),
-        'anim-curve' => 
-        array (
-          'ext' => false,
-          'name' => 'anim-curve',
-          'path' => 'anim/anim-curve-min.js',
-          'requires' => 
-          array (
-            0 => 'anim-xy',
-          ),
-          'type' => 'js',
-        ),
-        'anim-easing' => 
-        array (
-          'ext' => false,
-          'name' => 'anim-easing',
-          'path' => 'anim/anim-easing-min.js',
-          'requires' => 
-          array (
-          ),
-          'type' => 'js',
-        ),
-        'anim-node-plugin' => 
-        array (
-          'ext' => false,
-          'name' => 'anim-node-plugin',
-          'path' => 'anim/anim-node-plugin-min.js',
-          'requires' => 
-          array (
-            0 => 'node',
-            1 => 'anim-base',
-          ),
-          'type' => 'js',
-        ),
-        'anim-scroll' => 
-        array (
-          'ext' => false,
-          'name' => 'anim-scroll',
-          'path' => 'anim/anim-scroll-min.js',
-          'requires' => 
-          array (
-            0 => 'anim-base',
-          ),
-          'type' => 'js',
-        ),
-        'anim-xy' => 
-        array (
-          'ext' => false,
-          'name' => 'anim-xy',
-          'path' => 'anim/anim-xy-min.js',
-          'requires' => 
-          array (
-            0 => 'anim-base',
-            1 => 'node-screen',
-          ),
-          'type' => 'js',
-        ),
-      ),
-      'supersedes' => 
-      array (
-        0 => 'anim-color',
-        1 => 'anim-scroll',
-        2 => 'anim-node-plugin',
-        3 => 'anim-base',
-        4 => 'anim-curve',
-        5 => 'anim-easing',
-        6 => 'anim-xy',
-      ),
-      'type' => 'js',
     ),
-    'anim-base' => 
+    'dd-ddm' => 
     array (
-      'ext' => false,
-      'name' => 'anim-base',
-      'path' => 'anim/anim-base-min.js',
+      'path' => 'dd/dd-ddm-min.js',
       'requires' => 
       array (
-        0 => 'base',
-        1 => 'node-style',
+        0 => 'dd-ddm-base',
       ),
       'type' => 'js',
+      'name' => 'dd-ddm',
+      'ext' => false,
     ),
-    'anim-color' => 
+    'stylesheet' => 
     array (
-      'ext' => false,
-      'name' => 'anim-color',
-      'path' => 'anim/anim-color-min.js',
-      'requires' => 
-      array (
-        0 => 'anim-base',
-      ),
+      'path' => 'stylesheet/stylesheet-min.js',
       'type' => 'js',
-    ),
-    'anim-curve' => 
-    array (
       'ext' => false,
-      'name' => 'anim-curve',
-      'path' => 'anim/anim-curve-min.js',
-      'requires' => 
-      array (
-        0 => 'anim-xy',
-      ),
-      'type' => 'js',
-    ),
-    'anim-easing' => 
-    array (
-      'ext' => false,
-      'name' => 'anim-easing',
-      'path' => 'anim/anim-easing-min.js',
+      'name' => 'stylesheet',
       'requires' => 
       array (
       ),
-      'type' => 'js',
-    ),
-    'anim-node-plugin' => 
-    array (
-      'ext' => false,
-      'name' => 'anim-node-plugin',
-      'path' => 'anim/anim-node-plugin-min.js',
-      'requires' => 
-      array (
-        0 => 'node',
-        1 => 'anim-base',
-      ),
-      'type' => 'js',
-    ),
-    'anim-scroll' => 
-    array (
-      'ext' => false,
-      'name' => 'anim-scroll',
-      'path' => 'anim/anim-scroll-min.js',
-      'requires' => 
-      array (
-        0 => 'anim-base',
-      ),
-      'type' => 'js',
-    ),
-    'anim-xy' => 
-    array (
-      'ext' => false,
-      'name' => 'anim-xy',
-      'path' => 'anim/anim-xy-min.js',
-      'requires' => 
-      array (
-        0 => 'anim-base',
-        1 => 'node-screen',
-      ),
-      'type' => 'js',
-    ),
-    'attribute' => 
-    array (
-      'ext' => false,
-      'name' => 'attribute',
-      'path' => 'attribute/attribute-min.js',
-      'requires' => 
-      array (
-        0 => 'event',
-      ),
-      'type' => 'js',
-    ),
-    'base' => 
-    array (
-      'ext' => false,
-      'name' => 'base',
-      'path' => 'base/base-min.js',
-      'requires' => 
-      array (
-        0 => 'attribute',
-      ),
-      'type' => 'js',
-    ),
-    'classnamemanager' => 
-    array (
-      'ext' => false,
-      'name' => 'classnamemanager',
-      'path' => 'classnamemanager/classnamemanager-min.js',
-      'requires' => 
-      array (
-      ),
-      'type' => 'js',
-    ),
-    'compat' => 
-    array (
-      'ext' => false,
-      'name' => 'compat',
-      'path' => 'compat/compat-min.js',
-      'requires' => 
-      array (
-        0 => 'node',
-        1 => 'dump',
-        2 => 'substitute',
-      ),
-      'type' => 'js',
-    ),
-    'console' => 
-    array (
-      'ext' => false,
-      'name' => 'console',
-      'path' => 'console/console-min.js',
-      'requires' => 
-      array (
-        0 => 'widget',
-        1 => 'substitute',
-        2 => 'skin-sam-console',
-      ),
-      'skinnable' => true,
-      'type' => 'js',
-    ),
-    'cookie' => 
-    array (
-      'ext' => false,
-      'name' => 'cookie',
-      'path' => 'cookie/cookie-min.js',
-      'requires' => 
-      array (
-      ),
-      'type' => 'js',
     ),
     'cssbase' => 
     array (
@@ -266,13 +57,698 @@
         4 => 'cssfonts-context',
         5 => 'cssgrids-context',
       ),
+      'path' => 'cssbase/base-min.css',
+      'type' => 'css',
       'ext' => false,
       'name' => 'cssbase',
-      'path' => 'cssbase/base-min.css',
       'requires' => 
       array (
       ),
+    ),
+    'anim-base' => 
+    array (
+      'path' => 'anim/anim-base-min.js',
+      'requires' => 
+      array (
+        0 => 'base',
+        1 => 'node-style',
+      ),
+      'type' => 'js',
+      'name' => 'anim-base',
+      'ext' => false,
+    ),
+    'oop' => 
+    array (
+      'path' => 'oop/oop-min.js',
+      'requires' => 
+      array (
+        0 => 'yui-base',
+      ),
+      'type' => 'js',
+      'name' => 'oop',
+      'ext' => false,
+    ),
+    'selector-css3' => 
+    array (
+      'path' => 'dom/selector-css3-min.js',
+      'requires' => 
+      array (
+        0 => 'selector',
+        1 => 'dom',
+        2 => 'dom',
+      ),
+      'type' => 'js',
+      'name' => 'selector-css3',
+      'ext' => false,
+    ),
+    'yui-base' => 
+    array (
+      'path' => 'yui-base/yui-base-min.js',
+      'type' => 'js',
+      'ext' => false,
+      'name' => 'yui-base',
+      'requires' => 
+      array (
+      ),
+    ),
+    'json-parse' => 
+    array (
+      'path' => 'json/json-parse-min.js',
+      'type' => 'js',
+      'ext' => false,
+      'name' => 'json-parse',
+      'requires' => 
+      array (
+      ),
+      'expanded' => 
+      array (
+      ),
+    ),
+    'skin-sam-widget-stack' => 
+    array (
+      'after' => 
+      array (
+        0 => 'reset',
+        1 => 'fonts',
+        2 => 'grids',
+        3 => 'base',
+      ),
+      'path' => 'widget/assets/skins/sam/widget-stack.css',
       'type' => 'css',
+      'ext' => false,
+      'name' => 'skin-sam-widget-stack',
+      'requires' => 
+      array (
+      ),
+    ),
+    'dom-screen' => 
+    array (
+      'path' => 'dom/dom-screen-min.js',
+      'requires' => 
+      array (
+        0 => 'dom-base',
+        1 => 'dom-style',
+      ),
+      'type' => 'js',
+      'name' => 'dom-screen',
+      'ext' => false,
+    ),
+    'selector' => 
+    array (
+      'path' => 'dom/selector-min.js',
+      'requires' => 
+      array (
+        0 => 'dom-base',
+      ),
+      'type' => 'js',
+      'name' => 'selector',
+      'ext' => false,
+    ),
+    'anim-node-plugin' => 
+    array (
+      'path' => 'anim/anim-node-plugin-min.js',
+      'requires' => 
+      array (
+        0 => 'node',
+        1 => 'anim-base',
+      ),
+      'type' => 'js',
+      'name' => 'anim-node-plugin',
+      'ext' => false,
+    ),
+    'dd-plugin' => 
+    array (
+      'path' => 'dd/dd-plugin-min.js',
+      'requires' => 
+      array (
+        0 => 'dd-drag',
+      ),
+      'type' => 'js',
+      'optional' => 
+      array (
+        0 => 'dd-constrain',
+        1 => 'dd-proxy',
+      ),
+      'name' => 'dd-plugin',
+      'ext' => false,
+    ),
+    'skin-sam-widget-position-ext' => 
+    array (
+      'after' => 
+      array (
+        0 => 'reset',
+        1 => 'fonts',
+        2 => 'grids',
+        3 => 'base',
+      ),
+      'path' => 'widget/assets/skins/sam/widget-position-ext.css',
+      'type' => 'css',
+      'ext' => false,
+      'name' => 'skin-sam-widget-position-ext',
+      'requires' => 
+      array (
+      ),
+    ),
+    'classnamemanager' => 
+    array (
+      'path' => 'classnamemanager/classnamemanager-min.js',
+      'type' => 'js',
+      'ext' => false,
+      'name' => 'classnamemanager',
+      'requires' => 
+      array (
+      ),
+    ),
+    'skin-sam-widget-stdmod' => 
+    array (
+      'after' => 
+      array (
+        0 => 'reset',
+        1 => 'fonts',
+        2 => 'grids',
+        3 => 'base',
+      ),
+      'path' => 'widget/assets/skins/sam/widget-stdmod.css',
+      'type' => 'css',
+      'ext' => false,
+      'name' => 'skin-sam-widget-stdmod',
+      'requires' => 
+      array (
+      ),
+    ),
+    'overlay' => 
+    array (
+      'path' => 'overlay/overlay-min.js',
+      'skinnable' => true,
+      'requires' => 
+      array (
+        0 => 'widget',
+        1 => 'widget-position',
+        2 => 'widget-position-ext',
+        3 => 'widget-stack',
+        4 => 'widget-stdmod',
+        5 => 'skin-sam-overlay',
+      ),
+      'type' => 'js',
+      'name' => 'overlay',
+      'ext' => false,
+    ),
+    'get' => 
+    array (
+      'path' => 'get/get-min.js',
+      'requires' => 
+      array (
+        0 => 'yui-base',
+      ),
+      'type' => 'js',
+      'name' => 'get',
+      'ext' => false,
+    ),
+    'dom-style' => 
+    array (
+      'path' => 'dom/dom-style-min.js',
+      'requires' => 
+      array (
+        0 => 'dom-base',
+      ),
+      'type' => 'js',
+      'name' => 'dom-style',
+      'ext' => false,
+    ),
+    'widget-position-ext' => 
+    array (
+      'path' => 'widget/widget-position-ext-min.js',
+      'requires' => 
+      array (
+        0 => 'widget-position',
+        1 => 'widget',
+        2 => 'widget',
+      ),
+      'type' => 'js',
+      'name' => 'widget-position-ext',
+      'ext' => false,
+    ),
+    'dd-drop' => 
+    array (
+      'path' => 'dd/dd-drop-min.js',
+      'requires' => 
+      array (
+        0 => 'dd-ddm-drop',
+      ),
+      'type' => 'js',
+      'name' => 'dd-drop',
+      'ext' => false,
+    ),
+    'io-upload-iframe' => 
+    array (
+      'path' => 'io/io-upload-iframe-min.js',
+      'requires' => 
+      array (
+        0 => 'io-base',
+      ),
+      'type' => 'js',
+      'name' => 'io-upload-iframe',
+      'ext' => false,
+    ),
+    'collection' => 
+    array (
+      'path' => 'collection/collection-min.js',
+      'type' => 'js',
+      'ext' => false,
+      'name' => 'collection',
+      'requires' => 
+      array (
+      ),
+    ),
+    'dd-drop-plugin' => 
+    array (
+      'path' => 'dd/dd-drop-plugin-min.js',
+      'requires' => 
+      array (
+        0 => 'dd-drop',
+      ),
+      'type' => 'js',
+      'name' => 'dd-drop-plugin',
+      'ext' => false,
+    ),
+    'dom-base' => 
+    array (
+      'path' => 'dom/dom-base-min.js',
+      'requires' => 
+      array (
+        0 => 'event',
+      ),
+      'type' => 'js',
+      'name' => 'dom-base',
+      'ext' => false,
+    ),
+    'anim-color' => 
+    array (
+      'path' => 'anim/anim-color-min.js',
+      'requires' => 
+      array (
+        0 => 'anim-base',
+      ),
+      'type' => 'js',
+      'name' => 'anim-color',
+      'ext' => false,
+    ),
+    'dump' => 
+    array (
+      'path' => 'dump/dump-min.js',
+      'type' => 'js',
+      'ext' => false,
+      'name' => 'dump',
+      'requires' => 
+      array (
+      ),
+    ),
+    'yui' => 
+    array (
+      'supersedes' => 
+      array (
+        0 => 'yui-base',
+        1 => 'get',
+        2 => 'loader',
+      ),
+      'path' => 'yui/yui-min.js',
+      'type' => 'js',
+      'ext' => false,
+      'name' => 'yui',
+      'requires' => 
+      array (
+      ),
+    ),
+    'cssgrids-context' => 
+    array (
+      'path' => 'cssgrids/grids-context-min.css',
+      'requires' => 
+      array (
+        0 => 'cssfonts-context',
+      ),
+      'type' => 'css',
+      'optional' => 
+      array (
+        0 => 'cssreset-context',
+      ),
+      'name' => 'cssgrids-context',
+      'ext' => false,
+    ),
+    'node' => 
+    array (
+      'requires' => 
+      array (
+        0 => 'dom',
+        1 => 'base',
+      ),
+      'path' => 'node/node-min.js',
+      'supersedes' => 
+      array (
+        0 => 'node-screen',
+        1 => 'node-base',
+        2 => 'node-style',
+      ),
+      'submodules' => 
+      array (
+        'node-screen' => 
+        array (
+          'path' => 'node/node-screen-min.js',
+          'requires' => 
+          array (
+            0 => 'dom-screen',
+            1 => 'node-base',
+          ),
+          'type' => 'js',
+          'name' => 'node-screen',
+          'ext' => false,
+        ),
+        'node-base' => 
+        array (
+          'path' => 'node/node-base-min.js',
+          'requires' => 
+          array (
+            0 => 'dom-base',
+            1 => 'base',
+            2 => 'selector',
+          ),
+          'type' => 'js',
+          'name' => 'node-base',
+          'ext' => false,
+        ),
+        'node-style' => 
+        array (
+          'path' => 'node/node-style-min.js',
+          'requires' => 
+          array (
+            0 => 'dom-style',
+            1 => 'node-base',
+          ),
+          'type' => 'js',
+          'name' => 'node-style',
+          'ext' => false,
+        ),
+      ),
+      'type' => 'js',
+      'plugins' => 
+      array (
+        'node-event-simulate' => 
+        array (
+          'path' => 'node/node-event-simulate-min.js',
+          'requires' => 
+          array (
+            0 => 'node-base',
+            1 => 'event-simulate',
+            2 => 'node',
+            3 => 'node',
+          ),
+          'type' => 'js',
+          'name' => 'node-event-simulate',
+          'ext' => false,
+        ),
+      ),
+      'ext' => false,
+      'name' => 'node',
+      'rollup' => 2,
+    ),
+    'test' => 
+    array (
+      'path' => 'test/test-min.js',
+      'requires' => 
+      array (
+        0 => 'collection',
+        1 => 'substitute',
+        2 => 'node',
+        3 => 'json',
+      ),
+      'type' => 'js',
+      'name' => 'test',
+      'ext' => false,
+    ),
+    'anim-curve' => 
+    array (
+      'path' => 'anim/anim-curve-min.js',
+      'requires' => 
+      array (
+        0 => 'anim-xy',
+      ),
+      'type' => 'js',
+      'name' => 'anim-curve',
+      'ext' => false,
+    ),
+    'json' => 
+    array (
+      'requires' => 
+      array (
+      ),
+      'path' => 'json/json-min.js',
+      'supersedes' => 
+      array (
+        0 => 'json-parse',
+        1 => 'json-stringify',
+      ),
+      'submodules' => 
+      array (
+        'json-parse' => 
+        array (
+          'path' => 'json/json-parse-min.js',
+          'type' => 'js',
+          'ext' => false,
+          'name' => 'json-parse',
+          'requires' => 
+          array (
+          ),
+          'expanded' => 
+          array (
+          ),
+        ),
+        'json-stringify' => 
+        array (
+          'path' => 'json/json-stringify-min.js',
+          'type' => 'js',
+          'ext' => false,
+          'name' => 'json-stringify',
+          'requires' => 
+          array (
+          ),
+          'expanded' => 
+          array (
+          ),
+        ),
+      ),
+      'type' => 'js',
+      'expanded' => 
+      array (
+        0 => 'json-parse',
+        1 => 'json-stringify',
+      ),
+      'ext' => false,
+      'name' => 'json',
+      'rollup' => 1,
+    ),
+    'history' => 
+    array (
+      'path' => 'history/history-min.js',
+      'requires' => 
+      array (
+        0 => 'node',
+      ),
+      'type' => 'js',
+      'name' => 'history',
+      'ext' => false,
+    ),
+    'queue-base' => 
+    array (
+      'path' => 'queue/queue-base-min.js',
+      'type' => 'js',
+      'ext' => false,
+      'name' => 'queue-base',
+      'requires' => 
+      array (
+      ),
+    ),
+    'compat' => 
+    array (
+      'path' => 'compat/compat-min.js',
+      'requires' => 
+      array (
+        0 => 'node',
+        1 => 'dump',
+        2 => 'substitute',
+      ),
+      'type' => 'js',
+      'name' => 'compat',
+      'ext' => false,
+    ),
+    'cookie' => 
+    array (
+      'path' => 'cookie/cookie-min.js',
+      'type' => 'js',
+      'ext' => false,
+      'name' => 'cookie',
+      'requires' => 
+      array (
+      ),
+    ),
+    'anim' => 
+    array (
+      'supersedes' => 
+      array (
+        0 => 'anim-color',
+        1 => 'anim-scroll',
+        2 => 'anim-node-plugin',
+        3 => 'anim-base',
+        4 => 'anim-curve',
+        5 => 'anim-easing',
+        6 => 'anim-xy',
+      ),
+      'path' => 'anim/anim-min.js',
+      'rollup' => 4,
+      'requires' => 
+      array (
+        0 => 'base',
+        1 => 'node',
+      ),
+      'type' => 'js',
+      'submodules' => 
+      array (
+        'anim-color' => 
+        array (
+          'path' => 'anim/anim-color-min.js',
+          'requires' => 
+          array (
+            0 => 'anim-base',
+          ),
+          'type' => 'js',
+          'name' => 'anim-color',
+          'ext' => false,
+        ),
+        'anim-scroll' => 
+        array (
+          'path' => 'anim/anim-scroll-min.js',
+          'requires' => 
+          array (
+            0 => 'anim-base',
+          ),
+          'type' => 'js',
+          'name' => 'anim-scroll',
+          'ext' => false,
+        ),
+        'anim-node-plugin' => 
+        array (
+          'path' => 'anim/anim-node-plugin-min.js',
+          'requires' => 
+          array (
+            0 => 'node',
+            1 => 'anim-base',
+          ),
+          'type' => 'js',
+          'name' => 'anim-node-plugin',
+          'ext' => false,
+        ),
+        'anim-base' => 
+        array (
+          'path' => 'anim/anim-base-min.js',
+          'requires' => 
+          array (
+            0 => 'base',
+            1 => 'node-style',
+          ),
+          'type' => 'js',
+          'name' => 'anim-base',
+          'ext' => false,
+        ),
+        'anim-curve' => 
+        array (
+          'path' => 'anim/anim-curve-min.js',
+          'requires' => 
+          array (
+            0 => 'anim-xy',
+          ),
+          'type' => 'js',
+          'name' => 'anim-curve',
+          'ext' => false,
+        ),
+        'anim-easing' => 
+        array (
+          'path' => 'anim/anim-easing-min.js',
+          'type' => 'js',
+          'ext' => false,
+          'name' => 'anim-easing',
+          'requires' => 
+          array (
+          ),
+        ),
+        'anim-xy' => 
+        array (
+          'path' => 'anim/anim-xy-min.js',
+          'requires' => 
+          array (
+            0 => 'anim-base',
+            1 => 'node-screen',
+          ),
+          'type' => 'js',
+          'name' => 'anim-xy',
+          'ext' => false,
+        ),
+      ),
+      'name' => 'anim',
+      'ext' => false,
+    ),
+    'io-base' => 
+    array (
+      'path' => 'io/io-base-min.js',
+      'requires' => 
+      array (
+        0 => 'node',
+      ),
+      'type' => 'js',
+      'name' => 'io-base',
+      'ext' => false,
+    ),
+    'widget-stdmod' => 
+    array (
+      'path' => 'widget/widget-stdmod-min.js',
+      'requires' => 
+      array (
+        0 => 'widget',
+        1 => 'widget',
+      ),
+      'type' => 'js',
+      'name' => 'widget-stdmod',
+      'ext' => false,
+    ),
+    'event' => 
+    array (
+      'path' => 'event/event-min.js',
+      'requires' => 
+      array (
+        0 => 'event-custom',
+      ),
+      'type' => 'js',
+      'name' => 'event',
+      'ext' => false,
+    ),
+    'cssfonts' => 
+    array (
+      'path' => 'cssfonts/fonts-min.css',
+      'type' => 'css',
+      'ext' => false,
+      'name' => 'cssfonts',
+      'requires' => 
+      array (
+      ),
+    ),
+    'anim-xy' => 
+    array (
+      'path' => 'anim/anim-xy-min.js',
+      'requires' => 
+      array (
+        0 => 'anim-base',
+        1 => 'node-screen',
+      ),
+      'type' => 'js',
+      'name' => 'anim-xy',
+      'ext' => false,
     ),
     'cssbase-context' => 
     array (
@@ -285,202 +761,349 @@
         4 => 'cssfonts-context',
         5 => 'cssgrids-context',
       ),
+      'path' => 'cssbase/base-context-min.css',
+      'type' => 'css',
       'ext' => false,
       'name' => 'cssbase-context',
-      'path' => 'cssbase/base-context-min.css',
       'requires' => 
       array (
       ),
-      'type' => 'css',
     ),
-    'cssfonts' => 
+    'profiler' => 
     array (
+      'path' => 'profiler/profiler-min.js',
+      'type' => 'js',
       'ext' => false,
-      'name' => 'cssfonts',
-      'path' => 'cssfonts/fonts-min.css',
+      'name' => 'profiler',
       'requires' => 
       array (
       ),
-      'type' => 'css',
     ),
-    'cssfonts-context' => 
+    'node-event-simulate' => 
     array (
-      'ext' => false,
-      'name' => 'cssfonts-context',
-      'path' => 'cssfonts/fonts-context-min.css',
+      'path' => 'node/node-event-simulate-min.js',
       'requires' => 
       array (
+        0 => 'node-base',
+        1 => 'event-simulate',
+        2 => 'node',
+        3 => 'node',
       ),
-      'type' => 'css',
+      'type' => 'js',
+      'name' => 'node-event-simulate',
+      'ext' => false,
     ),
-    'cssgrids' => 
+    'io' => 
     array (
-      'ext' => false,
-      'name' => 'cssgrids',
-      'optional' => 
+      'supersedes' => 
       array (
-        0 => 'cssreset',
+        0 => 'io-queue',
+        1 => 'io-upload-iframe',
+        2 => 'io-base',
+        3 => 'io-form',
+        4 => 'io-xdr',
       ),
-      'path' => 'cssgrids/grids-min.css',
-      'requires' => 
-      array (
-        0 => 'cssfonts',
-      ),
-      'type' => 'css',
-    ),
-    'cssgrids-context' => 
-    array (
-      'ext' => false,
-      'name' => 'cssgrids-context',
-      'optional' => 
-      array (
-        0 => 'cssreset-context',
-      ),
-      'path' => 'cssgrids/grids-context-min.css',
-      'requires' => 
-      array (
-        0 => 'cssfonts-context',
-      ),
-      'type' => 'css',
-    ),
-    'cssreset' => 
-    array (
-      'ext' => false,
-      'name' => 'cssreset',
-      'path' => 'cssreset/reset-min.css',
-      'requires' => 
-      array (
-      ),
-      'type' => 'css',
-    ),
-    'cssreset-context' => 
-    array (
-      'ext' => false,
-      'name' => 'cssreset-context',
-      'path' => 'cssreset/reset-context-min.css',
-      'requires' => 
-      array (
-      ),
-      'type' => 'css',
-    ),
-    'dd' => 
-    array (
-      'ext' => false,
-      'name' => 'dd',
-      'path' => 'dd/dd-min.js',
-      'requires' => 
-      array (
-      ),
+      'path' => 'io/io-min.js',
       'rollup' => 4,
+      'type' => 'js',
+      'ext' => false,
       'submodules' => 
       array (
-        'dd-constrain' => 
+        'io-queue' => 
         array (
-          'ext' => false,
-          'name' => 'dd-constrain',
-          'path' => 'dd/dd-constrain-min.js',
+          'path' => 'io/io-queue-min.js',
           'requires' => 
           array (
-            0 => 'dd-drag',
-            1 => 'dd-proxy',
+            0 => 'io-base',
           ),
           'type' => 'js',
-        ),
-        'dd-ddm' => 
-        array (
+          'name' => 'io-queue',
           'ext' => false,
-          'name' => 'dd-ddm',
-          'path' => 'dd/dd-ddm-min.js',
+        ),
+        'io-upload-iframe' => 
+        array (
+          'path' => 'io/io-upload-iframe-min.js',
           'requires' => 
           array (
-            0 => 'dd-ddm-base',
+            0 => 'io-base',
           ),
           'type' => 'js',
-        ),
-        'dd-ddm-base' => 
-        array (
+          'name' => 'io-upload-iframe',
           'ext' => false,
-          'name' => 'dd-ddm-base',
-          'path' => 'dd/dd-ddm-base-min.js',
+        ),
+        'io-base' => 
+        array (
+          'path' => 'io/io-base-min.js',
           'requires' => 
           array (
             0 => 'node',
-            1 => 'base',
           ),
           'type' => 'js',
-        ),
-        'dd-ddm-drop' => 
-        array (
+          'name' => 'io-base',
           'ext' => false,
-          'name' => 'dd-ddm-drop',
-          'path' => 'dd/dd-ddm-drop-min.js',
+        ),
+        'io-form' => 
+        array (
+          'path' => 'io/io-form-min.js',
           'requires' => 
           array (
-            0 => 'dd-ddm',
+            0 => 'io-base',
           ),
           'type' => 'js',
-        ),
-        'dd-drag' => 
-        array (
+          'name' => 'io-form',
           'ext' => false,
-          'name' => 'dd-drag',
-          'path' => 'dd/dd-drag-min.js',
+        ),
+        'io-xdr' => 
+        array (
+          'path' => 'io/io-xdr-min.js',
           'requires' => 
           array (
-            0 => 'dd-ddm-base',
+            0 => 'io-base',
           ),
           'type' => 'js',
-        ),
-        'dd-drop' => 
-        array (
+          'name' => 'io-xdr',
           'ext' => false,
-          'name' => 'dd-drop',
-          'path' => 'dd/dd-drop-min.js',
-          'requires' => 
-          array (
-            0 => 'dd-ddm-drop',
-          ),
-          'type' => 'js',
-        ),
-        'dd-drop-plugin' => 
-        array (
-          'ext' => false,
-          'name' => 'dd-drop-plugin',
-          'path' => 'dd/dd-drop-plugin-min.js',
-          'requires' => 
-          array (
-            0 => 'dd-drop',
-          ),
-          'type' => 'js',
-        ),
-        'dd-plugin' => 
-        array (
-          'ext' => false,
-          'name' => 'dd-plugin',
-          'optional' => 
-          array (
-            0 => 'dd-constrain',
-            1 => 'dd-proxy',
-          ),
-          'path' => 'dd/dd-plugin-min.js',
-          'requires' => 
-          array (
-            0 => 'dd-drag',
-          ),
-          'type' => 'js',
-        ),
-        'dd-proxy' => 
-        array (
-          'ext' => false,
-          'name' => 'dd-proxy',
-          'path' => 'dd/dd-proxy-min.js',
-          'requires' => 
-          array (
-            0 => 'dd-drag',
-          ),
-          'type' => 'js',
         ),
       ),
+      'name' => 'io',
+      'requires' => 
+      array (
+      ),
+    ),
+    'console' => 
+    array (
+      'path' => 'console/console-min.js',
+      'skinnable' => true,
+      'requires' => 
+      array (
+        0 => 'widget',
+        1 => 'substitute',
+        2 => 'skin-sam-console',
+      ),
+      'type' => 'js',
+      'name' => 'console',
+      'ext' => false,
+    ),
+    'attribute' => 
+    array (
+      'path' => 'attribute/attribute-min.js',
+      'requires' => 
+      array (
+        0 => 'event-custom',
+      ),
+      'type' => 'js',
+      'name' => 'attribute',
+      'ext' => false,
+    ),
+    'anim-easing' => 
+    array (
+      'path' => 'anim/anim-easing-min.js',
+      'type' => 'js',
+      'ext' => false,
+      'name' => 'anim-easing',
+      'requires' => 
+      array (
+      ),
+    ),
+    'node-style' => 
+    array (
+      'path' => 'node/node-style-min.js',
+      'requires' => 
+      array (
+        0 => 'dom-style',
+        1 => 'node-base',
+      ),
+      'type' => 'js',
+      'name' => 'node-style',
+      'ext' => false,
+    ),
+    'io-queue' => 
+    array (
+      'path' => 'io/io-queue-min.js',
+      'requires' => 
+      array (
+        0 => 'io-base',
+      ),
+      'type' => 'js',
+      'name' => 'io-queue',
+      'ext' => false,
+    ),
+    'loader' => 
+    array (
+      'path' => 'loader/loader-min.js',
+      'requires' => 
+      array (
+        0 => 'get',
+      ),
+      'type' => 'js',
+      'name' => 'loader',
+      'ext' => false,
+    ),
+    'plugin' => 
+    array (
+      'path' => 'plugin/plugin-min.js',
+      'requires' => 
+      array (
+        0 => 'base',
+      ),
+      'type' => 'js',
+      'name' => 'plugin',
+      'ext' => false,
+    ),
+    'base' => 
+    array (
+      'path' => 'base/base-min.js',
+      'requires' => 
+      array (
+        0 => 'attribute',
+      ),
+      'type' => 'js',
+      'name' => 'base',
+      'ext' => false,
+    ),
+    'event-simulate' => 
+    array (
+      'path' => 'event-simulate/event-simulate-min.js',
+      'requires' => 
+      array (
+        0 => 'event',
+      ),
+      'type' => 'js',
+      'name' => 'event-simulate',
+      'ext' => false,
+    ),
+    'widget-position' => 
+    array (
+      'path' => 'widget/widget-position-min.js',
+      'requires' => 
+      array (
+        0 => 'widget',
+        1 => 'widget',
+      ),
+      'type' => 'js',
+      'name' => 'widget-position',
+      'ext' => false,
+    ),
+    'dom' => 
+    array (
+      'requires' => 
+      array (
+        0 => 'event',
+      ),
+      'path' => 'dom/dom-min.js',
+      'supersedes' => 
+      array (
+        0 => 'selector-native',
+        1 => 'dom-screen',
+        2 => 'dom-base',
+        3 => 'dom-style',
+        4 => 'selector',
+      ),
+      'submodules' => 
+      array (
+        'selector-native' => 
+        array (
+          'path' => 'dom/selector-native-min.js',
+          'requires' => 
+          array (
+            0 => 'dom-base',
+          ),
+          'type' => 'js',
+          'name' => 'selector-native',
+          'ext' => false,
+        ),
+        'dom-screen' => 
+        array (
+          'path' => 'dom/dom-screen-min.js',
+          'requires' => 
+          array (
+            0 => 'dom-base',
+            1 => 'dom-style',
+          ),
+          'type' => 'js',
+          'name' => 'dom-screen',
+          'ext' => false,
+        ),
+        'dom-base' => 
+        array (
+          'path' => 'dom/dom-base-min.js',
+          'requires' => 
+          array (
+            0 => 'event',
+          ),
+          'type' => 'js',
+          'name' => 'dom-base',
+          'ext' => false,
+        ),
+        'dom-style' => 
+        array (
+          'path' => 'dom/dom-style-min.js',
+          'requires' => 
+          array (
+            0 => 'dom-base',
+          ),
+          'type' => 'js',
+          'name' => 'dom-style',
+          'ext' => false,
+        ),
+        'selector' => 
+        array (
+          'path' => 'dom/selector-min.js',
+          'requires' => 
+          array (
+            0 => 'dom-base',
+          ),
+          'type' => 'js',
+          'name' => 'selector',
+          'ext' => false,
+        ),
+      ),
+      'type' => 'js',
+      'plugins' => 
+      array (
+        'selector-css3' => 
+        array (
+          'path' => 'dom/selector-css3-min.js',
+          'requires' => 
+          array (
+            0 => 'selector',
+            1 => 'dom',
+            2 => 'dom',
+          ),
+          'type' => 'js',
+          'name' => 'selector-css3',
+          'ext' => false,
+        ),
+      ),
+      'ext' => false,
+      'name' => 'dom',
+      'rollup' => 4,
+    ),
+    'node-screen' => 
+    array (
+      'path' => 'node/node-screen-min.js',
+      'requires' => 
+      array (
+        0 => 'dom-screen',
+        1 => 'node-base',
+      ),
+      'type' => 'js',
+      'name' => 'node-screen',
+      'ext' => false,
+    ),
+    'io-form' => 
+    array (
+      'path' => 'io/io-form-min.js',
+      'requires' => 
+      array (
+        0 => 'io-base',
+      ),
+      'type' => 'js',
+      'name' => 'io-form',
+      'ext' => false,
+    ),
+    'dd' => 
+    array (
       'supersedes' => 
       array (
         0 => 'dd-drop-plugin',
@@ -493,666 +1116,123 @@
         7 => 'dd-drag',
         8 => 'dd-drop',
       ),
-      'type' => 'js',
-    ),
-    'dd-constrain' => 
-    array (
-      'ext' => false,
-      'name' => 'dd-constrain',
-      'path' => 'dd/dd-constrain-min.js',
-      'requires' => 
-      array (
-        0 => 'dd-drag',
-        1 => 'dd-proxy',
-      ),
-      'type' => 'js',
-    ),
-    'dd-ddm' => 
-    array (
-      'ext' => false,
-      'name' => 'dd-ddm',
-      'path' => 'dd/dd-ddm-min.js',
-      'requires' => 
-      array (
-        0 => 'dd-ddm-base',
-      ),
-      'type' => 'js',
-    ),
-    'dd-ddm-base' => 
-    array (
-      'ext' => false,
-      'name' => 'dd-ddm-base',
-      'path' => 'dd/dd-ddm-base-min.js',
-      'requires' => 
-      array (
-        0 => 'node',
-        1 => 'base',
-      ),
-      'type' => 'js',
-    ),
-    'dd-ddm-drop' => 
-    array (
-      'ext' => false,
-      'name' => 'dd-ddm-drop',
-      'path' => 'dd/dd-ddm-drop-min.js',
-      'requires' => 
-      array (
-        0 => 'dd-ddm',
-      ),
-      'type' => 'js',
-    ),
-    'dd-drag' => 
-    array (
-      'ext' => false,
-      'name' => 'dd-drag',
-      'path' => 'dd/dd-drag-min.js',
-      'requires' => 
-      array (
-        0 => 'dd-ddm-base',
-      ),
-      'type' => 'js',
-    ),
-    'dd-drop' => 
-    array (
-      'ext' => false,
-      'name' => 'dd-drop',
-      'path' => 'dd/dd-drop-min.js',
-      'requires' => 
-      array (
-        0 => 'dd-ddm-drop',
-      ),
-      'type' => 'js',
-    ),
-    'dd-drop-plugin' => 
-    array (
-      'ext' => false,
-      'name' => 'dd-drop-plugin',
-      'path' => 'dd/dd-drop-plugin-min.js',
-      'requires' => 
-      array (
-        0 => 'dd-drop',
-      ),
-      'type' => 'js',
-    ),
-    'dd-plugin' => 
-    array (
-      'ext' => false,
-      'name' => 'dd-plugin',
-      'optional' => 
-      array (
-        0 => 'dd-constrain',
-        1 => 'dd-proxy',
-      ),
-      'path' => 'dd/dd-plugin-min.js',
-      'requires' => 
-      array (
-        0 => 'dd-drag',
-      ),
-      'type' => 'js',
-    ),
-    'dd-proxy' => 
-    array (
-      'ext' => false,
-      'name' => 'dd-proxy',
-      'path' => 'dd/dd-proxy-min.js',
-      'requires' => 
-      array (
-        0 => 'dd-drag',
-      ),
-      'type' => 'js',
-    ),
-    'dom' => 
-    array (
-      'ext' => false,
-      'name' => 'dom',
-      'path' => 'dom/dom-min.js',
-      'requires' => 
-      array (
-        0 => 'event',
-      ),
-      'rollup' => 3,
-      'submodules' => 
-      array (
-        'dom-base' => 
-        array (
-          'ext' => false,
-          'name' => 'dom-base',
-          'path' => 'dom/dom-base-min.js',
-          'requires' => 
-          array (
-            0 => 'event',
-          ),
-          'type' => 'js',
-        ),
-        'dom-screen' => 
-        array (
-          'ext' => false,
-          'name' => 'dom-screen',
-          'path' => 'dom/dom-screen-min.js',
-          'requires' => 
-          array (
-            0 => 'dom-base',
-            1 => 'dom-style',
-          ),
-          'type' => 'js',
-        ),
-        'dom-style' => 
-        array (
-          'ext' => false,
-          'name' => 'dom-style',
-          'path' => 'dom/dom-style-min.js',
-          'requires' => 
-          array (
-            0 => 'dom-base',
-          ),
-          'type' => 'js',
-        ),
-        'selector' => 
-        array (
-          'ext' => false,
-          'name' => 'selector',
-          'path' => 'dom/selector-min.js',
-          'requires' => 
-          array (
-            0 => 'dom-base',
-          ),
-          'type' => 'js',
-        ),
-      ),
-      'supersedes' => 
-      array (
-        0 => 'dom-screen',
-        1 => 'dom-base',
-        2 => 'dom-style',
-        3 => 'selector',
-      ),
-      'type' => 'js',
-    ),
-    'dom-base' => 
-    array (
-      'ext' => false,
-      'name' => 'dom-base',
-      'path' => 'dom/dom-base-min.js',
-      'requires' => 
-      array (
-        0 => 'event',
-      ),
-      'type' => 'js',
-    ),
-    'dom-screen' => 
-    array (
-      'ext' => false,
-      'name' => 'dom-screen',
-      'path' => 'dom/dom-screen-min.js',
-      'requires' => 
-      array (
-        0 => 'dom-base',
-        1 => 'dom-style',
-      ),
-      'type' => 'js',
-    ),
-    'dom-style' => 
-    array (
-      'ext' => false,
-      'name' => 'dom-style',
-      'path' => 'dom/dom-style-min.js',
-      'requires' => 
-      array (
-        0 => 'dom-base',
-      ),
-      'type' => 'js',
-    ),
-    'dump' => 
-    array (
-      'ext' => false,
-      'name' => 'dump',
-      'path' => 'dump/dump-min.js',
-      'requires' => 
-      array (
-      ),
-      'type' => 'js',
-    ),
-    'event' => 
-    array (
-      'ext' => false,
-      'name' => 'event',
-      'path' => 'event/event-min.js',
-      'requires' => 
-      array (
-        0 => 'oop',
-      ),
-      'type' => 'js',
-    ),
-    'get' => 
-    array (
-      'ext' => false,
-      'name' => 'get',
-      'path' => 'get/get-min.js',
-      'requires' => 
-      array (
-        0 => 'yui-base',
-      ),
-      'type' => 'js',
-    ),
-    'io' => 
-    array (
-      'ext' => false,
-      'name' => 'io',
-      'path' => 'io/io-min.js',
-      'requires' => 
-      array (
-      ),
+      'path' => 'dd/dd-min.js',
       'rollup' => 4,
+      'type' => 'js',
+      'ext' => false,
       'submodules' => 
       array (
-        'io-base' => 
+        'dd-drop-plugin' => 
         array (
+          'path' => 'dd/dd-drop-plugin-min.js',
+          'requires' => 
+          array (
+            0 => 'dd-drop',
+          ),
+          'type' => 'js',
+          'name' => 'dd-drop-plugin',
           'ext' => false,
-          'name' => 'io-base',
-          'path' => 'io/io-base-min.js',
+        ),
+        'dd-constrain' => 
+        array (
+          'path' => 'dd/dd-constrain-min.js',
+          'requires' => 
+          array (
+            0 => 'dd-drag',
+            1 => 'dd-proxy',
+          ),
+          'type' => 'js',
+          'name' => 'dd-constrain',
+          'ext' => false,
+        ),
+        'dd-proxy' => 
+        array (
+          'path' => 'dd/dd-proxy-min.js',
+          'requires' => 
+          array (
+            0 => 'dd-drag',
+          ),
+          'type' => 'js',
+          'name' => 'dd-proxy',
+          'ext' => false,
+        ),
+        'dd-ddm' => 
+        array (
+          'path' => 'dd/dd-ddm-min.js',
+          'requires' => 
+          array (
+            0 => 'dd-ddm-base',
+          ),
+          'type' => 'js',
+          'name' => 'dd-ddm',
+          'ext' => false,
+        ),
+        'dd-ddm-drop' => 
+        array (
+          'path' => 'dd/dd-ddm-drop-min.js',
+          'requires' => 
+          array (
+            0 => 'dd-ddm',
+          ),
+          'type' => 'js',
+          'name' => 'dd-ddm-drop',
+          'ext' => false,
+        ),
+        'dd-ddm-base' => 
+        array (
+          'path' => 'dd/dd-ddm-base-min.js',
           'requires' => 
           array (
             0 => 'node',
+            1 => 'base',
           ),
           'type' => 'js',
-        ),
-        'io-form' => 
-        array (
+          'name' => 'dd-ddm-base',
           'ext' => false,
-          'name' => 'io-form',
-          'path' => 'io/io-form-min.js',
+        ),
+        'dd-plugin' => 
+        array (
+          'path' => 'dd/dd-plugin-min.js',
           'requires' => 
           array (
-            0 => 'io-base',
+            0 => 'dd-drag',
           ),
           'type' => 'js',
-        ),
-        'io-queue' => 
-        array (
+          'optional' => 
+          array (
+            0 => 'dd-constrain',
+            1 => 'dd-proxy',
+          ),
+          'name' => 'dd-plugin',
           'ext' => false,
-          'name' => 'io-queue',
-          'path' => 'io/io-queue-min.js',
+        ),
+        'dd-drag' => 
+        array (
+          'path' => 'dd/dd-drag-min.js',
           'requires' => 
           array (
-            0 => 'io-base',
+            0 => 'dd-ddm-base',
           ),
           'type' => 'js',
-        ),
-        'io-upload-iframe' => 
-        array (
+          'name' => 'dd-drag',
           'ext' => false,
-          'name' => 'io-upload-iframe',
-          'path' => 'io/io-upload-iframe-min.js',
+        ),
+        'dd-drop' => 
+        array (
+          'path' => 'dd/dd-drop-min.js',
           'requires' => 
           array (
-            0 => 'io-base',
+            0 => 'dd-ddm-drop',
           ),
           'type' => 'js',
-        ),
-        'io-xdr' => 
-        array (
+          'name' => 'dd-drop',
           'ext' => false,
-          'name' => 'io-xdr',
-          'path' => 'io/io-xdr-min.js',
-          'requires' => 
-          array (
-            0 => 'io-base',
-          ),
-          'type' => 'js',
         ),
       ),
-      'supersedes' => 
-      array (
-        0 => 'io-queue',
-        1 => 'io-upload-iframe',
-        2 => 'io-base',
-        3 => 'io-form',
-        4 => 'io-xdr',
-      ),
-      'type' => 'js',
-    ),
-    'io-base' => 
-    array (
-      'ext' => false,
-      'name' => 'io-base',
-      'path' => 'io/io-base-min.js',
-      'requires' => 
-      array (
-        0 => 'node',
-      ),
-      'type' => 'js',
-    ),
-    'io-form' => 
-    array (
-      'ext' => false,
-      'name' => 'io-form',
-      'path' => 'io/io-form-min.js',
-      'requires' => 
-      array (
-        0 => 'io-base',
-      ),
-      'type' => 'js',
-    ),
-    'io-queue' => 
-    array (
-      'ext' => false,
-      'name' => 'io-queue',
-      'path' => 'io/io-queue-min.js',
-      'requires' => 
-      array (
-        0 => 'io-base',
-      ),
-      'type' => 'js',
-    ),
-    'io-upload-iframe' => 
-    array (
-      'ext' => false,
-      'name' => 'io-upload-iframe',
-      'path' => 'io/io-upload-iframe-min.js',
-      'requires' => 
-      array (
-        0 => 'io-base',
-      ),
-      'type' => 'js',
-    ),
-    'io-xdr' => 
-    array (
-      'ext' => false,
-      'name' => 'io-xdr',
-      'path' => 'io/io-xdr-min.js',
-      'requires' => 
-      array (
-        0 => 'io-base',
-      ),
-      'type' => 'js',
-    ),
-    'json' => 
-    array (
-      'expanded' => 
-      array (
-        0 => 'json-parse',
-        1 => 'json-stringify',
-      ),
-      'ext' => false,
-      'name' => 'json',
-      'path' => 'json/json-min.js',
+      'name' => 'dd',
       'requires' => 
       array (
       ),
-      'rollup' => 1,
-      'submodules' => 
-      array (
-        'json-parse' => 
-        array (
-          'expanded' => 
-          array (
-          ),
-          'ext' => false,
-          'name' => 'json-parse',
-          'path' => 'json/json-parse-min.js',
-          'requires' => 
-          array (
-          ),
-          'type' => 'js',
-        ),
-        'json-stringify' => 
-        array (
-          'expanded' => 
-          array (
-          ),
-          'ext' => false,
-          'name' => 'json-stringify',
-          'path' => 'json/json-stringify-min.js',
-          'requires' => 
-          array (
-          ),
-          'type' => 'js',
-        ),
-      ),
-      'supersedes' => 
-      array (
-        0 => 'json-parse',
-        1 => 'json-stringify',
-      ),
-      'type' => 'js',
-    ),
-    'json-parse' => 
-    array (
-      'expanded' => 
-      array (
-      ),
-      'ext' => false,
-      'name' => 'json-parse',
-      'path' => 'json/json-parse-min.js',
-      'requires' => 
-      array (
-      ),
-      'type' => 'js',
-    ),
-    'json-stringify' => 
-    array (
-      'expanded' => 
-      array (
-      ),
-      'ext' => false,
-      'name' => 'json-stringify',
-      'path' => 'json/json-stringify-min.js',
-      'requires' => 
-      array (
-      ),
-      'type' => 'js',
-    ),
-    'loader' => 
-    array (
-      'ext' => false,
-      'name' => 'loader',
-      'path' => 'loader/loader-min.js',
-      'requires' => 
-      array (
-        0 => 'get',
-      ),
-      'type' => 'js',
-    ),
-    'node' => 
-    array (
-      'ext' => false,
-      'name' => 'node',
-      'path' => 'node/node-min.js',
-      'requires' => 
-      array (
-        0 => 'dom',
-      ),
-      'rollup' => 3,
-      'submodules' => 
-      array (
-        'node-base' => 
-        array (
-          'ext' => false,
-          'name' => 'node-base',
-          'path' => 'node/node-base-min.js',
-          'requires' => 
-          array (
-            0 => 'dom-base',
-            1 => 'selector',
-          ),
-          'type' => 'js',
-        ),
-        'node-event-simulate' => 
-        array (
-          'ext' => false,
-          'name' => 'node-event-simulate',
-          'path' => 'node/node-event-simulate-min.js',
-          'requires' => 
-          array (
-            0 => 'node-base',
-          ),
-          'type' => 'js',
-        ),
-        'node-screen' => 
-        array (
-          'ext' => false,
-          'name' => 'node-screen',
-          'path' => 'node/node-screen-min.js',
-          'requires' => 
-          array (
-            0 => 'dom-screen',
-            1 => 'node-base',
-          ),
-          'type' => 'js',
-        ),
-        'node-style' => 
-        array (
-          'ext' => false,
-          'name' => 'node-style',
-          'path' => 'node/node-style-min.js',
-          'requires' => 
-          array (
-            0 => 'dom-style',
-            1 => 'node-base',
-          ),
-          'type' => 'js',
-        ),
-      ),
-      'supersedes' => 
-      array (
-        0 => 'node-event-simulate',
-        1 => 'node-screen',
-        2 => 'node-style',
-        3 => 'node-base',
-      ),
-      'type' => 'js',
-    ),
-    'node-base' => 
-    array (
-      'ext' => false,
-      'name' => 'node-base',
-      'path' => 'node/node-base-min.js',
-      'requires' => 
-      array (
-        0 => 'dom-base',
-        1 => 'selector',
-      ),
-      'type' => 'js',
-    ),
-    'node-event-simulate' => 
-    array (
-      'ext' => false,
-      'name' => 'node-event-simulate',
-      'path' => 'node/node-event-simulate-min.js',
-      'requires' => 
-      array (
-        0 => 'node-base',
-      ),
-      'type' => 'js',
-    ),
-    'node-menunav' => 
-    array (
-      'ext' => false,
-      'name' => 'node-menunav',
-      'path' => 'node-menunav/node-menunav-min.js',
-      'requires' => 
-      array (
-        0 => 'node',
-        1 => 'classnamemanager',
-        2 => 'skin-sam-node-menunav',
-      ),
-      'skinnable' => true,
-      'type' => 'js',
-    ),
-    'node-screen' => 
-    array (
-      'ext' => false,
-      'name' => 'node-screen',
-      'path' => 'node/node-screen-min.js',
-      'requires' => 
-      array (
-        0 => 'dom-screen',
-        1 => 'node-base',
-      ),
-      'type' => 'js',
-    ),
-    'node-style' => 
-    array (
-      'ext' => false,
-      'name' => 'node-style',
-      'path' => 'node/node-style-min.js',
-      'requires' => 
-      array (
-        0 => 'dom-style',
-        1 => 'node-base',
-      ),
-      'type' => 'js',
-    ),
-    'oop' => 
-    array (
-      'ext' => false,
-      'name' => 'oop',
-      'path' => 'oop/oop-min.js',
-      'requires' => 
-      array (
-        0 => 'yui-base',
-      ),
-      'type' => 'js',
-    ),
-    'overlay' => 
-    array (
-      'ext' => false,
-      'name' => 'overlay',
-      'path' => 'overlay/overlay-min.js',
-      'requires' => 
-      array (
-        0 => 'widget',
-        1 => 'widget-position',
-        2 => 'widget-position-ext',
-        3 => 'widget-stack',
-        4 => 'widget-stdmod',
-        5 => 'skin-sam-overlay',
-      ),
-      'skinnable' => true,
-      'type' => 'js',
-    ),
-    'plugin' => 
-    array (
-      'ext' => false,
-      'name' => 'plugin',
-      'path' => 'plugin/plugin-min.js',
-      'requires' => 
-      array (
-        0 => 'base',
-      ),
-      'type' => 'js',
-    ),
-    'profiler' => 
-    array (
-      'ext' => false,
-      'name' => 'profiler',
-      'path' => 'profiler/profiler-min.js',
-      'requires' => 
-      array (
-      ),
-      'type' => 'js',
-    ),
-    'queue' => 
-    array (
-      'ext' => false,
-      'name' => 'queue',
-      'path' => 'queue/queue-min.js',
-      'requires' => 
-      array (
-        0 => 'node',
-      ),
-      'type' => 'js',
-    ),
-    'selector' => 
-    array (
-      'ext' => false,
-      'name' => 'selector',
-      'path' => 'dom/selector-min.js',
-      'requires' => 
-      array (
-        0 => 'dom-base',
-      ),
-      'type' => 'js',
     ),
     'skin-sam-widget-position' => 
     array (
@@ -1163,127 +1243,124 @@
         2 => 'grids',
         3 => 'base',
       ),
+      'path' => 'widget/assets/skins/sam/widget-position.css',
+      'type' => 'css',
       'ext' => false,
       'name' => 'skin-sam-widget-position',
-      'path' => 'widget/assets/skins/sam/widget-position.css',
       'requires' => 
       array (
       ),
-      'type' => 'css',
     ),
-    'skin-sam-widget-position-ext' => 
+    'dd-ddm-drop' => 
     array (
-      'after' => 
-      array (
-        0 => 'reset',
-        1 => 'fonts',
-        2 => 'grids',
-        3 => 'base',
-      ),
-      'ext' => false,
-      'name' => 'skin-sam-widget-position-ext',
-      'path' => 'widget/assets/skins/sam/widget-position-ext.css',
+      'path' => 'dd/dd-ddm-drop-min.js',
       'requires' => 
       array (
+        0 => 'dd-ddm',
       ),
-      'type' => 'css',
-    ),
-    'skin-sam-widget-stack' => 
-    array (
-      'after' => 
-      array (
-        0 => 'reset',
-        1 => 'fonts',
-        2 => 'grids',
-        3 => 'base',
-      ),
+      'type' => 'js',
+      'name' => 'dd-ddm-drop',
       'ext' => false,
-      'name' => 'skin-sam-widget-stack',
-      'path' => 'widget/assets/skins/sam/widget-stack.css',
-      'requires' => 
-      array (
-      ),
-      'type' => 'css',
-    ),
-    'skin-sam-widget-stdmod' => 
-    array (
-      'after' => 
-      array (
-        0 => 'reset',
-        1 => 'fonts',
-        2 => 'grids',
-        3 => 'base',
-      ),
-      'ext' => false,
-      'name' => 'skin-sam-widget-stdmod',
-      'path' => 'widget/assets/skins/sam/widget-stdmod.css',
-      'requires' => 
-      array (
-      ),
-      'type' => 'css',
     ),
     'slider' => 
     array (
-      'ext' => false,
-      'name' => 'slider',
       'path' => 'slider/slider-min.js',
+      'skinnable' => true,
       'requires' => 
       array (
         0 => 'widget',
         1 => 'dd-constrain',
         2 => 'skin-sam-slider',
       ),
-      'skinnable' => true,
       'type' => 'js',
-    ),
-    'stylesheet' => 
-    array (
+      'name' => 'slider',
       'ext' => false,
-      'name' => 'stylesheet',
-      'path' => 'stylesheet/stylesheet-min.js',
-      'requires' => 
-      array (
-      ),
-      'type' => 'js',
     ),
     'substitute' => 
     array (
+      'path' => 'substitute/substitute-min.js',
+      'type' => 'js',
       'ext' => false,
-      'name' => 'substitute',
       'optional' => 
       array (
         0 => 'dump',
       ),
-      'path' => 'substitute/substitute-min.js',
+      'name' => 'substitute',
       'requires' => 
       array (
       ),
-      'type' => 'js',
     ),
-    'test' => 
+    'widget-stack' => 
     array (
-      'ext' => false,
-      'name' => 'test',
-      'path' => 'test/test-min.js',
+      'path' => 'widget/widget-stack-min.js',
+      'skinnable' => true,
       'requires' => 
       array (
-        0 => 'substitute',
-        1 => 'node',
-        2 => 'json',
+        0 => 'widget',
+        1 => 'skin-sam-widget-stack',
+        2 => 'widget',
       ),
       'type' => 'js',
+      'name' => 'widget-stack',
+      'ext' => false,
+    ),
+    'selector-native' => 
+    array (
+      'path' => 'dom/selector-native-min.js',
+      'requires' => 
+      array (
+        0 => 'dom-base',
+      ),
+      'type' => 'js',
+      'name' => 'selector-native',
+      'ext' => false,
+    ),
+    'node-menunav' => 
+    array (
+      'path' => 'node-menunav/node-menunav-min.js',
+      'skinnable' => true,
+      'requires' => 
+      array (
+        0 => 'node',
+        1 => 'classnamemanager',
+        2 => 'skin-sam-node-menunav',
+      ),
+      'type' => 'js',
+      'name' => 'node-menunav',
+      'ext' => false,
     ),
     'widget' => 
     array (
-      'ext' => false,
-      'name' => 'widget',
       'path' => 'widget/widget-min.js',
+      'skinnable' => true,
+      'requires' => 
+      array (
+        0 => 'base',
+        1 => 'node',
+        2 => 'classnamemanager',
+        3 => 'skin-sam-widget',
+      ),
+      'type' => 'js',
+      'name' => 'widget',
+      'ext' => false,
       'plugins' => 
       array (
+        'widget-stack' => 
+        array (
+          'path' => 'widget/widget-stack-min.js',
+          'skinnable' => true,
+          'requires' => 
+          array (
+            0 => 'widget',
+            1 => 'skin-sam-widget-stack',
+            2 => 'widget',
+          ),
+          'type' => 'js',
+          'name' => 'widget-stack',
+          'ext' => false,
+        ),
         'widget-position' => 
         array (
-          'ext' => false,
-          'name' => 'widget-position',
           'path' => 'widget/widget-position-min.js',
           'requires' => 
           array (
@@ -1291,11 +1368,23 @@
             1 => 'widget',
           ),
           'type' => 'js',
+          'name' => 'widget-position',
+          'ext' => false,
+        ),
+        'widget-stdmod' => 
+        array (
+          'path' => 'widget/widget-stdmod-min.js',
+          'requires' => 
+          array (
+            0 => 'widget',
+            1 => 'widget',
+          ),
+          'type' => 'js',
+          'name' => 'widget-stdmod',
+          'ext' => false,
         ),
         'widget-position-ext' => 
         array (
-          'ext' => false,
-          'name' => 'widget-position-ext',
           'path' => 'widget/widget-position-ext-min.js',
           'requires' => 
           array (
@@ -1304,133 +1393,208 @@
             2 => 'widget',
           ),
           'type' => 'js',
-        ),
-        'widget-stack' => 
-        array (
+          'name' => 'widget-position-ext',
           'ext' => false,
-          'name' => 'widget-stack',
-          'path' => 'widget/widget-stack-min.js',
-          'requires' => 
-          array (
-            0 => 'widget',
-            1 => 'skin-sam-widget-stack',
-            2 => 'widget',
-          ),
-          'skinnable' => true,
-          'type' => 'js',
-        ),
-        'widget-stdmod' => 
-        array (
-          'ext' => false,
-          'name' => 'widget-stdmod',
-          'path' => 'widget/widget-stdmod-min.js',
-          'requires' => 
-          array (
-            0 => 'widget',
-            1 => 'widget',
-          ),
-          'type' => 'js',
         ),
       ),
-      'requires' => 
-      array (
-        0 => 'base',
-        1 => 'node',
-        2 => 'classnamemanager',
-        3 => 'skin-sam-widget',
-      ),
-      'skinnable' => true,
-      'type' => 'js',
     ),
-    'widget-position' => 
+    'queue-io' => 
     array (
-      'ext' => false,
-      'name' => 'widget-position',
-      'path' => 'widget/widget-position-min.js',
+      'path' => 'queue/queue-io-min.js',
       'requires' => 
       array (
-        0 => 'widget',
-        1 => 'widget',
+        0 => 'io-base',
+        1 => 'queue',
+        2 => 'queue',
       ),
       'type' => 'js',
-    ),
-    'widget-position-ext' => 
-    array (
+      'name' => 'queue-io',
       'ext' => false,
-      'name' => 'widget-position-ext',
-      'path' => 'widget/widget-position-ext-min.js',
+    ),
+    'cssreset' => 
+    array (
+      'path' => 'cssreset/reset-min.css',
+      'type' => 'css',
+      'ext' => false,
+      'name' => 'cssreset',
       'requires' => 
       array (
-        0 => 'widget-position',
-        1 => 'widget',
-        2 => 'widget',
+      ),
+    ),
+    'json-stringify' => 
+    array (
+      'path' => 'json/json-stringify-min.js',
+      'type' => 'js',
+      'ext' => false,
+      'name' => 'json-stringify',
+      'requires' => 
+      array (
+      ),
+      'expanded' => 
+      array (
+      ),
+    ),
+    'anim-scroll' => 
+    array (
+      'path' => 'anim/anim-scroll-min.js',
+      'requires' => 
+      array (
+        0 => 'anim-base',
       ),
       'type' => 'js',
-    ),
-    'widget-stack' => 
-    array (
+      'name' => 'anim-scroll',
       'ext' => false,
-      'name' => 'widget-stack',
-      'path' => 'widget/widget-stack-min.js',
+    ),
+    'dd-proxy' => 
+    array (
+      'path' => 'dd/dd-proxy-min.js',
       'requires' => 
       array (
-        0 => 'widget',
-        1 => 'skin-sam-widget-stack',
-        2 => 'widget',
-      ),
-      'skinnable' => true,
-      'type' => 'js',
-    ),
-    'widget-stdmod' => 
-    array (
-      'ext' => false,
-      'name' => 'widget-stdmod',
-      'path' => 'widget/widget-stdmod-min.js',
-      'requires' => 
-      array (
-        0 => 'widget',
-        1 => 'widget',
+        0 => 'dd-drag',
       ),
       'type' => 'js',
-    ),
-    'yui' => 
-    array (
+      'name' => 'dd-proxy',
       'ext' => false,
-      'name' => 'yui',
-      'path' => 'yui/yui-min.js',
+    ),
+    'dd-ddm-base' => 
+    array (
+      'path' => 'dd/dd-ddm-base-min.js',
+      'requires' => 
+      array (
+        0 => 'node',
+        1 => 'base',
+      ),
+      'type' => 'js',
+      'name' => 'dd-ddm-base',
+      'ext' => false,
+    ),
+    'dd-constrain' => 
+    array (
+      'path' => 'dd/dd-constrain-min.js',
+      'requires' => 
+      array (
+        0 => 'dd-drag',
+        1 => 'dd-proxy',
+      ),
+      'type' => 'js',
+      'name' => 'dd-constrain',
+      'ext' => false,
+    ),
+    'cssreset-context' => 
+    array (
+      'path' => 'cssreset/reset-context-min.css',
+      'type' => 'css',
+      'ext' => false,
+      'name' => 'cssreset-context',
       'requires' => 
       array (
       ),
+    ),
+    'node-base' => 
+    array (
+      'path' => 'node/node-base-min.js',
+      'requires' => 
+      array (
+        0 => 'dom-base',
+        1 => 'base',
+        2 => 'selector',
+      ),
+      'type' => 'js',
+      'name' => 'node-base',
+      'ext' => false,
+    ),
+    'queue' => 
+    array (
+      'requires' => 
+      array (
+        0 => 'event-custom',
+      ),
+      'path' => 'queue/queue-min.js',
       'supersedes' => 
       array (
-        0 => 'yui-base',
-        1 => 'get',
-        2 => 'loader',
+        0 => 'queue-base',
+      ),
+      'submodules' => 
+      array (
+        'queue-base' => 
+        array (
+          'path' => 'queue/queue-base-min.js',
+          'type' => 'js',
+          'ext' => false,
+          'name' => 'queue-base',
+          'requires' => 
+          array (
+          ),
+        ),
       ),
       'type' => 'js',
-    ),
-    'yui-base' => 
-    array (
+      'plugins' => 
+      array (
+        'queue-io' => 
+        array (
+          'path' => 'queue/queue-io-min.js',
+          'requires' => 
+          array (
+            0 => 'io-base',
+            1 => 'queue',
+            2 => 'queue',
+          ),
+          'type' => 'js',
+          'name' => 'queue-io',
+          'ext' => false,
+        ),
+      ),
       'ext' => false,
-      'name' => 'yui-base',
-      'path' => 'yui-base/yui-base-min.js',
+      'name' => 'queue',
+      'rollup' => 0,
+    ),
+    'dd-drag' => 
+    array (
+      'path' => 'dd/dd-drag-min.js',
       'requires' => 
       array (
+        0 => 'dd-ddm-base',
       ),
       'type' => 'js',
+      'name' => 'dd-drag',
+      'ext' => false,
     ),
-  ),
-  'skin' => 
-  array (
-    'after' => 
+    'cssgrids' => 
     array (
-      0 => 'reset',
-      1 => 'fonts',
-      2 => 'grids',
-      3 => 'base',
+      'path' => 'cssgrids/grids-min.css',
+      'requires' => 
+      array (
+        0 => 'cssfonts',
+      ),
+      'type' => 'css',
+      'optional' => 
+      array (
+        0 => 'cssreset',
+      ),
+      'name' => 'cssgrids',
+      'ext' => false,
     ),
-    'base' => 'assets/skins/',
-    'defaultSkin' => 'sam',
-    'path' => 'skin.css',
+    'io-xdr' => 
+    array (
+      'path' => 'io/io-xdr-min.js',
+      'requires' => 
+      array (
+        0 => 'io-base',
+      ),
+      'type' => 'js',
+      'name' => 'io-xdr',
+      'ext' => false,
+    ),
+    'event-custom' => 
+    array (
+      'path' => 'event-custom/event-custom-min.js',
+      'requires' => 
+      array (
+        0 => 'oop',
+      ),
+      'type' => 'js',
+      'name' => 'event-custom',
+      'ext' => false,
+    ),
   ),
 ); ?>
