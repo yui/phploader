@@ -106,7 +106,14 @@
     ),
     'yui-base' => 
     array (
+      '_provides' => 
+      array (
+        'yui-base' => true,
+      ),
       'path' => 'yui-base/yui-base-min.js',
+      '_supersedes' => 
+      array (
+      ),
       'type' => 'js',
       'ext' => false,
       'name' => 'yui-base',
@@ -119,7 +126,14 @@
     ),
     'json-parse' => 
     array (
+      '_provides' => 
+      array (
+        'json-parse' => true,
+      ),
       'path' => 'json/json-parse-min.js',
+      '_supersedes' => 
+      array (
+      ),
       'requires' => 
       array (
         0 => 'yui-base',
@@ -263,6 +277,7 @@
         3 => 'widget-stack',
         4 => 'widget-stdmod',
         5 => 'skin-sam-overlay',
+        6 => 'skin-sam-overlay',
       ),
       'type' => 'js',
       'name' => 'overlay',
@@ -270,7 +285,14 @@
     ),
     'get' => 
     array (
+      '_provides' => 
+      array (
+        'get' => true,
+      ),
       'path' => 'get/get-min.js',
+      '_supersedes' => 
+      array (
+      ),
       'requires' => 
       array (
         0 => 'yui-base',
@@ -289,6 +311,25 @@
       'type' => 'js',
       'name' => 'dom-style',
       'ext' => false,
+    ),
+    'skin-sam-overlay' => 
+    array (
+      'after' => 
+      array (
+        0 => 'cssreset',
+        1 => 'cssfonts',
+        2 => 'cssgrids',
+        3 => 'cssreset-context',
+        4 => 'cssfonts-context',
+        5 => 'cssgrids-context',
+      ),
+      'path' => 'overlay/assets/skins/sam/overlay.css',
+      'type' => 'css',
+      'ext' => false,
+      'name' => 'skin-sam-overlay',
+      'requires' => 
+      array (
+      ),
     ),
     'widget-position-ext' => 
     array (
@@ -320,6 +361,7 @@
       'requires' => 
       array (
         0 => 'io-base',
+        1 => 'node',
       ),
       'type' => 'js',
       'name' => 'io-upload-iframe',
@@ -358,6 +400,25 @@
       'name' => 'dom-base',
       'ext' => false,
     ),
+    'skin-sam-node-menunav' => 
+    array (
+      'after' => 
+      array (
+        0 => 'cssreset',
+        1 => 'cssfonts',
+        2 => 'cssgrids',
+        3 => 'cssreset-context',
+        4 => 'cssfonts-context',
+        5 => 'cssgrids-context',
+      ),
+      'path' => 'node-menunav/assets/skins/sam/node-menunav.css',
+      'type' => 'css',
+      'ext' => false,
+      'name' => 'skin-sam-node-menunav',
+      'requires' => 
+      array (
+      ),
+    ),
     'anim-color' => 
     array (
       'path' => 'anim/anim-color-min.js',
@@ -388,7 +449,20 @@
         1 => 'get',
         2 => 'loader',
       ),
+      '_provides' => 
+      array (
+        'yui-base' => true,
+        'yui' => true,
+        'get' => true,
+        'loader' => true,
+      ),
       'path' => 'yui/yui-min.js',
+      '_supersedes' => 
+      array (
+        'get' => true,
+        'yui-base' => true,
+        'loader' => true,
+      ),
       'type' => 'js',
       'ext' => false,
       'name' => 'yui',
@@ -487,6 +561,25 @@
       'name' => 'node',
       'rollup' => 2,
     ),
+    'skin-sam-slider' => 
+    array (
+      'after' => 
+      array (
+        0 => 'cssreset',
+        1 => 'cssfonts',
+        2 => 'cssgrids',
+        3 => 'cssreset-context',
+        4 => 'cssfonts-context',
+        5 => 'cssgrids-context',
+      ),
+      'path' => 'slider/assets/skins/sam/slider.css',
+      'type' => 'css',
+      'ext' => false,
+      'name' => 'skin-sam-slider',
+      'requires' => 
+      array (
+      ),
+    ),
     'test' => 
     array (
       'path' => 'test/test-min.js',
@@ -512,6 +605,25 @@
       'name' => 'anim-curve',
       'ext' => false,
     ),
+    'skin-sam-widget' => 
+    array (
+      'after' => 
+      array (
+        0 => 'cssreset',
+        1 => 'cssfonts',
+        2 => 'cssgrids',
+        3 => 'cssreset-context',
+        4 => 'cssfonts-context',
+        5 => 'cssgrids-context',
+      ),
+      'path' => 'widget/assets/skins/sam/widget.css',
+      'type' => 'css',
+      'ext' => false,
+      'name' => 'skin-sam-widget',
+      'requires' => 
+      array (
+      ),
+    ),
     'json' => 
     array (
       'requires' => 
@@ -523,11 +635,29 @@
         0 => 'json-parse',
         1 => 'json-stringify',
       ),
+      '_supersedes' => 
+      array (
+        'json-parse' => true,
+        'json-stringify' => true,
+      ),
+      '_provides' => 
+      array (
+        'json-parse' => true,
+        'json' => true,
+        'json-stringify' => true,
+      ),
       'submodules' => 
       array (
         'json-parse' => 
         array (
+          '_provides' => 
+          array (
+            'json-parse' => true,
+          ),
           'path' => 'json/json-parse-min.js',
+          '_supersedes' => 
+          array (
+          ),
           'requires' => 
           array (
             0 => 'yui-base',
@@ -542,7 +672,14 @@
         ),
         'json-stringify' => 
         array (
+          '_provides' => 
+          array (
+            'json-stringify' => true,
+          ),
           'path' => 'json/json-stringify-min.js',
+          '_supersedes' => 
+          array (
+          ),
           'requires' => 
           array (
             0 => 'yui-base',
@@ -724,7 +861,7 @@
       'path' => 'io/io-base-min.js',
       'requires' => 
       array (
-        0 => 'node',
+        0 => 'event-custom',
       ),
       'type' => 'js',
       'name' => 'io-base',
@@ -759,6 +896,25 @@
       'type' => 'css',
       'ext' => false,
       'name' => 'cssfonts',
+      'requires' => 
+      array (
+      ),
+    ),
+    'skin-sam-console' => 
+    array (
+      'after' => 
+      array (
+        0 => 'cssreset',
+        1 => 'cssfonts',
+        2 => 'cssgrids',
+        3 => 'cssreset-context',
+        4 => 'cssfonts-context',
+        5 => 'cssgrids-context',
+      ),
+      'path' => 'console/assets/skins/sam/console.css',
+      'type' => 'css',
+      'ext' => false,
+      'name' => 'skin-sam-console',
       'requires' => 
       array (
       ),
@@ -852,6 +1008,7 @@
           'requires' => 
           array (
             0 => 'io-base',
+            1 => 'node',
           ),
           'type' => 'js',
           'name' => 'io-upload-iframe',
@@ -862,7 +1019,7 @@
           'path' => 'io/io-base-min.js',
           'requires' => 
           array (
-            0 => 'node',
+            0 => 'event-custom',
           ),
           'type' => 'js',
           'name' => 'io-base',
@@ -874,6 +1031,7 @@
           'requires' => 
           array (
             0 => 'io-base',
+            1 => 'node',
           ),
           'type' => 'js',
           'name' => 'io-form',
@@ -905,6 +1063,7 @@
         0 => 'widget',
         1 => 'substitute',
         2 => 'skin-sam-console',
+        3 => 'skin-sam-console',
       ),
       'type' => 'js',
       'name' => 'console',
@@ -957,7 +1116,14 @@
     ),
     'loader' => 
     array (
+      '_provides' => 
+      array (
+        'loader' => true,
+      ),
       'path' => 'loader/loader-min.js',
+      '_supersedes' => 
+      array (
+      ),
       'requires' => 
       array (
         0 => 'get',
@@ -1135,6 +1301,7 @@
       'requires' => 
       array (
         0 => 'io-base',
+        1 => 'node',
       ),
       'type' => 'js',
       'name' => 'io-form',
@@ -1311,6 +1478,7 @@
         0 => 'widget',
         1 => 'dd-constrain',
         2 => 'skin-sam-slider',
+        3 => 'skin-sam-slider',
       ),
       'type' => 'js',
       'name' => 'slider',
@@ -1339,6 +1507,7 @@
         0 => 'widget',
         1 => 'skin-sam-widget-stack',
         2 => 'widget',
+        3 => 'skin-sam-widget-stack',
       ),
       'type' => 'js',
       'name' => 'widget-stack',
@@ -1364,6 +1533,7 @@
         0 => 'node',
         1 => 'classnamemanager',
         2 => 'skin-sam-node-menunav',
+        3 => 'skin-sam-node-menunav',
       ),
       'type' => 'js',
       'name' => 'node-menunav',
@@ -1379,6 +1549,7 @@
         1 => 'node',
         2 => 'classnamemanager',
         3 => 'skin-sam-widget',
+        4 => 'skin-sam-widget',
       ),
       'type' => 'js',
       'name' => 'widget',
@@ -1394,6 +1565,7 @@
             0 => 'widget',
             1 => 'skin-sam-widget-stack',
             2 => 'widget',
+            3 => 'skin-sam-widget-stack',
           ),
           'type' => 'js',
           'name' => 'widget-stack',
@@ -1463,7 +1635,14 @@
     ),
     'json-stringify' => 
     array (
+      '_provides' => 
+      array (
+        'json-stringify' => true,
+      ),
       'path' => 'json/json-stringify-min.js',
+      '_supersedes' => 
+      array (
+      ),
       'requires' => 
       array (
         0 => 'yui-base',

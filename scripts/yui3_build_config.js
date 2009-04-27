@@ -24,7 +24,9 @@ YUI({
 
     var l = new Y.Loader({
             base: 'http://yui.yahooapis.com/' + version + '/build/'
-        }),
+        }), o;
+
+        l._setup();
 
         o = Y.JSON.stringify({
             base: l.base,
