@@ -4,10 +4,12 @@
   array (
     'after' => 
     array (
-      0 => 'reset',
-      1 => 'fonts',
-      2 => 'grids',
-      3 => 'base',
+      0 => 'cssreset',
+      1 => 'cssfonts',
+      2 => 'cssgrids',
+      3 => 'cssreset-context',
+      4 => 'cssfonts-context',
+      5 => 'cssgrids-context',
     ),
     'path' => 'skin.css',
     'base' => 'assets/skins/',
@@ -39,12 +41,13 @@
     'stylesheet' => 
     array (
       'path' => 'stylesheet/stylesheet-min.js',
-      'type' => 'js',
-      'ext' => false,
-      'name' => 'stylesheet',
       'requires' => 
       array (
+        0 => 'yui-base',
       ),
+      'type' => 'js',
+      'name' => 'stylesheet',
+      'ext' => false,
     ),
     'cssbase' => 
     array (
@@ -110,28 +113,35 @@
       'requires' => 
       array (
       ),
+      'expanded' => 
+      array (
+      ),
     ),
     'json-parse' => 
     array (
       'path' => 'json/json-parse-min.js',
-      'type' => 'js',
-      'ext' => false,
-      'name' => 'json-parse',
       'requires' => 
       array (
+        0 => 'yui-base',
       ),
+      'type' => 'js',
+      'name' => 'json-parse',
+      'ext' => false,
       'expanded' => 
       array (
+        0 => 'yui-base',
       ),
     ),
     'skin-sam-widget-stack' => 
     array (
       'after' => 
       array (
-        0 => 'reset',
-        1 => 'fonts',
-        2 => 'grids',
-        3 => 'base',
+        0 => 'cssreset',
+        1 => 'cssfonts',
+        2 => 'cssgrids',
+        3 => 'cssreset-context',
+        4 => 'cssfonts-context',
+        5 => 'cssgrids-context',
       ),
       'path' => 'widget/assets/skins/sam/widget-stack.css',
       'type' => 'css',
@@ -196,10 +206,12 @@
     array (
       'after' => 
       array (
-        0 => 'reset',
-        1 => 'fonts',
-        2 => 'grids',
-        3 => 'base',
+        0 => 'cssreset',
+        1 => 'cssfonts',
+        2 => 'cssgrids',
+        3 => 'cssreset-context',
+        4 => 'cssfonts-context',
+        5 => 'cssgrids-context',
       ),
       'path' => 'widget/assets/skins/sam/widget-position-ext.css',
       'type' => 'css',
@@ -212,21 +224,24 @@
     'classnamemanager' => 
     array (
       'path' => 'classnamemanager/classnamemanager-min.js',
-      'type' => 'js',
-      'ext' => false,
-      'name' => 'classnamemanager',
       'requires' => 
       array (
+        0 => 'yui-base',
       ),
+      'type' => 'js',
+      'name' => 'classnamemanager',
+      'ext' => false,
     ),
     'skin-sam-widget-stdmod' => 
     array (
       'after' => 
       array (
-        0 => 'reset',
-        1 => 'fonts',
-        2 => 'grids',
-        3 => 'base',
+        0 => 'cssreset',
+        1 => 'cssfonts',
+        2 => 'cssgrids',
+        3 => 'cssreset-context',
+        4 => 'cssfonts-context',
+        5 => 'cssgrids-context',
       ),
       'path' => 'widget/assets/skins/sam/widget-stdmod.css',
       'type' => 'css',
@@ -313,12 +328,13 @@
     'collection' => 
     array (
       'path' => 'collection/collection-min.js',
-      'type' => 'js',
-      'ext' => false,
-      'name' => 'collection',
       'requires' => 
       array (
+        0 => 'oop',
       ),
+      'type' => 'js',
+      'name' => 'collection',
+      'ext' => false,
     ),
     'dd-drop-plugin' => 
     array (
@@ -356,12 +372,13 @@
     'dump' => 
     array (
       'path' => 'dump/dump-min.js',
-      'type' => 'js',
-      'ext' => false,
-      'name' => 'dump',
       'requires' => 
       array (
+        0 => 'yui-base',
       ),
+      'type' => 'js',
+      'name' => 'dump',
+      'ext' => false,
     ),
     'yui' => 
     array (
@@ -511,27 +528,31 @@
         'json-parse' => 
         array (
           'path' => 'json/json-parse-min.js',
-          'type' => 'js',
-          'ext' => false,
-          'name' => 'json-parse',
           'requires' => 
           array (
+            0 => 'yui-base',
           ),
+          'type' => 'js',
+          'name' => 'json-parse',
+          'ext' => false,
           'expanded' => 
           array (
+            0 => 'yui-base',
           ),
         ),
         'json-stringify' => 
         array (
           'path' => 'json/json-stringify-min.js',
-          'type' => 'js',
-          'ext' => false,
-          'name' => 'json-stringify',
           'requires' => 
           array (
+            0 => 'yui-base',
           ),
+          'type' => 'js',
+          'name' => 'json-stringify',
+          'ext' => false,
           'expanded' => 
           array (
+            0 => 'yui-base',
           ),
         ),
       ),
@@ -539,7 +560,8 @@
       'expanded' => 
       array (
         0 => 'json-parse',
-        1 => 'json-stringify',
+        1 => 'yui-base',
+        2 => 'json-stringify',
       ),
       'ext' => false,
       'name' => 'json',
@@ -559,12 +581,13 @@
     'queue-base' => 
     array (
       'path' => 'queue/queue-base-min.js',
-      'type' => 'js',
-      'ext' => false,
-      'name' => 'queue-base',
       'requires' => 
       array (
+        0 => 'yui-base',
       ),
+      'type' => 'js',
+      'name' => 'queue-base',
+      'ext' => false,
     ),
     'compat' => 
     array (
@@ -582,12 +605,13 @@
     'cookie' => 
     array (
       'path' => 'cookie/cookie-min.js',
-      'type' => 'js',
-      'ext' => false,
-      'name' => 'cookie',
       'requires' => 
       array (
+        0 => 'yui-base',
       ),
+      'type' => 'js',
+      'name' => 'cookie',
+      'ext' => false,
     ),
     'anim' => 
     array (
@@ -671,12 +695,13 @@
         'anim-easing' => 
         array (
           'path' => 'anim/anim-easing-min.js',
-          'type' => 'js',
-          'ext' => false,
-          'name' => 'anim-easing',
           'requires' => 
           array (
+            0 => 'yui-base',
           ),
+          'type' => 'js',
+          'name' => 'anim-easing',
+          'ext' => false,
         ),
         'anim-xy' => 
         array (
@@ -772,12 +797,13 @@
     'profiler' => 
     array (
       'path' => 'profiler/profiler-min.js',
-      'type' => 'js',
-      'ext' => false,
-      'name' => 'profiler',
       'requires' => 
       array (
+        0 => 'yui-base',
       ),
+      'type' => 'js',
+      'name' => 'profiler',
+      'ext' => false,
     ),
     'node-event-simulate' => 
     array (
@@ -898,12 +924,13 @@
     'anim-easing' => 
     array (
       'path' => 'anim/anim-easing-min.js',
-      'type' => 'js',
-      'ext' => false,
-      'name' => 'anim-easing',
       'requires' => 
       array (
+        0 => 'yui-base',
       ),
+      'type' => 'js',
+      'name' => 'anim-easing',
+      'ext' => false,
     ),
     'node-style' => 
     array (
@@ -917,15 +944,15 @@
       'name' => 'node-style',
       'ext' => false,
     ),
-    'io-queue' => 
+    'focusmanager' => 
     array (
-      'path' => 'io/io-queue-min.js',
+      'path' => 'focusmanager/focusmanager-min.js',
       'requires' => 
       array (
-        0 => 'io-base',
+        0 => 'node',
       ),
       'type' => 'js',
-      'name' => 'io-queue',
+      'name' => 'focusmanager',
       'ext' => false,
     ),
     'loader' => 
@@ -939,15 +966,15 @@
       'name' => 'loader',
       'ext' => false,
     ),
-    'plugin' => 
+    'io-queue' => 
     array (
-      'path' => 'plugin/plugin-min.js',
+      'path' => 'io/io-queue-min.js',
       'requires' => 
       array (
-        0 => 'base',
+        0 => 'io-base',
       ),
       'type' => 'js',
-      'name' => 'plugin',
+      'name' => 'io-queue',
       'ext' => false,
     ),
     'base' => 
@@ -959,6 +986,17 @@
       ),
       'type' => 'js',
       'name' => 'base',
+      'ext' => false,
+    ),
+    'plugin' => 
+    array (
+      'path' => 'plugin/plugin-min.js',
+      'requires' => 
+      array (
+        0 => 'base',
+      ),
+      'type' => 'js',
+      'name' => 'plugin',
       'ext' => false,
     ),
     'event-simulate' => 
@@ -1238,10 +1276,12 @@
     array (
       'after' => 
       array (
-        0 => 'reset',
-        1 => 'fonts',
-        2 => 'grids',
-        3 => 'base',
+        0 => 'cssreset',
+        1 => 'cssfonts',
+        2 => 'cssgrids',
+        3 => 'cssreset-context',
+        4 => 'cssfonts-context',
+        5 => 'cssgrids-context',
       ),
       'path' => 'widget/assets/skins/sam/widget-position.css',
       'type' => 'css',
@@ -1424,14 +1464,16 @@
     'json-stringify' => 
     array (
       'path' => 'json/json-stringify-min.js',
-      'type' => 'js',
-      'ext' => false,
-      'name' => 'json-stringify',
       'requires' => 
       array (
+        0 => 'yui-base',
       ),
+      'type' => 'js',
+      'name' => 'json-stringify',
+      'ext' => false,
       'expanded' => 
       array (
+        0 => 'yui-base',
       ),
     ),
     'anim-scroll' => 
@@ -1519,12 +1561,13 @@
         'queue-base' => 
         array (
           'path' => 'queue/queue-base-min.js',
-          'type' => 'js',
-          'ext' => false,
-          'name' => 'queue-base',
           'requires' => 
           array (
+            0 => 'yui-base',
           ),
+          'type' => 'js',
+          'name' => 'queue-base',
+          'ext' => false,
         ),
       ),
       'type' => 'js',
