@@ -45,6 +45,9 @@ class YAHOO_util_Loader {
     // current target not used
     var $target = "";
 
+    //If set to true the CSS and JS will be combo loaded from yui.yahooapis.com
+    var $combine = false;
+
     var $allowRollups = true;
 
     // If set to true to pick up optional modules in addition to required modules
@@ -112,6 +115,11 @@ class YAHOO_util_Loader {
     var $depCache = array();
     var $filters = array();
 
+    // used to do combo handling
+    var $comboBase = "";
+    var $cssComboLocation = null;
+    var $jsComboLocation  = null;
+
     /**
      * The constructor needs to be supplied with additional metadata
      */
@@ -126,6 +134,8 @@ class YAHOO_util_Loader {
         $this->jsonAvail  = function_exists('json_encode');
         $this->embedAvail = ($this->curlAvail && $this->apcAvail);
         $this->base = $yui_current[YUI_BASE];
+        $this->comboBase = str_replace('http://yui.yahooapis.com/', 'http://yui.yahooapis.com/combo?', $this->base);
+        $this->comboDefaultVersion = str_replace('http://yui.yahooapis.com/', '', $this->base); //(ex) 2.7.0/build/
 
         $this->fullCacheKey = null;
         $cache = null;
@@ -140,7 +150,7 @@ class YAHOO_util_Loader {
             $this->cacheFound = true;
 
             // $this->log("using cache -------------------------------------------------------");
-            //$this->log(var_export($cache[YUI_DEPCACHE], true));
+            // $this->log(var_export($cache[YUI_DEPCACHE], true));
             // $this->log("----------------------------------------------------------");
             $this->modules = $cache[YUI_MODULES];
             $this->skin = $cache[YUI_SKIN];
@@ -376,11 +386,11 @@ class YAHOO_util_Loader {
     }
  
     function script_raw() {
-        return $this->json(YUI_JS);
+        return $this->raw(YUI_JS);
     }
 
     function css_raw() {
-        return $this->json(YUI_CSS);
+        return $this->raw(YUI_CSS);
     }
 
     function raw($moduleType=null, $allowRollups=false, $skipSort=false) {
@@ -1012,7 +1022,12 @@ class YAHOO_util_Loader {
                         break;
                     case YUI_TAGS:
                     default: 
-                        $html .= $this->getLink($name, $dep[YUI_TYPE])."\n";
+                        if ($this->combine === true) {
+                            $this->addToCombo($name, $dep[YUI_TYPE]);
+                            $html = $this->getComboLink($dep[YUI_TYPE]);
+                        } else {
+                           $html .= $this->getLink($name, $dep[YUI_TYPE])."\n";
+                        }
                 }
             }
         }
@@ -1102,7 +1117,11 @@ class YAHOO_util_Loader {
 
             curl_setopt($ch, CURLOPT_URL, $url); // set url to post to 
             curl_setopt($ch, CURLOPT_FAILONERROR, 1); 
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);// allow redirects 
+            
+            //Commenting out CURLOPT_FOLLOWLOCATION for now.  Doesn't work in safe mode or with openbase_dir enabled. 
+            //See http://au.php.net/manual/ro/function.curl-setopt.php#71313.
+            //curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);// allow redirects
+            
             curl_setopt($ch, CURLOPT_RETURNTRANSFER,1); // return into a variable 
             // curl_setopt($ch, CURLOPT_TIMEOUT, 3); // times out after 4s
 
@@ -1160,6 +1179,66 @@ class YAHOO_util_Loader {
             return '<link rel="stylesheet" type="text/css" href="' . $url . '" />';
         } else {
             return '<script type="text/javascript" src="' . $url . '"></script>';
+        }
+    }
+  
+    function getComboLink($type) {
+        $url = '';
+        
+        if ($type == YUI_CSS) {
+            if ($this->cssComboLocation !== null) {
+                $url = "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$this->cssComboLocation}\" />";
+            } else {
+                $url = "<!-- NO YUI CSS COMPONENTS IDENTIFIED -->";
+            }
+        } else if ($type == YUI_JS) {
+            if ($this->jsComboLocation !== null) {
+                if ($this->cssComboLocation !== null) {
+                    $url = "\n";
+                }
+                $url .= "<script type=\"text/javascript\" src=\"{$this->jsComboLocation}\"></script>";
+            } else {
+                $url = "<!-- NO YUI JAVASCRIPT COMPONENTS IDENTIFIED -->";
+            }
+        }
+        
+        //Allow for RAW & DEBUG over minified default
+        if ($this->filter) {
+            if (count($this->filterList) > 0 && !isset($this->filterList[$name])) {
+                // skip the filter
+            } else if (isset($this->filters[$this->filter])) {
+                $filter = $this->filters[$this->filter];
+                $url = ereg_replace($filter[YUI_SEARCH], $filter[YUI_REPLACE], $url);
+            }
+        }
+        
+        return $url;
+    }
+    
+    function addToCombo($name, $type) {
+        //Allow version overrides
+        $yuiVersion = $this->comboDefaultVersion;
+        if ($this->version !== null) {
+            $yuiVersion = $this->version . '/build/';
+            $this->comboBase = 'http://yui.yahooapis.com/combo?' . $yuiVersion;
+        }
+        
+        if ($type == YUI_CSS) {
+            //If this is the first css component then add the combo base path
+            if ($this->cssComboLocation === null) {
+                $this->cssComboLocation = $this->comboBase . $this->modules[$name][YUI_PATH];
+            } else {
+                //Prep for next component
+                $this->cssComboLocation .= '&' . $yuiVersion . $this->modules[$name][YUI_PATH];
+            }
+        } else {
+            //If this is the first js component then add the combo base path
+            if ($this->jsComboLocation === null) {
+                $this->jsComboLocation = $this->comboBase . $this->modules[$name][YUI_PATH];
+            } else {
+                //Prep for next component
+                $this->jsComboLocation .= '&' . $yuiVersion . $this->modules[$name][YUI_PATH];
+            }
         }
     }
   

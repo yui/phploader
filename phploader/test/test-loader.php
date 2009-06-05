@@ -12,9 +12,9 @@ $loader = new YAHOO_util_Loader();
 $output  = "";
 $checked = "";
 $modules = array();
-$canEmbed = false;
-$embed = "EMBED";
+$embed = false;
 $loadOptional = false;
+$combine = false;
 
 if (isset($_GET["module"])) {
 
@@ -37,11 +37,14 @@ if (isset($_GET["module"])) {
         }
     }
 
-    // content type is "EMBED" to inline the files, otherwise links
-    // to the files are generated.  This is not implemented on the test
-    // page (we always generate links)
     if (isset($_GET["contenttype"])) {
         $contenttype = $_GET["contenttype"];
+    }
+
+    // content type is "EMBED" to inline the files, otherwise links to the files are generated.
+    if (isset($_GET["embed"])) {
+        $contenttype = "EMBED";
+        $embed = true;
     }
 
     if (isset($_GET["base"])) {
@@ -49,20 +52,28 @@ if (isset($_GET["module"])) {
         $loader->base = $base;
     }
 
+    if (isset($_GET["comboBase"]) && !empty($_GET["comboBase"])) {
+        $comboBase= $_GET["comboBase"];
+        $loader->comboBase = $comboBase;
+    } else {
+        $comboBase= 'http://yui.yahooapis.com/combo?2.7.0/build/';
+        $loader->comboBase = $comboBase;
+    }
+
     if (isset($_GET["filter"])) {
         $filter= $_GET["filter"];
         $loader->filter = $filter;
     }
 
-    if (isset($_GET["canEmbed"])) {
-        $canEmbed = true;
+    if (isset($_GET["combine"])) {
+        $combine = true;
     }
 
     if (isset($_GET["loadOptional"])) {
         $loadOptional = true;
     }
 
-    $loader->canEmbed  = $canEmbed;
+    $loader->combine = $combine;
     $loader->loadOptional = $loadOptional;
 
     // tell the loader about each module requested
@@ -118,16 +129,14 @@ if (isset($_GET["module"])) {
 
 </style>
 
-<!-- The actual output after processing all of the dependencies
-
-<?php echo $output ?> 
-
--->
+<?php 
+//The actual output after processing all of the dependencies
+//echo $output; 
+?> 
 
 </head>
 <body>
-<form name="mainform" action="<?php echo getenv("REQUEST_URI") ?>">
-
+<form name="mainform" action="<?php echo getenv("REQUEST_URI"); ?>">
 
 <!-- All of the modules, check the ones that are required -->
 <div class="content" id="modulelist">
@@ -153,7 +162,8 @@ if (isset($_GET["module"])) {
 
     $prodchecked = "";
     $debugchecked = "";
-    $canEmbedchecked = "";
+    $combinechecked = "";
+    $embedchecked = "";
     $loadOptionalchecked = "";
 
     // if ($target == $prod) {
@@ -166,8 +176,12 @@ if (isset($_GET["module"])) {
         // $devchecked = "checked";
     // }
 
-    if ($canEmbed) {
-        $canEmbedchecked = "checked";
+    if ($combine) {
+        $combinechecked = "checked";
+    }
+
+    if ($embed) {
+        $embedchecked = "checked";
     }
 
     if ($loadOptional) {
@@ -177,7 +191,13 @@ if (isset($_GET["module"])) {
 ?>
 
 <p>
-<input id="base" type="text" name="base" value="<?php echo $loader->base ?>"  size="8"/>
+<label>Base:</label><br />
+<input id="base" type="text" name="base" value="<?php echo $loader->base; ?>"  size="15"/>
+</p>
+
+<p>
+<label>Combo Base:</label><br />
+<input id="base" type="text" name="comboBase" value="<?php echo $loader->comboBase; ?>"  size="15"/>
 </p>
 
 <p>
@@ -188,14 +208,18 @@ if (isset($_GET["module"])) {
 </select>
 </p>
 
+<p>
+<input type="checkbox" name="combine" value="1" <?php echo $combine; ?> />
+Use Combo Loader
+</p>
 
 <p>
-<input type="checkbox" name="canEmbed" value="1" <?php echo $canEmbedchecked ?> />
+<input type="checkbox" name="embed" value="1" <?php echo $embedchecked; ?> />
 Embed enabled
 </p>
 
 <p>
-<input type="checkbox" name="loadOptional" value="1" <?php echo $loadOptionalchecked ?> />
+<input type="checkbox" name="loadOptional" value="1" <?php echo $loadOptionalchecked; ?> />
 Load Optional
 </p>
 
