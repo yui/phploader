@@ -1,4 +1,10 @@
 <?php
+/**
+ *  Copyright (c) 2009, Yahoo! Inc. All rights reserved.
+ *  Code licensed under the BSD License:
+ *  http://developer.yahoo.net/yui/license.html
+ *  version: 1.0 beta
+ */
 
 include('/home/y/share/pear/Yahoo/YUI/config.php');
 
@@ -36,6 +42,17 @@ define('YUI_TAGS',       'TAGS');
 define('YUI_TYPE',       'type');
 define('YUI_URL',        'url');
 
+/**
+ * YAHOO_util_Loader class
+ *
+ * Used to specify JavaScript and CSS module requirements.  It maintains a dependency
+ * tree for these modules so when a module is requested, all of the other modules it 
+ * depends on are included as well.  By default, the YUI Library is configured, and 
+ * other modules and their dependencies can be added via PHP.
+ *
+ * @package YAHOO_util_Loader
+ * @author Yahoo! Inc.
+ **/
 class YAHOO_util_Loader {
 
     var $base = "";
@@ -120,15 +137,11 @@ class YAHOO_util_Loader {
     var $cssComboLocation = null;
     var $jsComboLocation  = null;
 
-    /**
-     * The constructor needs to be supplied with additional metadata
-     */
+    
     function YAHOO_util_Loader($cacheKey=null, $modules=null, $noYUI=false) {
-
         global $yui_current;
 
         $this->apcttl = 0;
-
         $this->curlAvail  = function_exists('curl_exec');
         $this->apcAvail   = function_exists('apc_fetch');
         $this->jsonAvail  = function_exists('json_encode');
@@ -163,7 +176,6 @@ class YAHOO_util_Loader {
         } else {
 
             // $this->log("initializing metadata-------------------------------------------------------");
-
             // set up the YUI info for the current version of the lib
             if ($noYUI) {
                 $this->modules = array();
@@ -211,7 +223,7 @@ class YAHOO_util_Loader {
             //$this->loadSingle($arg);
         //}
     }
-
+    
     function updateCache() {
         if ($this->fullCacheKey) {
             $cache = array();
@@ -226,6 +238,10 @@ class YAHOO_util_Loader {
         }
     }
 
+    /**
+    * Used to load the specific components
+    * @param array An array of components to load 
+    */
     function load() {
         $args = func_get_args();
         foreach ($args as $arg) {
@@ -318,38 +334,109 @@ class YAHOO_util_Loader {
         return true;
     }
 
+    /**
+    * Used to output each of the required script tags
+    * @return string (e.g.) <link rel="stylesheet" type="text/css" href="..." />
+    */
     function script() {
         return $this->tags(YUI_JS);
     }
-
+    
+    /**
+    * Used to output each of the required link tags
+    * @return string (e.g.) <script type="text/javascript" src="..."></script>
+    */
     function css() {
         return $this->tags(YUI_CSS);
     }
 
+    /**
+    * Used to output each of the required html tags (i.e.) script or link
+    * @param $moduleType string Type of html tag to return (i.e.) js or css.  Default is both.
+    * @param skipSort bool
+    * @return string
+    */
     function tags($moduleType=null, $skipSort=false) {
         return $this->processDependencies(YUI_TAGS, $moduleType, $skipSort);
     }
-
+    
+    /**
+    * Used to embed the raw JavaScript inline
+    * @return string (e.g.) <script type="text/javascript">...</script>
+    */
     function script_embed() {
         return $this->embed(YUI_JS);
     }
-
+    
+    /**
+    * Used to embed the raw CSS inline
+    * @return string (e.g.) <style type="text/css">...</style>
+    */
     function css_embed() {
         return $this->embed(YUI_CSS);
     }
 
+    /**
+    * Used to output each of the required html tags inline (i.e.) script or link
+    * @param $moduleType string Type of html tag to return (i.e.) js or css.  Default is both.
+    * @param skipSort bool
+    * @return string
+    */
     function embed($moduleType=null, $skipSort=false) {
         return $this->processDependencies(YUI_EMBED, $moduleType, $skipSort);
     }
 
+    /**
+    * Used to fetch an array of the required JavaScript components 
+    * @return Array (e.g.)
+    * Array ([js] => Array (
+    *            [0] => Array
+    *                (
+    *                    [http://yui.yahooapis.com/2.7.0/build/yahoo-dom-event/yahoo-dom-event.js] => Array
+    *                        (
+    *                            [0] => yahoo-dom-event
+    *                            [1] => yahoo
+    *                            [2] => event
+    *                            [3] => dom
+    *                        )
+    *                )
+    *       )
+    * )
+    */
     function script_data() {
         return $this->data(YUI_JS);
     }
 
+    /**
+    * Used to fetch an array of the required CSS components 
+    * @return Array (e.g.)
+    * Array ([css] => Array (
+    *        [0] => Array
+    *            (
+    *                [http://yui.yahooapis.com/2.7.0/build/reset-fonts-grids/reset-fonts-grids.css] => Array
+    *                    (
+    *                        [0] => reset-fonts-grids
+    *                        [1] => reset
+    *                        [2] => fonts
+    *                        [3] => grids
+    *                        [4] => reset-fonts
+    *                    )
+    *            )
+    *    )
+    * )
+    *
+    */
     function css_data() {
         return $this->data(YUI_CSS);
     }
-
+    
+    /**
+    * Used to output an Array which contains data about the required JavaScript & CSS components
+    * @param $moduleType string Type of html tag to return (i.e.) js or css.  Default is both.
+    * @param allowRollups bool
+    * @param skipSort bool
+    * @return string
+    */
     function data($moduleType=null, $allowRollups=false, $skipSort=false) {
         if (!$allowRollups) {
             $this->setProcessedModuleType($moduleType);
@@ -360,17 +447,39 @@ class YAHOO_util_Loader {
         return $this->processDependencies($type, $moduleType, $skipSort);
     }
 
+    /**
+    * Used to fetch a JSON object with the required JavaScript components 
+    * @return string JSON object (e.g.)
+    * {"js":[
+    *   {"http:\/\/yui.yahooapis.com\/2.7.0\/build\/yahoo-dom-event\/yahoo-dom-event.js": ["yahoo-dom-event","yahoo","event","dom"]}
+    * ]}
+    */
     function script_json() {
         return $this->json(YUI_JS);
     }
-
+    
+    /**
+    * Used to fetch a JSON object with the required CSS components 
+    * @return string JSON object (e.g.)
+    * {"css":[
+    *   {"http:\/\/yui.yahooapis.com\/2.7.0\/build\/fonts\/fonts-min.css": ["fonts"]},
+    *   {"http:\/\/yui.yahooapis.com\/2.7.0\/build\/grids\/grids-min.css": ["grids"]}
+    * ]}
+    */
     function css_json() {
         return $this->json(YUI_CSS);
     }
 
+    /**
+    *  Used to fetch a JSON object with the required JavaScript and CSS components
+    * @param moduleType string
+    * @param allowRollups bool
+    * @param skipSort bool
+    * @param full bool
+    * @return string
+    */
     function json($moduleType=null, $allowRollups=false, $skipSort=false, $full=false) {
-        //$this->firstPass = $allowRollups; // TODO: Seems like an awkward way to 
-                                          // force it to not use rollups
+        //$this->firstPass = $allowRollups; // TODO: Seems like an awkward way to force it to not use rollups
         if (!$allowRollups) {
             $this->setProcessedModuleType($moduleType);
         }
@@ -385,14 +494,29 @@ class YAHOO_util_Loader {
         return $this->processDependencies($type, $moduleType, $skipSort);
     }
  
+    /**
+    * Used to produce the raw JavaScript inline code without the actual <script> tags
+    * @return string
+    */
     function script_raw() {
         return $this->raw(YUI_JS);
     }
 
+    /**
+    * Used to produce the raw CSS inline code without the actual <style> tags
+    * @return string
+    */
     function css_raw() {
         return $this->raw(YUI_CSS);
     }
 
+    /**
+    * Used to produce the raw Javacript and CSS inline code without the actual <script> or <style> tags
+    * @param moduleType string
+    * @param allowRollups bool
+    * @param skipSort bool
+    * @return string
+    */
     function raw($moduleType=null, $allowRollups=false, $skipSort=false) {
         return $this->processDependencies(YUI_RAW, $moduleType, $skipSort);
     }
@@ -610,7 +734,11 @@ class YAHOO_util_Loader {
         return false;
     }
 
-    // overrides the base dir for the list of modules
+    /**
+    * Used to override the base dir for specific set of modules
+    * @param string Base path (e.g.) 2.6.0/build
+    * @param array Module names of which to override base
+    */
     function overrideBase($base, $modules) {
         foreach ($modules as $name=>$val) {
             $this->baseOverrides[$name] = $base;
@@ -847,7 +975,7 @@ class YAHOO_util_Loader {
                 // $this->log($name . ": checking after " . var_export($dep, true));
                 // add 'after' items
 
-/*
+                /*
                 if (isset($dep[YUI_AFTER])) {
                     $after = $dep[YUI_AFTER];
                     $this->log("* " .$name . ": has after " . $after);
