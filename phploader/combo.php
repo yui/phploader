@@ -1,17 +1,24 @@
 <?php
+/**
+ *  Copyright (c) 2009, Yahoo! Inc. All rights reserved.
+ *  Code licensed under the BSD License:
+ *  http://developer.yahoo.net/yui/license.html
+ *  version: 1.0 beta
+ */
+ 
 /*
 * This script servers as a local replacement for the remote YUI combo handler
-* Each version of YUI you intend to support must be setup in the yui_loader directory
-* A valid setup will look something like yui_loader/2.7.0/build, yui_loader/2.6.0/build, etc.
+* Each version of YUI you intend to support must be setup in the phploader directory
+* A valid setup will look something like phploader/2.7.0/build, phploader/2.6.0/build, etc.
 *
 * Additional Setup Note: 
-* If the yui_loader directory does not live webservers root folder then modify $pathToYUILoader accordingly
+* If your phploader directory does not live webservers root folder then modify $pathToYUILoader accordingly
 */
 
 include("/home/y/share/pear/Yahoo/YUI/loader.php");
 $loader = new YAHOO_util_Loader();
 
-$pathToYUILoader = server() . "/yui_loader/"; //Web accessible path to the YUI loader directory (Override as needed)
+$pathToYUILoader = server() . "/phploader/"; //Web accessible path to the YUI loader directory (Override as needed)
 $base = $pathToYUILoader . $loader->comboDefaultVersion; //Defaults to current version
 
 //server(): Computes the base URL of the current page (protocol, server, path)
@@ -38,6 +45,7 @@ if (isset($queryString) && !empty($queryString)) {
             //Add module to array for loading
             $yuiComponents[] = $parts[2];
             //Check for and setup base overrides as needed
+            //(i.e.) requested component version number doesn't equal the current version
             $tmpbase = $pathToYUILoader . $parts[0] . '/' . $parts[1] . '/';
             if ($tmpbase != $base) {
                 $baseOverrides[$tmpbase][$parts[2]] = $parts[2];
