@@ -2,7 +2,7 @@
 
 // header('Content-type: text/ascii');
 
-include("/home/y/share/pear/Yahoo/YUI/loader.php");
+include("../loader.php");
 
 function encoded_out($str) {
     echo (htmlentities($str));

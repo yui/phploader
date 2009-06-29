@@ -2,7 +2,7 @@
 
 error_reporting(E_ALL);
 
-include("/home/y/share/pear/Yahoo/YUI/loader.php");
+include("../loader.php");
 
 function verify($name, $url)  {
 

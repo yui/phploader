@@ -2,7 +2,7 @@
 
 error_reporting(E_ALL);
 
-include("/home/y/share/pear/Yahoo/YUI/loader.php");
+include("../loader.php");
 
 // create the loader instance, this sets up the platform config as well,
 // which we need right away because we are iterating the packages to

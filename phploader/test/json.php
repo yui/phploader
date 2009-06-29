@@ -1,6 +1,6 @@
 <?php
 
-include("/home/y/share/pear/Yahoo/YUI/loader.php");
+include("../loader.php");
 
 $loader = new YAHOO_util_Loader();
 
