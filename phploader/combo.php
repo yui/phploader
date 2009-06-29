@@ -3,22 +3,35 @@
  *  Copyright (c) 2009, Yahoo! Inc. All rights reserved.
  *  Code licensed under the BSD License:
  *  http://developer.yahoo.net/yui/license.html
- *  version: 1.0 beta
+ *  version: 1.0.0b1
  */
  
 /*
-* This script servers as a local replacement for the remote YUI combo handler
-* Each version of YUI you intend to support must be setup in the phploader directory
-* A valid setup will look something like phploader/2.7.0/build, phploader/2.6.0/build, etc.
-*
-* Additional Setup Note: 
-* If your phploader directory does not live webservers root folder then modify $pathToYUILoader accordingly
+    This feature will allow YUI PHP Loader to combine files without relying 
+    on a remote combo-service.  The key use case here would be someone 
+    writing their own website/application in PHP.
+
+    1. The main endpoint for combo requests in this case is combo.php.  Place
+        this file in the same location as loader.php.
+
+        Note: If the phploader directory does not live in the webserver's root 
+        folder then modify the $pathToYUILoader variable in combo.php accordingly
+
+    2. Download and extract each version of YUI you intend to support into
+        the phploader directory.  We recommend you organize them in a 
+        subfolder named "releases".
+
+        A valid setup would look something like:
+        htdocs/phploader/releases/2.7.0/build
+        htdocs/phploader/releases/2.6.0/build
+        etc...
+
 */
 
-include("/home/y/share/pear/Yahoo/YUI/loader.php");
+include("./loader.php");
 $loader = new YAHOO_util_Loader();
 
-$pathToYUILoader = server() . "/phploader/"; //Web accessible path to the YUI loader directory (Override as needed)
+$pathToYUILoader = server() . "/phploader/releases/"; //Web accessible path to the YUI loader directory (Override as needed)
 $base = $pathToYUILoader . $loader->comboDefaultVersion; //Defaults to current version
 
 //server(): Computes the base URL of the current page (protocol, server, path)

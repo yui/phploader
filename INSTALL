@@ -1,0 +1,37 @@
+Basic YUI PHP Loader Setup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Verify that the environment you intend to install YUI PHP Loader on
+    has a working webserver, (e.g.) Apache, with support for PHP.
+
+2. Extract the YUI PHP Loader archive to a location within the
+    server's webroot (e.g.) htdocs/phploader.
+    
+3. Refer to usage documents and examples:
+    http://developer.yahoo.com/yui/phploader
+
+
+Local Combo Handler Setup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This feature will allow YUI PHP Loader to combine files without relying 
+on a remote combo-service.  The key use case here would be someone 
+writing their own website/application in PHP.
+
+1. The main endpoint for combo requests in this case is combo.php.  Place
+    this file in the same location as loader.php.
+    
+    Note: If the phploader directory does not live in the webserver's root 
+    folder then modify the $pathToYUILoader variable in combo.php accordingly
+    
+2. Download and extract each version of YUI you intend to support into
+    the phploader directory.  We recommend you organize them in a 
+    subfolder named "releases".
+
+    A valid setup would look something like:
+    htdocs/phploader/releases/2.7.0/build
+    htdocs/phploader/releases/2.6.0/build
+    etc...
+    
+3. Refer to usage documents and examples:
+    http://developer.yahoo.com/yui/phploader
