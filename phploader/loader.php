@@ -187,7 +187,7 @@ class YAHOO_util_Loader {
     /**
     * The YAHOO_util_Loader class constructor
     * @constructor
-    * @yuiVersion {string} Defines which version of YUI metadata to load
+    * @param {string} yuiVersion Defines which version of YUI metadata to load
     * @param {string} cacheKey Unique APC cache key.  This is combined with the YUI base
     * so that updates to YUI will force a new cache entry.  However, if your custom config 
     * changes, this key should be changed (otherwise the old values will be used until the cache expires).
