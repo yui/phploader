@@ -15,24 +15,19 @@
         this file in the same location as loader.php.
 
         Note: If the phploader directory does not live in the webserver's root 
-        folder then modify the $pathToYUILoader variable in combo.php accordingly
+        folder then modify the PATH_TO_LOADER variable in combo.php accordingly
 
     2. Download and extract each version of YUI you intend to support into
-        the phploader directory.  We recommend you organize them in a 
-        subfolder named "releases".
+        the phploader/lib directory.
 
         A valid setup would look something like:
-        htdocs/phploader/releases/2.7.0/build
-        htdocs/phploader/releases/2.6.0/build
+        htdocs/phploader/lib/2.7.0/build
+        htdocs/phploader/lib/2.6.0/build
         etc...
-
 */
 
-include("./loader.php");
-$loader = new YAHOO_util_Loader();
-
-$pathToYUILoader = server() . "/phploader/releases/"; //Web accessible path to the YUI loader directory (Override as needed)
-$base = $pathToYUILoader . $loader->comboDefaultVersion; //Defaults to current version
+//Web accessible path to the YUI PHP loader lib directory (Override as needed)
+define("PATH_TO_LOADER", server() . "/phploader/phploader/lib/");
 
 //server(): Computes the base URL of the current page (protocol, server, path)
 //credit: http://code.google.com/p/simple-php-framework/ (modified version of full_url), license: MIT
@@ -48,6 +43,16 @@ $queryString = getenv('QUERY_STRING') ? urldecode(getenv('QUERY_STRING')) : '';
 if (isset($queryString) && !empty($queryString)) {
     $yuiFiles    = explode("&amp;", $queryString);
     $contentType = strpos($yuiFiles[0], ".js") ? 'application/x-javascript' : ' text/css';
+    
+    //Use the first module to determine which version of the YUI meta info to load
+    if (isset($yuiFiles) && !empty($yuiFiles)) {
+        $metaInfo = explode("/", $yuiFiles[0]);
+        $yuiVersion = $metaInfo[0];
+    }
+    
+    include("./loader.php");
+    $loader = new YAHOO_util_Loader($yuiVersion);
+    $base = PATH_TO_LOADER . $loader->comboDefaultVersion . "/build/"; //Defaults to current version
 
     //Detect and load the required components now
     $baseOverrides = array();
@@ -57,21 +62,8 @@ if (isset($queryString) && !empty($queryString)) {
         if (isset($parts[0]) && isset($parts[1]) && isset($parts[2])) {
             //Add module to array for loading
             $yuiComponents[] = $parts[2];
-            //Check for and setup base overrides as needed
-            //(i.e.) requested component version number doesn't equal the current version
-            $tmpbase = $pathToYUILoader . $parts[0] . '/' . $parts[1] . '/';
-            if ($tmpbase != $base) {
-                $baseOverrides[$tmpbase][$parts[2]] = $parts[2];
-            }
         } else {
            die('<!-- Unable to determine module name! -->');
-        }
-    }
-    
-    //Do base overrides if required
-    if (!empty($baseOverrides)) {
-        foreach($baseOverrides as $baseOverride=>$modules) {
-            call_user_func_array(array($loader, 'overrideBase'), array($baseOverride, $modules));
         }
     }
     

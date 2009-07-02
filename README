@@ -1,25 +1,24 @@
-yuidoc README
+phploader README
 
-yuidoc is a set of tools to generate the API documentation for the JavaScript
-in the YUI library.  The docs are derived completely from JavaDoc style
-comment blocks; no attempt is made to understand the javascript itself.
+The YUI PHP Loader Utility is a server-side utility that allows you to 
+load specific YUI components and their dependencies into your page via PHP.
+YUI PHP Loader can operate as a holistic solution by loading all of your 
+necessary YUI components, or it can be used to add one or more components 
+to a page on which some YUI content already exists.
 
-yuidoc requires Python 2.3+ with the following extensions:
-    simplejson - for reading and writing json
-    cheetah    - for generating the html docs
-    pygments   - for colorizing the source
+phploader requires a webserver with support for PHP 4.3.0+ or PHP 5+.
 
-The code for yuidoc is provided under a BSD license:
+The code for YUI phploader is provided under a BSD license:
     http://developer.yahoo.net/yui/license.html
 
 Project home page:
-    http://developer.yahoo.com/yui/yuidoc/
+    http://developer.yahoo.com/yui/phploader
     
 Source code:
-    http://github.com/yui/yuidoc
+    http://github.com/yui/phploader
 
 Issue tracker:
-    http://yuilibrary.com/projects/yuidoc
+    http://yuilibrary.com/projects/phploader
     
 Files:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,33 +32,19 @@ CHANGES
 INSTALL
     Installation instructions
 
-TAGS
-    Supported tags
-
 license.txt
     Open source license details.
 
-bin/yuidoc_parse.py
-    The comment block parser.  Parses all javascript files in the the specified 
-    directories and outputs a single file containing a json structure of the 
-    parsed documentation.
+lib/meta
+    Contains the YUI module dependency metadata.  The latest version is
+    shipped with each release, but you can manually add additional version.
 
-bin/yuidoc_highlight.py
-    Colorizes the script source
+phploader/loader.php
+    The main YUI PHP Loader class file
 
-bin/yuidoc_generate.py
-    Reads the json output from parser.py and generates HTML docs.
+phploader/combo.php
+    Local lightweight combo handling service that will allow PHP Loader to 
+    combine files without relying on a remote combo-service.
 
-bin/yuidoc.py
-    Wrapper for yuidoc_parse, yuidoc_highlight, and yuidoc_generate
-
-bin/example.sh 
-    An example shell script to run both the parser and generator on a src tree
-
-bin/example.bat
-    An example batch for for DOS/Windows
-
-ext
-    External required packages, provided for convenience
-
-
+phploader/tests
+    Contains a number of tests and example loader scripts

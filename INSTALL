@@ -25,12 +25,11 @@ writing their own website/application in PHP.
     folder then modify the $pathToYUILoader variable in combo.php accordingly
     
 2. Download and extract each version of YUI you intend to support into
-    the phploader directory.  We recommend you organize them in a 
-    subfolder named "releases".
+    the phploader/lib directory.
 
     A valid setup would look something like:
-    htdocs/phploader/releases/2.7.0/build
-    htdocs/phploader/releases/2.6.0/build
+    htdocs/phploader/lib/2.7.0/build
+    htdocs/phploader/lib/2.6.0/build
     etc...
     
 3. Refer to usage documents and examples:

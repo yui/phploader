@@ -14,8 +14,6 @@
  * @module phploader
  */
 
-include('../yui_module_info/config.php');
-
 define('YUI_AFTER',      'after');
 define('YUI_BASE',       'base');
 define('YUI_CSS',        'css');
@@ -175,12 +173,12 @@ class YAHOO_util_Loader {
     /**
     * The base path to the combo service.  Uses the Yahoo! CDN service by default.
     * You do not have to set this property to use the combine option. YUI PHP Loader ships 
-    * with an intrinsic, lightweight combo-handler as well.
+    * with an intrinsic, lightweight combo-handler as well (see combo.php).
     * @property comboBase
     * @type string
     * @default http://yui.yahooapis.com/combo?
     */
-    var $comboBase = "";
+    var $comboBase = "http://yui.yahooapis.com/combo?";
     
     // additional vars used to assist with combo handling
     var $cssComboLocation = null;
@@ -189,13 +187,37 @@ class YAHOO_util_Loader {
     /**
     * The YAHOO_util_Loader class constructor
     * @constructor
+    * @yuiVersion {string} Defines which version of YUI metadata to load
     * @param {string} cacheKey Unique APC cache key.  This is combined with the YUI base
     * so that updates to YUI will force a new cache entry.  However, if your custom config 
     * changes, this key should be changed (otherwise the old values will be used until the cache expires).
     * @param {array} modules A list of custom modules
     * @param {boolean} noYUI Pass true if you do not want the YUI metadata
     */
-    function YAHOO_util_Loader($cacheKey=null, $modules=null, $noYUI=false) {
+    function YAHOO_util_Loader($yuiVersion, $cacheKey=null, $modules=null, $noYUI=false) {
+        if (!isset($yuiVersion)) {
+            die("Error: The first parameter of YAHOO_util_Loader must specify which version of YUI to use!");
+        }
+        
+        /* 
+        * Include the metadata config file that corresponds to the requested YUI version
+        * Note: we attempt to find a prebuilt config_{version}.php file which contains an associative array,
+        * but if not available we'll attempt to find and parse the YUI json dependency file.
+        */
+        $parentDir = dirname(dirname(__FILE__));
+        $phpConfigFile = $parentDir . '/lib/meta/config_' . $yuiVersion . '.php';
+        $jsonConfigFile = $parentDir . '/lib/meta/json_' . $yuiVersion . '.txt';
+        
+        if (file_exists($phpConfigFile) && is_readable($phpConfigFile)) {
+            require($phpConfigFile);
+        } else if (file_exists($jsonConfigFile) && is_readable($jsonConfigFile) && function_exists('json_encode')) {
+            $jsonConfigString = file_get_contents($jsonConfigFile);
+            $inf = json_decode($jsonConfigString, true);
+            $GLOBALS['yui_current'] = $inf;
+        } else {
+            die("Unable to find a suitable YUI metadata file!");
+        }
+        
         global $yui_current;
 
         $this->apcttl = 0;
@@ -204,9 +226,7 @@ class YAHOO_util_Loader {
         $this->jsonAvail  = function_exists('json_encode');
         $this->embedAvail = ($this->curlAvail && $this->apcAvail);
         $this->base = $yui_current[YUI_BASE];
-        $this->comboBase = str_replace('http://yui.yahooapis.com/', 'http://yui.yahooapis.com/combo?', $this->base);
-        $this->comboDefaultVersion = str_replace('http://yui.yahooapis.com/', '', $this->base); //(ex) 2.7.0/build/
-
+        $this->comboDefaultVersion = $yuiVersion; //(ex) 2.7.0
         $this->fullCacheKey = null;
         $cache = null;
 
@@ -773,13 +793,13 @@ class YAHOO_util_Loader {
     }
 
     /**
-    * Used to override the base dir for specific set of modules
+    * Used to override the base dir for specific set of modules (Note: not supported when using the combo service)
     * @method overrideBase
     * @param {string} base Base path (e.g.) 2.6.0/build
     * @param {array} modules Module names of which to override base
     */
     function overrideBase($base, $modules) {
-        foreach ($modules as $name=>$val) {
+        foreach ($modules as $name) {
             $this->baseOverrides[$name] = $base;
         }
     }
@@ -1296,9 +1316,11 @@ class YAHOO_util_Loader {
             curl_setopt($ch, CURLOPT_URL, $url); // set url to post to 
             curl_setopt($ch, CURLOPT_FAILONERROR, 1); 
             
-            //Commenting out CURLOPT_FOLLOWLOCATION for now.  Doesn't work in safe mode or with openbase_dir enabled. 
-            //See http://au.php.net/manual/ro/function.curl-setopt.php#71313.
-            //curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);// allow redirects
+            //Doesn't work in safe mode or with openbase_dir enabled, see http://au.php.net/manual/ro/function.curl-setopt.php#71313.
+            $open_basedir = ini_get("open_basedir");
+            if (empty($open_basedir) && !ini_get('safe_mode')) {
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);// allow redirects
+            }
             
             curl_setopt($ch, CURLOPT_RETURNTRANSFER,1); // return into a variable 
             // curl_setopt($ch, CURLOPT_TIMEOUT, 3); // times out after 4s
@@ -1328,8 +1350,7 @@ class YAHOO_util_Loader {
     function getContent($name, $type) {
 
         if(!$this->embedAvail) {
-            return "<!--// cURL was not detected, so the content can't "
-                . " be embedded -->" . $this->getLink($name, $type);
+            return "<!--// cURL was not detected, so the content can't be embedded -->" . $this->getLink($name, $type);
         }
 
         $url = $this->getUrl($name);
@@ -1393,28 +1414,22 @@ class YAHOO_util_Loader {
     }
     
     function addToCombo($name, $type) {
-        //Allow version overrides
-        $yuiVersion = $this->comboDefaultVersion;
-        if ($this->version !== null) {
-            $yuiVersion = $this->version . '/build/';
-            $this->comboBase = 'http://yui.yahooapis.com/combo?' . $yuiVersion;
-        }
-        
+        $pathToModule = $this->comboDefaultVersion . '/build/' . $this->modules[$name][YUI_PATH];
         if ($type == YUI_CSS) {
             //If this is the first css component then add the combo base path
             if ($this->cssComboLocation === null) {
-                $this->cssComboLocation = $this->comboBase . $this->modules[$name][YUI_PATH];
+                $this->cssComboLocation = $this->comboBase . $pathToModule;
             } else {
                 //Prep for next component
-                $this->cssComboLocation .= '&' . $yuiVersion . $this->modules[$name][YUI_PATH];
+                $this->cssComboLocation .= '&' . $pathToModule;
             }
         } else {
             //If this is the first js component then add the combo base path
             if ($this->jsComboLocation === null) {
-                $this->jsComboLocation = $this->comboBase . $this->modules[$name][YUI_PATH];
+                $this->jsComboLocation = $this->comboBase . $pathToModule;
             } else {
                 //Prep for next component
-                $this->jsComboLocation .= '&' . $yuiVersion . $this->modules[$name][YUI_PATH];
+                $this->jsComboLocation .= '&' . $pathToModule;
             }
         }
     }
