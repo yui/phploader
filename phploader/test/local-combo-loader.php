@@ -1,10 +1,17 @@
 <?PHP
+/**
+ *  Copyright (c) 2009, Yahoo! Inc. All rights reserved.
+ *  Code licensed under the BSD License:
+ *  http://developer.yahoo.net/yui/license.html
+ *  version: 1.0.0b1
+ */
+ 
 include("../loader.php");
 
-$loader = new YAHOO_util_Loader("3.0.0b1");
+$loader = new YAHOO_util_Loader("2.7.0");
 $loader->combine = true;
-$loader->comboBase = "http://localhost/phploader/phploader/combo.php?";
-$loader->load("stylesheet");
+//$loader->comboBase = "http://localhost/phploader/phploader/combo.php?";
+$loader->load("colorpicker");
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
