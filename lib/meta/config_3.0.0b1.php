@@ -1,4 +1,12 @@
-<?php $GLOBALS['yui_current'] = array (
+<?php
+/**
+ *  Copyright (c) 2009, Yahoo! Inc. All rights reserved.
+ *  Code licensed under the BSD License:
+ *  http://developer.yahoo.net/yui/license.html
+ *  version: 1.0.0b1
+ */
+ 
+$GLOBALS['yui_current'] = array (
   'base' => 'http://yui.yahooapis.com/3.0.0b1/build/',
   'skin' => 
   array (
