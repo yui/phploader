@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>
+            YUI Library Examples: Connection Manager
+        </title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="assets/yui.css">
+        <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+        <style type="text/css">
+/*Supplemental CSS for the YUI distribution*/
+        #custom-doc { width: 95%; min-width: 950px; }
+        #pagetitle {background-image: url(assets/bg_hd.gif);}
+        #pagetitle h1 {background-image: url(assets/title_h_bg.gif);}
+
+        </style><!--Script and CSS includes for YUI dependencies on this page-->
+
+        <script type="text/javascript" src="../../build/yuiloader-dom-event/yuiloader-dom-event.js">
+</script>
+        <script type="text/javascript">
+//enable passthrough of errors from YUI Event:
+        if ((typeof YAHOO !== "undefined") && (YAHOO.util) && (YAHOO.util.Event)) {
+        YAHOO.util.Event.throwErrors = true;
+        }
+        </script>
+    </head>
+    <body id="yahoo-com" class="">
+        <div id="custom-doc" class="yui-t2">
+            <div id="hd">
+                <div id="ygunav">
+                    <p>
+                        <em><a href="http://developer.yahoo.com/yui/">YUI Library Home</a></em>
+                    </p>
+                    <form action="http://search.yahoo.com/search" id="sitesearchform" name="sitesearchform">
+                        <input name="vs" type="hidden" value="developer.yahoo.com"> <input name="vs" type="hidden" value="yuiblog.com">
+                        <div id="sitesearch">
+                            <label for="searchinput">Site Search (YDN &amp; YUIBlog):</label> <input type="text" id="searchinput" name="p"> <input type="submit" value="Search" id="searchsubmit" class="ygbt">
+                        </div>
+                    </form>
+                </div>
+                <div id="ygma">
+                    <a href="http://developer.yahoo.com/yui/"><img src="assets/yui.gif" border="0" height="38"></a>
+                </div>
+                <div id="pagetitle">
+                    <h1>
+                        YUI Library Examples: PHP Loader
+                    </h1>
+                </div>
+            </div>
+            <div id="bd">
+                <div id="yui-main">
+                    <div class="yui-b">
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <h1 class="firstContent">
+                                    PHP Loader: Examples
+                                </h1>
+                                    <li><a href='phploader-basic.php'>Using PHP Loader to Load the Calendar Control (Basic)</a>: This example demonstrates a simple implementation in which we bring in the YUI Calendar Control — and its JavaScript and CSS dependencies — using the PHP Loader Utility.</li>
+                                    <li><a href='phploader-advanced.php'>Using PHP Loader to Load the Calendar Control (Advanced)</a>: This example demonstrates a more advanced implementation in which we bring in the YUI Calendar Control — and its JavaScript and CSS dependencies — using the PHP Loader Utility.  The major difference between this and the previous example is that the CSS and JavaScript are output via separate method calls allowing for more control/optimization.</li>
+                                    <li><a href='phploader-custom-modules.php'>Adding Custom (Non-YUI) Content with PHP Loader</a>: PHP Loader can be used to add YUI components to the page, but it can also be used to add other components that you create yourself (or that you pull from a third-party source). This example shows one simple way to pull in external content with PHP Loader.</li>
+                                    <li><a href='phploader-custom-modules-with-yui.php'>Adding Custom Modules with YUI Dependencies</a>: PHP Loader can be used to add YUI components to the page, but it can also be used to add other components that you create yourself (or that you pull from a third-party source). This example shows how to pull in external content that has dependancies on YUI components.</li>
+                                    <li><a href='phploader-local-combo-handler.php'>Using the Local Combo Handler</a>: PHP Loader ships with intrinsic combo-handling support. This feature will allow PHP Loader to combine files without relying on a remote combo-service such as the one outlined <a href="http://developer.yahoo.com/yui/articles/hosting/?#combo">here</a>. It should also prove useful in environments where SSL is required and/or where including scripts from remote servers is prohibited.</li>
+                                </ul>
+                            </div>                            
+                            <div class="yui-u">
+                                <div id="module" class="firstContent">
+                                    <h3>
+                                        PHP Loader:
+                                    </h3>
+                                    <ul>
+                                        <li>
+                                            <a href="../index.php">User's Guide</a>
+                                        </li>
+                                        <li>
+                                            <a href="../api_docs/index.html">API Documentation</a>
+                                        </li>
+                                        <!-->
+                                        <li>
+                                            <a href="http://yuiblog.com/assets/pdf/cheatsheets/connection.pdf">Cheat Sheet PDF</a>(external)
+                                        </li>
+                                        -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="yui-b" id="tocWrapper">
+                    <!-- TABLE OF CONTENTS -->
+                    <div id="toc">
+                        <ul>
+                            <li class="sect first">Yahoo! UI Library
+                            </li>
+                            <li class="item">
+                                <a title="The Yahoo! User Interface Library (YUI)" href="http://developer.yahoo.com/yui/">Home (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The Yahoo! Group YDN-JavaScript hosts the YUI community forum" href="http://tech.groups.yahoo.com/group/ydn-javascript/">YUI Discussion Forum (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a>
+                            </li>
+                            <li class="item">
+                                <a title="Instantly searchable API documentation for the entire YUI library." href="http://developer.yahoo.com/yui/docs/index.html">API Documentation</a>
+                            </li>
+                            <li class="item">
+                                <a title="Examples of every YUI utility and control in action" href="http://developer.yahoo.com/yui/examples/">Functional Examples</a>
+                            </li>
+                            <li class="item">
+                                <a title="Videos and podcasts from the YUI Team and from the Yahoo! frontend engineering community." href="http://developer.yahoo.com/yui/theater/">YUI Theater (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="YUI is free and open, offered under a BSD license." href="http://developer.yahoo.com/yui/license.html">YUI License (external)</a>
+                            </li>
+                            <li class="sect">YUI Functional Examples
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Animation Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/animation/index.html">Animation (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI AutoComplete Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/autocomplete/index.html">AutoComplete (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Browser History Manager - Functional Examples" href="http://developer.yahoo.com/yui/examples/history/index.html">Browser History Manager (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Button Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/button/index.html">Button (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Calendar Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/calendar/index.html">Calendar (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Carousel Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/carousel/index.html">Carousel (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Charts Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/charts/index.html">Charts (experimental) (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Color Picker Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/colorpicker/index.html">Color Picker (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Cookie Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/cookie/index.html">Cookie (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Connection Manager (AJAX) - Functional Examples" href="http://developer.yahoo.com/yui/examples/connection/index.html">Connection Manager (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog) - Functional Examples" href="http://developer.yahoo.com/yui/examples/container/index.html">Container (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI DataTable Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/datatable/index.html">DataTable (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Dom Collection - Functional Examples" href="http://developer.yahoo.com/yui/examples/dom/index.html">Dom (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Drag &amp; Drop Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/dragdrop/index.html">Drag &amp; Drop (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Event Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/event/index.html">Event (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Get Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/get/index.html">Get (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI ImageCropper Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/imagecropper/index.html">ImageCropper (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI ImageLoader Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/imageloader/index.html">ImageLoader (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI JSON Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/json/index.html">JSON (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Layout Manager - Functional Examples" href="http://developer.yahoo.com/yui/examples/layout/index.html">Layout Manager (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Logger Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/logger/index.html">Logger (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Menu Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/menu/index.html">Menu (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Paginator - Functional Examples" href="http://developer.yahoo.com/yui/examples/paginator/index.html">Paginator (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Profiler Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/profiler/index.html">Profiler (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI ProfileViewer Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/profilerviewer/index.html">ProfilerViewer (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Resize Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/resize/index.html">Resize (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Rich Text Editor - Functional Examples" href="http://developer.yahoo.com/yui/examples/editor/index.html">Rich Text Editor (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Selector Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/selector/index.html">Selector (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Slider Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/slider/index.html">Slider (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Stylesheet Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/stylesheet/index.html">Stylesheet (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI TabView Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/tabview/index.html">TabView (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI TreeView Control - Functional Examples" href="http://developer.yahoo.com/yui/examples/treeview/index.html">TreeView (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Uploader Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/uploader/index.html">Uploader (experimental) (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI YAHOO Global Object - Functional Examples" href="http://developer.yahoo.com/yui/examples/yahoo/index.html">YAHOO Global Object (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Loader Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/yuiloader/index.html">YUI Loader (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="The YUI Test Utility - Functional Examples" href="http://developer.yahoo.com/yui/examples/yuitest/index.html">YUI Test (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="YUI Reset CSS - Functional Examples" href="http://developer.yahoo.com/yui/examples/reset/index.html">Reset CSS (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="YUI Base CSS - Functional Examples" href="http://developer.yahoo.com/yui/examples/base/index.html">Base CSS (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="YUI Fonts CSS - Functional Examples" href="http://developer.yahoo.com/yui/examples/fonts/index.html">Fonts CSS (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="YUI Grids CSS - Functional Examples" href="http://developer.yahoo.com/yui/examples/grids/index.html">Grids CSS (external)</a>
+                            </li>
+                            <li class="sect">YUI Articles on the YUI Website
+                            </li>
+                            <li class="item">
+                                <a title="Answers to Frequently Asked Questions about the YUI Library" href="http://developer.yahoo.com/yui/articles/faq/">YUI FAQ (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="Yahoo!'s philosophy of Graded Browser Support" href="http://developer.yahoo.com/yui/articles/gbs/">Graded Browser Support (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://developer.yahoo.com/yui/articles/reportingbugs/">Bug Reports/Feature Requests (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="Serve YUI source files from Yahoo! -- free, fast, and simple" href="http://developer.yahoo.com/yui/articles/hosting/">Serving YUI Files from Yahoo! (external)</a>
+                            </li>
+                            <li class="item">
+                                <a title="Best practices for working with web services while protecting user privacy" href="http://developer.yahoo.com/security/">Security Best Practices (external)</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div><!--closes bd-->
+            <div id="ft">
+                <p class="first">
+                    Copyright © 2009 Yahoo! Inc. All rights reserved.
+                </p>
+                <p>
+                    <a href="http://privacy.yahoo.com/privacy/us/devel/index.html">Privacy Policy</a> - <a href="http://docs.yahoo.com/info/terms/">Terms of Service</a> - <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - <a href="http://careers.yahoo.com/">Job Openings</a>
+                </p>
+            </div>
+        </div>
+    </body>
+</html>

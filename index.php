@@ -1,4 +1,28 @@
-<?PHP include "./inc/header.inc"; ?>
+<?PHP include("./examples/inc/config.inc"); ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library: YUI Loader Utility</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="examples/assets/reset-fonts-grids-min.css" type="text/css">
+	<link rel="stylesheet" type="text/css" href="examples/assets/dpSyntaxHighlighter.css">
+	<link rel="stylesheet" type="text/css" href="examples/assets/yui.css">
+	<link rel="shortcut icon" href="examples/assets/favicon.ico" type="image/x-icon"> 
+</head>
+<body id="yahoo-com" class=" yui-skin-sam">
+<div id="doc3" class="yui-t7">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://developer.yahoo.com">Developer Network Home</a> <i> - </i>	
+			<a href="http://help.yahoo.com/help/us/ysearch">Help</a>
+			</em>
+		</p>
+	</div>
+	<div id="ygma"><a href="/"><img src="http://l.yimg.com/a/i/us/nt/ma/ma_devnet_1.gif"  border="0"></a></div>
+	<div id="pagetitle"><h1>YUI Library: YUI PHP Loader Utility</h1></div>
+</div>
+<div id="bd">
 <div id="yui-main">
 <div class="yui-b">
   <div class="yui-ge">
@@ -148,7 +172,7 @@ These can be set individually on a YUI PHP Loader instance:</p>
 
 <div class="apisummary">
 <?PHP
-include "./inc/moduleNames.inc";
+include "./examples/inc/moduleNames.inc";
 echo $moduleNamesTable;
 ?>
 </div>
@@ -204,14 +228,21 @@ echo $rollupNamesTable;
 
 <p>YUI PHP Loader relies on metadata files to calculate module dependencies, rollups, sort order, etc.  The metadata files are located in the lib/meta folder.  By default YUI PHP Loader ships with metadata for the latest YUI releases; both versions 2 and 3.  Additional metadata can be added as needed to support older and/or newer YUI releases.  YUI PHP Loader uses pre-built PHP config files first, but is capable of parsing YUI JSON metadata files if no PHP config file is available.  The naming convention for PHP config files is <em>config_{yui version}.php</em> (e.g.) config_<?PHP echo($yuiCurrentVersion);?>.php.  The naming convention for JSON config files is <em>json_{yui version}.txt</em> (e.g.) json_<?PHP echo($yuiCurrentVersion);?>.txt.</p>
 
-<?PHP include "./inc/support.inc"; ?>
+<?PHP include "./examples/inc/support.inc"; ?>
 
 </div>
 
 <div class="yui-u">		
 
 <div id="examples">
-    <?PHP include("./inc/phploader.inc"); ?>
+    <h3>YUI PHP Loader Utility Examples:</h3>
+    <ul>
+        <li><a href='examples/phploader-basic.php'>Using YUI PHP Loader to Load the Calendar Control (Basic)</a></li>
+        <li><a href='examples/phploader-advanced.php'>Using YUI PHP Loader to Load the Calendar Control (Advanced)</a></li>
+        <li><a href='examples/phploader-custom-modules.php'>Adding Custom (Non-YUI) Content with YUI PHP Loader</a></li>
+        <li><a href='examples/phploader-custom-modules-with-yui.php'>Adding Custom Modules with YUI Dependencies</a></li>
+        <li><a href='examples/phploader-local-combo-handler.php'>Using the Local Combo Handler</a></li>
+    </ul>
 </div>
 
 
@@ -220,5 +251,19 @@ echo $rollupNamesTable;
 
 </div>
 </div>
+	<div id="ft">
+        <p class="first">Copyright &copy; <?PHP print strftime("%Y"); ?> Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/terms/">Terms of Service</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
 
-<?PHP include "./inc/footer.inc" ?>
+<script src="examples/assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+</body>
+</html>
