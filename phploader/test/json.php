@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /**
  *  Copyright (c) 2009, Yahoo! Inc. All rights reserved.
  *  Code licensed under the BSD License:
@@ -101,7 +101,7 @@ if (isset($_REQUEST["module"])) {
 </style>
 
 <!-- The actual output after processing all of the dependencies -->
-<?php echo $output ?>
+<?PHP echo $output ?>
 
 </head>
 <body>
@@ -111,7 +111,7 @@ if (isset($_REQUEST["module"])) {
 <!-- All of the modules, check the ones that are required -->
 <div class="content" id="modulelist">
 <ul>
-<?php
+<?PHP
     $i = 1;
     foreach($yui_load_manager->modules as $name => $allmoddef) {
         $checked = (array_search($name, $modules) !== false) ? "checked" : "";
@@ -123,7 +123,7 @@ if (isset($_REQUEST["module"])) {
 
 <hr />
 
-<?php
+<?PHP
 
     $dev = $yui_load_manager->DEV;
     $prod = $yui_load_manager->PROD;
@@ -139,8 +139,8 @@ if (isset($_REQUEST["module"])) {
 
 ?>
 
-<label for="fordev"><input id="fordev"  type="radio" name="target" value="<?php echo $dev ?>"  <?php echo $devchecked ?> /> Dev</label>
-<label for="forprod"><input id="forprod" type="radio" name="target" value="<?php echo $prod ?>" <?php echo $prodchecked ?> /> Prod</label>
+<label for="fordev"><input id="fordev"  type="radio" name="target" value="<?PHP echo $dev ?>"  <?PHP echo $devchecked ?> /> Dev</label>
+<label for="forprod"><input id="forprod" type="radio" name="target" value="<?PHP echo $prod ?>" <?PHP echo $prodchecked ?> /> Prod</label>
 
 <hr />
 
@@ -150,7 +150,7 @@ if (isset($_REQUEST["module"])) {
 
 <!-- Encoded loader output for easy reading -->
 <div class="content" id="codewindow">
-    <pre><?php echo htmlentities($output); ?></pre>
+    <pre><?PHP echo htmlentities($output); ?></pre>
 </div>
 
 </form>

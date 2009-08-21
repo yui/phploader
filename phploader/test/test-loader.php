@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /**
  *  Copyright (c) 2009, Yahoo! Inc. All rights reserved.
  *  Code licensed under the BSD License:
@@ -135,19 +135,19 @@ if (isset($_GET["module"])) {
 
 </style>
 
-<?php 
+<?PHP 
 //The actual output after processing all of the dependencies
 //echo $output; 
 ?> 
 
 </head>
 <body>
-<form name="mainform" action="<?php echo getenv("REQUEST_URI"); ?>">
+<form name="mainform" action="<?PHP echo getenv("REQUEST_URI"); ?>">
 
 <!-- All of the modules, check the ones that are required -->
 <div class="content" id="modulelist">
 <ul>
-<?php
+<?PHP
     $i = 1;
     //$keys = sort(array_keys($yui_load_manager->modules));
     //foreach($loader->modules as $name => $allmoddef) {
@@ -164,7 +164,7 @@ if (isset($_GET["module"])) {
 
 <hr />
 
-<?php
+<?PHP
 
     $prodchecked = "";
     $debugchecked = "";
@@ -198,34 +198,34 @@ if (isset($_GET["module"])) {
 
 <p>
 <label>Base:</label><br />
-<input id="base" type="text" name="base" value="<?php echo $loader->base; ?>"  size="15"/>
+<input id="base" type="text" name="base" value="<?PHP echo $loader->base; ?>"  size="15"/>
 </p>
 
 <p>
 <label>Combo Base:</label><br />
-<input id="base" type="text" name="comboBase" value="<?php echo $loader->comboBase; ?>"  size="15"/>
+<input id="base" type="text" name="comboBase" value="<?PHP echo $loader->comboBase; ?>"  size="15"/>
 </p>
 
 <p>
 <select id="filter" name="filter">
-  <option value="" <?php if (!$loader->filter) echo "selected"; ?>>None</option>
-  <option value="RAW" <?php if ($loader->filter == "RAW") echo "selected"; ?>>RAW</option>
-  <option value="DEBUG" <?php if ($loader->filter == "DEBUG") echo "selected"; ?>>DEBUG</option>
+  <option value="" <?PHP if (!$loader->filter) echo "selected"; ?>>None</option>
+  <option value="RAW" <?PHP if ($loader->filter == "RAW") echo "selected"; ?>>RAW</option>
+  <option value="DEBUG" <?PHP if ($loader->filter == "DEBUG") echo "selected"; ?>>DEBUG</option>
 </select>
 </p>
 
 <p>
-<input type="checkbox" name="combine" value="1" <?php echo $combine; ?> />
+<input type="checkbox" name="combine" value="1" <?PHP echo $combine; ?> />
 Use Combo Loader
 </p>
 
 <p>
-<input type="checkbox" name="embed" value="1" <?php echo $embedchecked; ?> />
+<input type="checkbox" name="embed" value="1" <?PHP echo $embedchecked; ?> />
 Embed enabled
 </p>
 
 <p>
-<input type="checkbox" name="loadOptional" value="1" <?php echo $loadOptionalchecked; ?> />
+<input type="checkbox" name="loadOptional" value="1" <?PHP echo $loadOptionalchecked; ?> />
 Load Optional
 </p>
 
@@ -237,7 +237,7 @@ Load Optional
 
 <!-- Encoded loader output for easy reading -->
 <div class="content" id="codewindow">
-    <pre><?php echo htmlentities($output); ?></pre>
+    <pre><?PHP echo htmlentities($output); ?></pre>
 </div>
 
 </form>

@@ -1,0 +1,1271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>API: phploader  PHP.YAHOO_util_Loader   (YUI Library)</title>
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css" />
+
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+	<div id="hd">
+        <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
+        <h3>phploader&nbsp; <span class="subtitle">1.0.0beta</span></h3>
+        <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
+            &gt; <a href="./module_phploader.html" title="phploader">phploader</a>
+                 &gt; PHP.YAHOO_util_Loader 
+                
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b property="yui:name">PHP.YAHOO_util_Loader</b>
+                        <span class="extends">
+                        </span>
+
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description" property="yui:description">
+                        The YUI PHP loader base class which provides dynamic server-side loading for YUI
+                    </div>
+
+                        <div class="section constructor details" rel="yui:constructor" resource="#constructor">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong property="yui:name">PHP.YAHOO_util_Loader</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                yuiVersion
+
+                                                , 
+                                                cacheKey
+
+                                                , 
+                                                modules
+
+                                                , 
+                                                noYUI
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl rel="yui:parameters">
+                                            <dt>Parameters:</dt>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">yuiVersion</span>
+                                                    &lt;<span property="yui:type">string</span>&gt;
+                                                    </code>
+                                                    <span property="yui:description"> Defines which version of YUI metadata to load</span>
+                                                </dd>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">cacheKey</span>
+                                                    &lt;<span property="yui:type">string</span>&gt;
+                                                    </code>
+                                                    <span property="yui:description"> Unique APC cache key.  This is combined with the YUI base
+so that updates to YUI will force a new cache entry.  However, if your custom config 
+changes, this key should be changed (otherwise the old values will be used until the cache expires).</span>
+                                                </dd>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">modules</span>
+                                                    &lt;<span property="yui:type">array</span>&gt;
+                                                    </code>
+                                                    <span property="yui:description"> A list of custom modules</span>
+                                                </dd>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">noYUI</span>
+                                                    &lt;<span property="yui:type">boolean</span>&gt;
+                                                    </code>
+                                                    <span property="yui:description"> Pass true if you do not want the YUI metadata</span>
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div rel="yui:properties" resource="#properties">
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="" rel="yui:property" resource="#property_allowRollups">
+                                    <h4><a name="property_allowRollups" property="yui:name">allowRollups</a>
+                                        - <code><span property="yui:type">boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Should we allow rollups
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: true
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_base">
+                                    <h4><a name="property_base" property="yui:name">base</a>
+                                        - <code><span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The base directory
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: http://yui.yahooapis.com/[YUI VERSION]/build/
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_combine">
+                                    <h4><a name="property_combine" property="yui:name">combine</a>
+                                        - <code><span property="yui:type">boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Combined into a single request using the combo service to pontentially reduce the number of http requests required.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_comboBase">
+                                    <h4><a name="property_comboBase" property="yui:name">comboBase</a>
+                                        - <code><span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The base path to the combo service.  Uses the Yahoo! CDN service by default.
+You do not have to set this property to use the combine option. YUI PHP Loader ships 
+with an intrinsic, lightweight combo-handler as well (see combo.php).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: http://yui.yahooapis.com/combo?
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_filterList">
+                                    <h4><a name="property_filterList" property="yui:name">filterList</a>
+                                        - <code><span property="yui:type">array</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            A list of modules to apply the filter to.  If not supplied, all
+modules will have any defined filters applied.  Tip: Useful for debugging.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_loadOptional">
+                                    <h4><a name="property_loadOptional" property="yui:name">loadOptional</a>
+                                        - <code><span property="yui:type">boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Whether or not to load optional dependencies for the requested modules
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_rollupsToTop">
+                                    <h4><a name="property_rollupsToTop" property="yui:name">rollupsToTop</a>
+                                        - <code><span property="yui:type">boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Force rollup modules to be sorted as moved to the top of
+the stack when performing an automatic rollup.  This has a very small performance consequence.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div rel="yui:methods" resource="#methods">
+                        <div class="section method details">
+                            <h3 id="methods">Methods</h3>
+                            <div class="content">
+                                    <div class="" rel="yui:method" resource="#method_css">
+                                    <h4>
+                                        <a name="method_css">css</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">css</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to output each of the required link tags
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">(e.g.)</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_css_data">
+                                    <h4>
+                                        <a name="method_css_data">css_data</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        array
+                                            <strong property="yui:name">css_data</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to fetch an array of the required CSS components
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        array
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">Returns an array of data about each of the identified JavaScript components</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_css_embed">
+                                    <h4>
+                                        <a name="method_css_embed">css_embed</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">css_embed</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to embed the raw CSS
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">(e.g.) Returns the style tag(s) with the CSS inline</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_css_json">
+                                    <h4>
+                                        <a name="method_css_json">css_json</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">css_json</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to fetch a JSON object with the required CSS components
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">Returns a JSON object containing urls for each CSS component</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_css_raw">
+                                    <h4>
+                                        <a name="method_css_raw">css_raw</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">css_raw</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to produce the raw CSS code inline without the actual style tags
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">Returns the raw CSS code inline without the actual style tags</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_data">
+                                    <h4>
+                                        <a name="method_data">data</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">data</strong>
+                                           (
+                                                
+                                                        
+                                                         moduleType
+                                                    
+                                                
+                                                        , 
+                                                         allowRollups
+                                                    
+                                                
+                                                        , 
+                                                         skipSort
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to output an Array which contains data about the required JavaScript & CSS components
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">moduleType</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> Type of html tag to return (i.e.) js or css.  Default is both.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">allowRollups</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"></span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">skipSort</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"></span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_embed">
+                                    <h4>
+                                        <a name="method_embed">embed</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">embed</strong>
+                                           (
+                                                
+                                                        
+                                                         moduleType
+                                                    
+                                                
+                                                        , 
+                                                         skipSort
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to output each of the required html tags inline (i.e.) script and/or style
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">moduleType</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> Type of html tag to return (i.e.) js or css.  Default is both.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">skipSort</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"></span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">Returns the style tag(s) with the CSS inline and/or the script tag(s) with the JavaScript inline</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_getRemoteContent">
+                                    <h4>
+                                        <a name="method_getRemoteContent">getRemoteContent</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">getRemoteContent</strong>
+                                           (
+                                                
+                                                        
+                                                         url
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Retrieve the contents of a remote resource
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">url</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> URL to fetch data from</span>
+                                                        </dd>
+                                                </dl>
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_getUrl">
+                                    <h4>
+                                        <a name="method_getUrl">getUrl</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">getUrl</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Retrieve the calculated url for the component in question
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">name</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> YUI component name</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_json">
+                                    <h4>
+                                        <a name="method_json">json</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">json</strong>
+                                           (
+                                                
+                                                        
+                                                         moduleType
+                                                    
+                                                
+                                                        , 
+                                                         allowRollups
+                                                    
+                                                
+                                                        , 
+                                                         skipSort
+                                                    
+                                                
+                                                        , 
+                                                         full
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to fetch a JSON object with the required JavaScript and CSS components
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">moduleType</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"></span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">allowRollups</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"></span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">skipSort</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"></span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">full</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"></span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">Returns a JSON object with the required JavaScript and CSS components</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_load">
+                                    <h4>
+                                        <a name="method_load">load</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">load</strong>
+                                           (
+                                                
+                                                        
+                                                         string
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to load YUI and/or custom components
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">string</span>
+                                                        &lt;<span property="yui:type">object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> $varname [, string $... ] List of component names</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_raw">
+                                    <h4>
+                                        <a name="method_raw">raw</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">raw</strong>
+                                           (
+                                                
+                                                        
+                                                         moduleType
+                                                    
+                                                
+                                                        , 
+                                                         allowRollups
+                                                    
+                                                
+                                                        , 
+                                                         skipSort
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to produce the raw Javacript and CSS code inline without the actual script or style tags
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">moduleType</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"></span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">allowRollups</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"></span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">skipSort</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"></span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">Returns the raw JavaScript and/or CSS code inline without the actual style tags</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_script">
+                                    <h4>
+                                        <a name="method_script">script</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">script</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to output each of the required script tags
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_script_data">
+                                    <h4>
+                                        <a name="method_script_data">script_data</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        array
+                                            <strong property="yui:name">script_data</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to fetch an array of the required JavaScript components
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        array
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">Returns an array of data about each of the identified JavaScript components</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_script_embed">
+                                    <h4>
+                                        <a name="method_script_embed">script_embed</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">script_embed</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to embed the raw JavaScript inline
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">Returns the script tag(s) with the JavaScript inline</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_script_json">
+                                    <h4>
+                                        <a name="method_script_json">script_json</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">script_json</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to fetch a JSON object with the required JavaScript components
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">Returns a JSON object containing urls for each JavaScript component</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_script_raw">
+                                    <h4>
+                                        <a name="method_script_raw">script_raw</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">script_raw</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to produce the raw JavaScript code inline without the actual script tags
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">Returns the raw JavaScript code inline without the actual script tags</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_setLoaded">
+                                    <h4>
+                                        <a name="method_setLoaded">setLoaded</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">setLoaded</strong>
+                                           (
+                                                
+                                                        
+                                                         string
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to specify modules that are already on the page that should not be loaded again
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">string</span>
+                                                        &lt;<span property="yui:type">object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> $varname [, string $... ] List of module names</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_tags">
+                                    <h4>
+                                        <a name="method_tags">tags</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">tags</strong>
+                                           (
+                                                
+                                                        
+                                                         moduleType
+                                                    
+                                                
+                                                        , 
+                                                         skipSort
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used to output each of the required html tags (i.e.) script or link
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">moduleType</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> Type of html tag to return (i.e.) js or css.  Default is both.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">skipSort</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"></span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div rel="yui:events" resource="#events">
+
+
+                    </div>
+
+                    <div rel="yui:attributes" resource="#configattributes">
+
+                    </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div id="moduleList" class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="module_phploader.html" title="phploader">phploader</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="classList" class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="PHP.YAHOO_util_Loader.html" title="PHP.YAHOO_util_Loader">PHP.YAHOO_util_Loader</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="fileList" class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="loader.php.html" title="loader.php">loader.php</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="propertyList" class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#property_allowRollups" title="allowRollups">allowRollups</a></li>
+                                <li class=""><a href="#property_base" title="base">base</a></li>
+                                <li class=""><a href="#property_combine" title="combine">combine</a></li>
+                                <li class=""><a href="#property_comboBase" title="comboBase">comboBase</a></li>
+                                <li class=""><a href="#property_filterList" title="filterList">filterList</a></li>
+                                <li class=""><a href="#property_loadOptional" title="loadOptional">loadOptional</a></li>
+                                <li class=""><a href="#property_rollupsToTop" title="rollupsToTop">rollupsToTop</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="methodsList" class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#method_css" title="css">css</a></li>
+                                <li class=""><a href="#method_css_data" title="css_data">css_data</a></li>
+                                <li class=""><a href="#method_css_embed" title="css_embed">css_embed</a></li>
+                                <li class=""><a href="#method_css_json" title="css_json">css_json</a></li>
+                                <li class=""><a href="#method_css_raw" title="css_raw">css_raw</a></li>
+                                <li class=""><a href="#method_data" title="data">data</a></li>
+                                <li class=""><a href="#method_embed" title="embed">embed</a></li>
+                                <li class=""><a href="#method_getRemoteContent" title="getRemoteContent">getRemoteContent</a></li>
+                                <li class=""><a href="#method_getUrl" title="getUrl">getUrl</a></li>
+                                <li class=""><a href="#method_json" title="json">json</a></li>
+                                <li class=""><a href="#method_load" title="load">load</a></li>
+                                <li class=""><a href="#method_raw" title="raw">raw</a></li>
+                                <li class=""><a href="#method_script" title="script">script</a></li>
+                                <li class=""><a href="#method_script_data" title="script_data">script_data</a></li>
+                                <li class=""><a href="#method_script_embed" title="script_embed">script_embed</a></li>
+                                <li class=""><a href="#method_script_json" title="script_json">script_json</a></li>
+                                <li class=""><a href="#method_script_raw" title="script_raw">script_raw</a></li>
+                                <li class=""><a href="#method_setLoaded" title="setLoaded">setLoaded</a></li>
+                                <li class=""><a href="#method_tags" title="tags">tags</a></li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+<script type="text/javascript">
+    ALL_YUI_PROPS = [{"url": "PHP.YAHOO_util_Loader.html#property_allowRollups", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "allowRollups"}, {"url": "PHP.YAHOO_util_Loader.html#property_base", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "base"}, {"url": "PHP.YAHOO_util_Loader.html#property_combine", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "combine"}, {"url": "PHP.YAHOO_util_Loader.html#property_comboBase", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "comboBase"}, {"url": "PHP.YAHOO_util_Loader.html#method_css", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css"}, {"url": "PHP.YAHOO_util_Loader.html#method_css_data", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css_data"}, {"url": "PHP.YAHOO_util_Loader.html#method_css_embed", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css_embed"}, {"url": "PHP.YAHOO_util_Loader.html#method_css_json", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css_json"}, {"url": "PHP.YAHOO_util_Loader.html#method_css_raw", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css_raw"}, {"url": "PHP.YAHOO_util_Loader.html#method_data", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "data"}, {"url": "PHP.YAHOO_util_Loader.html#method_embed", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "embed"}, {"url": "PHP.YAHOO_util_Loader.html#property_filterList", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "filterList"}, {"url": "PHP.YAHOO_util_Loader.html#method_getRemoteContent", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getRemoteContent"}, {"url": "PHP.YAHOO_util_Loader.html#method_getUrl", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getUrl"}, {"url": "PHP.YAHOO_util_Loader.html#method_json", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "json"}, {"url": "PHP.YAHOO_util_Loader.html#method_load", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "load"}, {"url": "PHP.YAHOO_util_Loader.html#property_loadOptional", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "loadOptional"}, {"url": "PHP.YAHOO_util_Loader.html#method_raw", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "raw"}, {"url": "PHP.YAHOO_util_Loader.html#property_rollupsToTop", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "rollupsToTop"}, {"url": "PHP.YAHOO_util_Loader.html#method_script", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script"}, {"url": "PHP.YAHOO_util_Loader.html#method_script_data", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script_data"}, {"url": "PHP.YAHOO_util_Loader.html#method_script_embed", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script_embed"}, {"url": "PHP.YAHOO_util_Loader.html#method_script_json", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script_json"}, {"url": "PHP.YAHOO_util_Loader.html#method_script_raw", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script_raw"}, {"url": "PHP.YAHOO_util_Loader.html#method_setLoaded", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "setLoaded"}, {"url": "PHP.YAHOO_util_Loader.html#method_tags", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "tags"}];
+</script>
+</body>
+</html>

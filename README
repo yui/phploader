@@ -48,3 +48,9 @@ phploader/combo.php
 
 phploader/tests
     Contains a number of tests and example loader scripts
+    
+examples
+    Contains YUI PHP Loader example documentation and working code samples
+    
+api_docs
+    Contains the standard YUI API style documentation

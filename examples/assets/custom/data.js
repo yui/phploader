@@ -1,0 +1,1 @@
+var JSONString = '[{"itemText" : "List item 2"}, {"itemText" : "List item 3"}, {"itemText" : "List item 4, with custom class"}]';

@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /**
  *  Copyright (c) 2009, Yahoo! Inc. All rights reserved.
  *  Code licensed under the BSD License:
@@ -7,7 +7,7 @@
  */
 ?>
 <dl>
-<?php
+<?PHP
     foreach ($_SERVER as $name => $value) {
         // if ( strstr($name, 'YUI_') == $name ) { // this works
         if ( strpos($name, 'YUI_') !== false ) {   // this is faster

@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /**
  *  Copyright (c) 2009, Yahoo! Inc. All rights reserved.
  *  Code licensed under the BSD License:
@@ -24,7 +24,7 @@ YAHOO_config = {
 }
 </script>
 
-<?php 
+<?PHP 
 
 define('SKIP_CONTENT_TYPE', true);
 define('OVERRIDE_BASE', "/build/");
@@ -36,4 +36,4 @@ include("loader-inc.php");
 </body>
 </html>
 
-<?php //header('Content-type: text/html'); ?>
+<?PHP //header('Content-type: text/html'); ?>
