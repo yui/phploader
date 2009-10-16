@@ -1,3 +1,3 @@
 <?PHP
-    $yuiCurrentVersion = '2.7.0';
+    $yuiCurrentVersion = '2.8.0r4';
 ?>
