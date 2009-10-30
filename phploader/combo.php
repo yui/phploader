@@ -21,13 +21,17 @@
         the phploader/lib directory.
 
         A valid setup would look something like:
+        htdocs/phploader/lib/2.8.0r4/build
         htdocs/phploader/lib/2.7.0/build
-        htdocs/phploader/lib/2.6.0/build
         etc...
 */
 
 //Web accessible path to the YUI PHP loader lib directory (Override as needed)
-define("PATH_TO_LOADER", server() . "/phploader/phploader/lib/");
+define("PATH_TO_LOADER", server() . "/phploader/lib/"); 
+
+//APC Configuration
+define("APC_AVAIL", function_exists('apc_fetch') ? true : false);
+define("APC_TTL", 0);
 
 //server(): Computes the base URL of the current page (protocol, server, path)
 //credit: http://code.google.com/p/simple-php-framework/ (modified version of full_url), license: MIT
@@ -41,45 +45,70 @@ function server()
 
 $queryString = getenv('QUERY_STRING') ? urldecode(getenv('QUERY_STRING')) : '';
 if (isset($queryString) && !empty($queryString)) {
-    $yuiFiles    = explode("&amp;", $queryString);
+    $yuiFiles    = explode("&", $queryString);
     $contentType = strpos($yuiFiles[0], ".js") ? 'application/x-javascript' : ' text/css';
     
-    //Use the first module to determine which version of the YUI meta info to load
-    if (isset($yuiFiles) && !empty($yuiFiles)) {
-        $metaInfo = explode("/", $yuiFiles[0]);
-        $yuiVersion = $metaInfo[0];
+    $cache = false;
+    if (APC_AVAIL === true) {
+        $cache = apc_fetch('combo:'.$queryString);
     }
     
-    include("./loader.php");
-    $loader = new YAHOO_util_Loader($yuiVersion);
-    $base = PATH_TO_LOADER . $loader->comboDefaultVersion . "/build/"; //Defaults to current version
+    if ($cache) {
+        //Set cache headers and output cache content
+        header("Cache-Control: max-age=315360000");
+        header("Expires: " . date("D, j M Y H:i:s", strtotime("now + 10 years")) ." GMT");
+        header("Content-Type: " . $contentType);
+        echo $cache;
+    } else {
+        //Use the first module to determine which version of the YUI meta info to load
+        if (isset($yuiFiles) && !empty($yuiFiles)) {
+            $metaInfo = explode("/", $yuiFiles[0]);
+            $yuiVersion = $metaInfo[0];
+        }
 
-    //Detect and load the required components now
-    $baseOverrides = array();
-    $yuiComponents = array();
-    foreach($yuiFiles as $yuiFile) {
-        $parts = explode("/", $yuiFile);
-        if (isset($parts[0]) && isset($parts[1]) && isset($parts[2])) {
-            //Add module to array for loading
-            $yuiComponents[] = $parts[2];
+        include("./loader.php");
+        $loader = new YAHOO_util_Loader($yuiVersion);
+        $base   = PATH_TO_LOADER . $yuiVersion . "/build/";
+        $loader->base = $base;
+
+        //Detect and load the required components now
+        $yuiComponents = array();
+        foreach($yuiFiles as $yuiFile) {
+            $parts = explode("/", $yuiFile);
+            if (isset($parts[0]) && isset($parts[1]) && isset($parts[2])) {
+                //Add module to array for loading
+                $yuiComponents[] = $parts[2];
+            } else {
+               die('<!-- Unable to determine module name! -->');
+            }
+        }
+
+        //Load the components
+        call_user_func_array(array($loader, 'load'), $yuiComponents);
+
+        //Set cache headers and output raw file content
+        header("Cache-Control: max-age=315360000");
+        header("Expires: " . date("D, j M Y H:i:s", strtotime("now + 10 years")) ." GMT");
+        header("Content-Type: " . $contentType);
+        if ($contentType == "application/x-javascript") {
+            $rawScript = $loader->script_raw();
+            if (APC_AVAIL === true) {
+                apc_store('combo:'.$queryString, $rawScript, APC_TTL);
+            }
+            echo $rawScript;
         } else {
-           die('<!-- Unable to determine module name! -->');
+            $rawCSS = $loader->css_raw();
+            //Handle image path corrections
+            $rawCSS = preg_replace('/((url\()(\w+)(.*);)/', '${2}'. $base . '${3}${4}', $rawCSS); // subdirs
+            $rawCSS = preg_replace('/(\.\.\/)+/', $base, $rawCSS); // relative pathes
+            $rawCSS = str_replace("url(/", "url($base", $rawCSS); // url(/whatever)
+            
+            if (APC_AVAIL === true) {
+                apc_store('combo:'.$queryString, $rawCSS, APC_TTL);
+            }
+            echo $rawCSS;
         }
     }
-    
-    //Load the components
-    call_user_func_array(array($loader, 'load'), $yuiComponents);
-
-    //Set cache headers and output raw file content
-    header("Cache-Control: max-age=315360000");
-    header("Expires: " . date("D, j M Y H:i:s", strtotime("now + 10 years")) ." GMT");
-    header("Content-Type: " . $contentType);
-    if ($contentType == "application/x-javascript") {
-        echo $loader->script_raw();
-    } else {
-        echo $loader->css_raw();
-    }
-    
 } else {
     die('<!-- No YUI modules defined! -->');
 }

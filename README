@@ -36,8 +36,9 @@ license.txt
     Open source license details.
 
 lib/meta
-    Contains the YUI module dependency metadata.  The latest version is
-    shipped with each release, but you can manually add additional version.
+    Contains the YUI module dependency metadata (for versions 2 and 3).
+    The latest version is shipped with each release, but you can manually
+    add additional version.
 
 phploader/loader.php
     The main YUI PHP Loader class file

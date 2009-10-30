@@ -3,31 +3,23 @@ include("./inc/config.inc");
 include("../phploader/loader.php");
 
 //Create a custom module metadata set
-$customConfig = array(
+$customModules = array(
     "customJS" => array(
         "name" => 'customJS',
         "type" => 'js', // 'js' or 'css'
-        // "path" => 'path/to/file3.css', // includes base
         "fullpath" => './assets/custom/data.js', // overrides path
-        "global" => true, // globals are always loaded
-        "requires" => array (0 => 'event', 1 => 'dom', 2 => 'json'),
-        // "supersedes" => array (0 => 'something'), // if a rollup
-        // "rollup" => 3 // the rollup threshold
+        "requires" => array("event", "dom", "json")
     ),
     "customCSS" => array(
         "name" => 'customCSS',
         "type" => 'css', // 'js' or 'css'
-        // "path" => 'path/to/file3.css', // includes base
         "fullpath" => './assets/custom/custom.css', // overrides path
-        "global" => true, // globals are always loaded
-        // "supersedes" => array (0 => 'something'), // if a rollup
-        // "rollup" => 3 // the rollup threshold
     )
 );
 
 //Get a new YAHOO_util_Loader instance which includes our custom metadata along with the base YUI metadata
 //Note: rand is used here to help cache bust the example
-$loader = new YAHOO_util_Loader($yuiCurrentVersion, 'my_custom_config_'.rand(), $customConfig);
+$loader = new YAHOO_util_Loader($yuiCurrentVersion, 'my_custom_config_'.rand(), $customModules);
 $loader->load("customJS", "customCSS");
 ?>
 

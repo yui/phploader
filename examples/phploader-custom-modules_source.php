@@ -3,37 +3,29 @@ include("./inc/config.inc");
 include("../phploader/loader.php");
 
 //Create a custom module metadata set
-$customConfig = array(
-    "dcJson" => array(
-        "name" => 'dcJson',
+$customModules = array(
+    "JSONModule" => array(
+        "name" => 'JSONModule',
         "type" => 'js', // 'js' or 'css'
-        // "path" => 'path/to/file.js', // includes base
-        "fullpath" => 'http://www.json.org/json2.js', // overrides path
-        // "requires" => array (0 => 'event', 1 => 'dom'),
-        // "optional" => array (0 => 'connection'),
-        // "global" => true, // globals are always loaded
-        // "supersedes" => array (0 => 'something'), // if a rollup
-        // "rollup" => 3 // the rollup threshold
+        "fullpath" => 'http://www.json.org/json2.js' // overrides path
     ),
     "customJS" => array(
         "name" => 'customJS',
-        "type" => 'js', // 'js' or 'css'
-        "fullpath" => './assets/custom/data.js', // overrides path
-        "global" => true, // globals are always loaded
-        "requires" => array (0 => 'dcJson')
+        "type" => 'js',
+        "fullpath" => './assets/custom/data.js',
+        "requires" => array('JSONModule')
     ),
     "customCSS" => array(
         "name" => 'customCSS',
-        "type" => 'css', // 'js' or 'css'
-        "fullpath" => './assets/custom/custom.css', // overrides path
-        "global" => true // globals are always loaded
+        "type" => 'css',
+        "fullpath" => './assets/custom/custom.css'
     )
 );
 
 //Get a new YAHOO_util_Loader instance which includes just our custom metadata (No YUI metadata)
 //Note: rand is used here to help cache bust the example
-$loader = new YAHOO_util_Loader($yuiCurrentVersion, 'my_custom_config_'.rand(), $customConfig, true);
-$loader->load("dcJson", "customJS", "customCSS");
+$loader = new YAHOO_util_Loader($yuiCurrentVersion, 'my_custom_config_'.rand(), $customModules, true);
+$loader->load("JSONModule", "customJS", "customCSS");
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"

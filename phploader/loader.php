@@ -69,7 +69,8 @@ class YAHOO_util_Loader {
     var $target = "";
 
     /**
-    * Combined into a single request using the combo service to pontentially reduce the number of http requests required.
+    * Combined into a single request using the combo service to pontentially reduce the number of 
+    * http requests required.  This option is not supported when loading custom modules.
     * @property combine
     * @type boolean
     * @default false
@@ -224,9 +225,9 @@ class YAHOO_util_Loader {
         $this->curlAvail  = function_exists('curl_exec');
         $this->apcAvail   = function_exists('apc_fetch');
         $this->jsonAvail  = function_exists('json_encode');
-        $this->embedAvail = ($this->curlAvail && $this->apcAvail);
+        $this->customModulesInUse = empty($modules) ? false : true;
         $this->base = $yui_current[YUI_BASE];
-        $this->comboDefaultVersion = $yuiVersion; //(ex) 2.7.0
+        $this->comboDefaultVersion = $yuiVersion; //$customModules
         $this->fullCacheKey = null;
         $cache = null;
 
@@ -866,9 +867,6 @@ class YAHOO_util_Loader {
             $reqs[$name] = true;
         }
 
-        //print_r($this->requests);
-        //return;
-
         // get and store the full list of dependencies.
         foreach ($this->requests as $name=>$val) {
             $reqs[$name] = true;
@@ -1208,8 +1206,8 @@ class YAHOO_util_Loader {
                         $item[YUI_OPTIONAL] = $dep[YUI_OPTIONAL];
                         break;
                     case YUI_TAGS:
-                    default: 
-                        if ($this->combine === true) {
+                    default:
+                        if ($this->combine === true && $this->customModulesInUse === false) {
                             $this->addToCombo($name, $dep[YUI_TYPE]);
                             $html = $this->getComboLink($dep[YUI_TYPE]);
                         } else {
@@ -1306,8 +1304,11 @@ class YAHOO_util_Loader {
     * @return
     */
     function getRemoteContent($url) {
-
-        $remote_content = apc_fetch($url);
+        
+        $remote_content = null;
+        if ($this->apcAvail === true) {
+            $remote_content = apc_fetch($url);
+        }        
 
         if (!$remote_content) {
 
@@ -1330,7 +1331,9 @@ class YAHOO_util_Loader {
             //$this->log("CONTENT: " . $remote_content);
 
             // save the contents of the remote url for 30 minutes
-            apc_store($url, $remote_content, $this->apcttl);
+            if ($this->apcAvail === true) {
+                apc_store($url, $remote_content, $this->apcttl);
+            }
 
             curl_close ($ch);
         }
@@ -1338,9 +1341,9 @@ class YAHOO_util_Loader {
         return $remote_content;
     }
 
-    function getRaw($name) {
-        if (!$this->embedAvail) {
-            return "cURL and/or APC was not detected, so the content can't be embedded";
+    function getRaw($name) {        
+        if(!$this->curlAvail) {
+            return "<!--// cURL was not detected, so the content cannot be fetched -->";
         }
 
         $url = $this->getUrl($name);
@@ -1349,8 +1352,8 @@ class YAHOO_util_Loader {
 
     function getContent($name, $type) {
 
-        if(!$this->embedAvail) {
-            return "<!--// cURL was not detected, so the content can't be embedded -->" . $this->getLink($name, $type);
+        if(!$this->curlAvail) {
+            return "<!--// cURL was not detected, so the content cannot be fetched/embedded -->" . $this->getLink($name, $type);
         }
 
         $url = $this->getUrl($name);

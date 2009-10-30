@@ -28,29 +28,31 @@
 	<h2 class="first">Defining a Custom Module with YUI Component Dependencies</h2>
 
     <p>
-    The YAHOO_util_Loader class constructor accepts three parameters:
+    The YAHOO_util_Loader class constructor accepts four parameters:
     </p>
     <ol>
+        <li><strong>yuiVersion</strong>: Version of YUI metadata to load</li>
         <li><strong>cacheKey</strong>: Unique name to use as the <a href="http://us.php.net/manual/en/book.apc.php">APC</a> cache key.  Module calculations 
         are cached for performance if the environment supports APC.</li>
-        <li><strong>modules</strong>: A list of custom modules</li>
+        <li><strong>modules</strong>: An array of custom modules</li>
         <li><strong>noYUI</strong>: Enable or disable the base YUI metadata</li>
     </ol>
     
     <p>The <em>modules</em> parameter expects an associative array.  The array should consist of custom JavaScript and/or 
-    CSS modules defined using the following format:</p>
+    CSS modules.  The modules array format mirrors that of the YUI metadata included with PHP Loader.  Use the metadata in the lib/meta folder as
+    a reference for determining all the possible options.  Below is an example of such an array:</p>
     
     <textarea name="code" class="php" cols="60" rows="1">
-    $customConfig = array(
-        "customJS" => array(
-            "name" => 'customJS',
+    $customModules = array(
+        "JSONModule" => array(
+            "name" => 'JSONModule',
             "type" => 'js', // 'js' or 'css'
-            // "path" => 'path/to/file3.css', // includes base
-            "fullpath" => '../assets/custom/data.js', // overrides path
-            "global" => true, // globals are always loaded
-            "requires" => array (0 => 'event', 1 => 'dom', 2 => 'json'),
-            // "supersedes" => array (0 => 'something'), // if a rollup
-            // "rollup" => 3 // the rollup threshold
+            // "requires" => array('event', 'dom'),
+            // "optional" => array('connection'),
+            // "supersedes" => array('something'), // if a rollup
+            // "rollup" => 3, // the rollup threshold
+            // "path" => 'path/to/file.js', // includes base
+            "fullpath" => 'http://www.json.org/json2.js' // overrides path
         )
     );
     </textarea>
@@ -76,31 +78,23 @@
 include("loader.php");
 
 //Create a custom module metadata set
-$customConfig = array(
+$customModules = array(
     "customJS" => array(
         "name" => 'customJS',
         "type" => 'js', // 'js' or 'css'
-        // "path" => 'path/to/file3.css', // includes base
         "fullpath" => './assets/custom/data.js', // overrides path
-        "global" => true, // globals are always loaded
-        "requires" => array (0 => 'event', 1 => 'dom', 2 => 'json'),
-        // "supersedes" => array (0 => 'something'), // if a rollup
-        // "rollup" => 3 // the rollup threshold
+        "requires" => array("event", "dom", "json")
     ),
     "customCSS" => array(
         "name" => 'customCSS',
-        "type" => 'css', // 'js' or 'css'
-        // "path" => 'path/to/file3.css', // includes base
-        "fullpath" => './assets/custom/custom.css', // overrides path
-        "global" => true, // globals are always loaded
-        // "supersedes" => array (0 => 'something'), // if a rollup
-        // "rollup" => 3 // the rollup threshold
+        "type" => 'css',
+        "fullpath" => './assets/custom/custom.css'
     )
 );
 
 //Get a new YAHOO_util_Loader instance which includes our custom metadata along with the base YUI metadata
 //Note: rand is used here to help cache bust the example
-$loader = new YAHOO_util_Loader('<?PHP echo($yuiCurrentVersion);?>', 'my_custom_config_'.rand(), $customConfig);
+$loader = new YAHOO_util_Loader('<?PHP echo($yuiCurrentVersion);?>', 'my_custom_config_'.rand(), $customModules);
 $loader->load("customJS", "customCSS");
 ?&gt;
 

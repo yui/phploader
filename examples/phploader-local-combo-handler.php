@@ -22,7 +22,7 @@
 
 <p>This example implements the <a href="http://developer.yahoo.com/yui/phploader/">YUI PHP Loader Utility</a> to load 
 the <a href="http://developer.yahoo.com/yui/calendar/">Calendar Control</a>.  This example is almost identical to the advanced example 
-outlined <a href="phploader-advanced.html">here</a>.  The only major difference is that we are enabling the combo handling service and overriding the 
+outlined <a href="phploader-advanced.php">here</a>.  The only major difference is that we are enabling the combo handling service and overriding the 
 default the combo service location.  By default when combo handling is requested YUI PHP Loader will serve files from Yahoo! 
 servers; see "<a href="http://developer.yahoo.com/yui/articles/hosting/">Serving YUI Files from Yahoo!</a>" for important information about this service.</p>
 
@@ -56,7 +56,7 @@ $loader->load("calendar");
 
 <p>This example implements the <a href="http://developer.yahoo.com/yui/phploader/">YUI PHP Loader Utility</a> to load 
 the <a href="http://developer.yahoo.com/yui/calendar/">Calendar Control</a>.  This example is almost identical to the 
-advanced example outlined <a href="phploader-advanced.html">here</a>.  The only major difference is that we are 
+advanced example outlined <a href="phploader-advanced.php">here</a>.  The only major difference is that we are 
 enabling the combo handling service and overriding the default the combo service location.  By default when combo 
 handling is requested YUI PHP Loader will serve files from Yahoo! servers; see 
 "<a href="http://developer.yahoo.com/yui/articles/hosting/">Serving YUI Files from Yahoo!</a>" for important information 

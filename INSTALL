@@ -15,21 +15,20 @@ Local Combo Handler Setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This feature will allow YUI PHP Loader to combine files without relying 
-on a remote combo-service.  The key use case here would be someone 
-writing their own website/application in PHP.
+on a remote combo-service.
 
 1. The main endpoint for combo requests in this case is combo.php.  Place
     this file in the same location as loader.php.
     
     Note: If the phploader directory does not live in the webserver's root 
-    folder then modify the $pathToYUILoader variable in combo.php accordingly
+    folder then modify the PATH_TO_LOADER variable in combo.php accordingly.
     
 2. Download and extract each version of YUI you intend to support into
     the phploader/lib directory.
 
     A valid setup would look something like:
+    htdocs/phploader/lib/2.8.0r4/build
     htdocs/phploader/lib/2.7.0/build
-    htdocs/phploader/lib/2.6.0/build
     etc...
     
 3. Refer to usage documents and examples:

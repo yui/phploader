@@ -27,36 +27,37 @@
 	<h2 class="first">Defining a Custom Module</h2>
 
     <p>
-    The YAHOO_util_Loader class constructor accepts three parameters:
+    The YAHOO_util_Loader class constructor accepts four parameters:
     </p>
     <ol>
+        <li><strong>yuiVersion</strong>: Version of YUI metadata to load</li>
         <li><strong>cacheKey</strong>: Unique name to use as the <a href="http://us.php.net/manual/en/book.apc.php">APC</a> cache key.  Module calculations 
         are cached for performance if the environment supports APC.</li>
-        <li><strong>modules</strong>: A list of custom modules</li>
+        <li><strong>modules</strong>: An array of custom modules</li>
         <li><strong>noYUI</strong>: Enable or disable the base YUI metadata</li>
     </ol>
     
     <p>The <em>modules</em> parameter expects an associative array.  The array should consist of custom JavaScript and/or 
-    CSS modules defined using the following format:</p>
+    CSS modules.  The modules array format mirrors that of the YUI metadata included with PHP Loader.  Use the metadata in the lib/meta folder as
+    a reference for determining all the possible options.  Below is an example of such an array:</p>
     
     <textarea name="code" class="php" cols="60" rows="1">
-    $customConfig = array(
-        "dcJson" => array(
-            "name" => 'dcJson',
+    $customModules = array(
+        "JSONModule" => array(
+            "name" => 'JSONModule',
             "type" => 'js', // 'js' or 'css'
+            // "requires" => array('event', 'dom'),
+            // "optional" => array('connection'),
+            // "supersedes" => array('something'), // if a rollup
+            // "rollup" => 3, // the rollup threshold
             // "path" => 'path/to/file.js', // includes base
-            "fullpath" => 'http://www.json.org/json2.js', // overrides path
-            // "requires" => array (0 => 'event', 1 => 'dom'),
-            // "optional" => array (0 => 'connection'),
-            // "global" => true, // globals are always loaded
-            // "supersedes" => array (0 => 'something'), // if a rollup
-            // "rollup" => 3 // the rollup threshold
+            "fullpath" => 'http://www.json.org/json2.js' // overrides path
         )
     );
     </textarea>
     
     <p><strong>Note:</strong> The module names must be unique and should not conflict with any of the existing YUI 
-    component names if you have chosen to leave the YUI metadata enabled.  To make a custom module dependant on an existing
+    component names if you have chosen to leave the YUI metadata enabled.  To make a custom module dependent on an existing
     YUI module simply default a <em>requires</em> key/value pair that lists out the desired YUI components.</p>
 
     <h2>Simple Example with no YUI Dependencies</h2>
@@ -73,37 +74,29 @@
 include("loader.php");
 
 //Create a custom module metadata set
-$customConfig = array(
-    "dcJson" => array(
-        "name" => 'dcJson',
+$customModules = array(
+    "JSONModule" => array(
+        "name" => 'JSONModule',
         "type" => 'js', // 'js' or 'css'
-        // "path" => 'path/to/file.js', // includes base
-        "fullpath" => 'http://www.json.org/json2.js', // overrides path
-        // "requires" => array (0 => 'event', 1 => 'dom'),
-        // "optional" => array (0 => 'connection'),
-        // "global" => true, // globals are always loaded
-        // "supersedes" => array (0 => 'something'), // if a rollup
-        // "rollup" => 3 // the rollup threshold
+        "fullpath" => 'http://www.json.org/json2.js' // overrides path
     ),
     "customJS" => array(
         "name" => 'customJS',
-        "type" => 'js', // 'js' or 'css'
-        "fullpath" => './assets/custom/data.js', // overrides path
-        "global" => true, // globals are always loaded
-        "requires" => array (0 => 'dcJson')
+        "type" => 'js',
+        "fullpath" => './assets/custom/data.js',
+        "requires" => array('JSONModule')
     ),
     "customCSS" => array(
         "name" => 'customCSS',
-        "type" => 'css', // 'js' or 'css'
-        "fullpath" => './assets/custom/custom.css', // overrides path
-        "global" => true // globals are always loaded
+        "type" => 'css',
+        "fullpath" => './assets/custom/custom.css'
     )
 );
 
 //Get a new YAHOO_util_Loader instance which includes just our custom metadata (No YUI metadata)
 //Note: rand is used here to help cache bust the example
-$loader = new YAHOO_util_Loader('<?PHP echo($yuiCurrentVersion);?>', 'my_custom_config_'.rand(), $customConfig, true);
-$loader->load("dcJson", "customJS", "customCSS");
+$loader = new YAHOO_util_Loader('<?PHP echo($yuiCurrentVersion);?>', 'my_custom_config_'.rand(), $customModules, true);
+$loader->load("JSONModule", "customJS", "customCSS");
 ?&gt;
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -170,7 +163,7 @@ $loader->load("dcJson", "customJS", "customCSS");
     <li><strong>A custom module set is defined</strong></li>
     <li><strong>An instance of YUI PHP Loader is created:</strong> Our custom module set is passed to the Loader</li>
     <li><strong>YUI PHP Loader calculates the dependencies and order of our custom modules: </strong>The Loader knows 
-    our <em>customJS</em> module is dependent on our <em>dcJson</em> module.</li>
+    our <em>customJS</em> module is dependent on our <em>JSONModule</em> module.</li>
     <li><strong>YUI PHP Loader loads the modules and is used to output the CSS and JavaScript: </strong>The &lt;link&gt; 
     nodes are output in the document head and the &lt;script&gt; nodes are output just before the closing body node.  This 
     is in accordance with the best practice performance recommendations outlined <a href="http://developer.yahoo.com/performance/rules.html">here</a>.</li>

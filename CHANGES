@@ -3,3 +3,10 @@ ChangeLog
 
 1.0.0b1
     * Initial release
+
+1.0.0b2
+    * Doc cleanup
+    * Combo script incorrectly exploded the query string on &amp; not &.
+    * Modified APC/Curl support checks
+    * Adding APC support for combo.php
+    * Combo.php was not handling relative image path in the raw css.  Now converts to absolute paths.

@@ -61,7 +61,7 @@
   <div id="quicklinks">
       <h4>Quick Links:</h4>
       <ul>
-        <li><a href="/yui/docs/module_phploader.html">API Documentation</a></li>
+        <li><a href="api_docs/index.html">API Documentation</a></li>
         <li><a href="http://yuilibrary.com/downloads/">Download YUI PHP Loader</a> from YUILibrary.com: YUI PHP Loader is available from the YUI project website, but it is a separate download from the YUI JavaScript/CSS library.</li>
     </ul>
     </div>

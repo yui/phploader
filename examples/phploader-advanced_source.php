@@ -1,7 +1,7 @@
 <?PHP
 include("./inc/config.inc");
 include("../phploader/loader.php");
-$loader = new YAHOO_util_Loader($yuiCurrentVersion); //(ex) 2.7.0
+$loader = new YAHOO_util_Loader($yuiCurrentVersion); //$customModules
 
 //Specify YUI components to load
 $loader->load("calendar");

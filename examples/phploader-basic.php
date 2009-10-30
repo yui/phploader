@@ -34,18 +34,19 @@
 </ol>
 <p>Here's what that looks like in terms of raw source &mdash; this is the full source code for this example: </p>
 <textarea name="code" class="php" cols="60" rows="1">
+&lt;?PHP
+include("loader.php");
+$loader = new YAHOO_util_Loader("<?PHP echo($yuiCurrentVersion);?>");
+
+//Specify YUI components to load
+$loader->load("calendar");
+?&gt;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
 	<title>YUI PHP Loader Utility Basic Example: Loading YUI Calendar with the YUI PHP Loader Utility</title>
 
     &lt;?PHP
-    include("loader.php");
-    $loader = new YAHOO_util_Loader("<?PHP echo($yuiCurrentVersion);?>");
-    
-    //Specify YUI components to load
-    $loader->load("calendar");
-    
 	//Output the CSS and JavaScript tags
     echo $loader->tags();
 	?&gt;
