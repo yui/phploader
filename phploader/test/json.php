@@ -100,8 +100,7 @@ if (isset($_REQUEST["module"])) {
 
 </style>
 
-<!-- The actual output after processing all of the dependencies -->
-<?PHP echo $output ?>
+<!-- The actual output after processing all of the dependencies (removed) -->
 
 </head>
 <body>

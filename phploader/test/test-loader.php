@@ -135,11 +135,6 @@ if (isset($_GET["module"])) {
 
 </style>
 
-<?PHP 
-//The actual output after processing all of the dependencies
-//echo $output; 
-?> 
-
 </head>
 <body>
 <form name="mainform" action="<?PHP echo getenv("REQUEST_URI"); ?>">
