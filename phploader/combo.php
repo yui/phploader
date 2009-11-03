@@ -15,7 +15,7 @@
         this file in the same location as loader.php.
 
         Note: If the phploader directory does not live in the webserver's root 
-        folder then modify the PATH_TO_LOADER variable in combo.php accordingly
+        folder then modify the PATH_TO_LIB variable accordingly
 
     2. Download and extract each version of YUI you intend to support into
         the phploader/lib directory.
@@ -26,22 +26,14 @@
         etc...
 */
 
+require "./combo_functions.inc.php";
+
 //Web accessible path to the YUI PHP loader lib directory (Override as needed)
-define("PATH_TO_LOADER", server() . "/phploader/lib/"); 
+define("PATH_TO_LIB", server() . "/phploader/lib/"); 
 
 //APC Configuration
 define("APC_AVAIL", function_exists('apc_fetch') ? true : false);
 define("APC_TTL", 0);
-
-//server(): Computes the base URL of the current page (protocol, server, path)
-//credit: http://code.google.com/p/simple-php-framework/ (modified version of full_url), license: MIT
-function server()
-{
-    $s = getenv('HTTPS') ? '' : (getenv('HTTPS') == 'on') ? 's' : '';
-    $protocol = substr(strtolower(getenv('SERVER_PROTOCOL')), 0, strpos(strtolower(getenv('SERVER_PROTOCOL')), '/')) . $s;
-    $port = (getenv('SERVER_PORT') == '80') ? '' : (":".getenv('SERVER_PORT'));
-    return $protocol . "://" . getenv('HTTP_HOST') . $port;
-}
 
 $queryString = getenv('QUERY_STRING') ? urldecode(getenv('QUERY_STRING')) : '';
 if (isset($queryString) && !empty($queryString)) {
@@ -50,7 +42,7 @@ if (isset($queryString) && !empty($queryString)) {
     
     $cache = false;
     if (APC_AVAIL === true) {
-        $cache = apc_fetch('combo:'.$queryString);
+        //$cache = apc_fetch('combo:'.$queryString);
     }
     
     if ($cache) {
@@ -68,8 +60,15 @@ if (isset($queryString) && !empty($queryString)) {
 
         include("./loader.php");
         $loader = new YAHOO_util_Loader($yuiVersion);
-        $base   = PATH_TO_LOADER . $yuiVersion . "/build/";
-        $loader->base = $base;
+        $base   = PATH_TO_LIB . $yuiVersion . "/build/";
+        $baseWithoutBuild = PATH_TO_LIB . $yuiVersion . "/";
+        $loader->base = $base; 
+        
+        //Verify this version of the library exists locally
+        $localPathToBuild = "../lib/" . $yuiVersion . "/build/";
+        if (file_exists($localPathToBuild) === false || is_readable($localPathToBuild ) === false) {
+            die('<!-- Unable to locate the YUI build directory! -->');
+        }
 
         //Detect and load the required components now
         $yuiComponents = array();
@@ -97,11 +96,30 @@ if (isset($queryString) && !empty($queryString)) {
             }
             echo $rawScript;
         } else {
-            $rawCSS = $loader->css_raw();
-            //Handle image path corrections
-            $rawCSS = preg_replace('/((url\()(\w+)(.*);)/', '${2}'. $base . '${3}${4}', $rawCSS); // subdirs
-            $rawCSS = preg_replace('/(\.\.\/)+/', $base, $rawCSS); // relative pathes
-            $rawCSS = str_replace("url(/", "url($base", $rawCSS); // url(/whatever)
+            $rawCSS = '';
+            $cssResourceList = $loader->css_data();
+            foreach ($cssResourceList["css"] as $cssResource=>$val) {
+                foreach($cssResourceList["css"][$cssResource] as $key=>$value) {
+                     $crtResourceBase = substr($key, 0, strrpos($key, "/") + 1);
+                     $crtResourceContent = $loader->getRemoteContent($key);
+                     
+                     //Handle image path corrections (order is important)
+                     $crtResourceContent = preg_replace('/((url\()(\w+)(.*);)/', '${2}'. $crtResourceBase . '${3}${4}', $crtResourceContent); // subdirs (e.g) url(foo/foo.png)
+                     $crtResourceContent = preg_replace('/(url\([^\.\/]\))+/', $crtResourceBase, $crtResourceContent); // just filename (e.g.) url(picker_mask.png)
+                     $crtResourceContent = str_replace("url(/", "url($crtResourceBase", $crtResourceContent); // slash filename (e.g.) url(/whatever)
+                     $crtResourceContent = preg_replace('/(\.\.\/)+/', $crtResourceBase, $crtResourceContent); // relative pathes (e.g.) url(../../foo.png)
+                     $crtResourceContent = preg_replace_callback(
+                                            '/AlphaImageLoader\(src=[\'"](.*?)[\'"]/',
+                                            'alphaImageLoaderPathCorrection',
+                                            $crtResourceContent
+                                           ); // AlphaImageLoader relative pathes (e.g.) AlphaImageLoader(src='../../foo.png')
+                     
+                     $rawCSS .= $crtResourceContent;
+                 }
+            }
+            
+            //Cleanup build path dups caused by relative pathes that already included the build directory
+            $rawCSS = str_replace("/build/build/", "/build/", $rawCSS);
             
             if (APC_AVAIL === true) {
                 apc_store('combo:'.$queryString, $rawCSS, APC_TTL);
