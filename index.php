@@ -239,6 +239,7 @@ echo $rollupNamesTable;
     <ul>
         <li><a href='examples/phploader-basic.php'>Using YUI PHP Loader to Load the Calendar Control (Basic)</a></li>
         <li><a href='examples/phploader-advanced.php'>Using YUI PHP Loader to Load the Calendar Control (Advanced)</a></li>
+        <li><a href='examples/phploader-mixed-loading.php'>Mixed Loading Methods</a></li>
         <li><a href='examples/phploader-custom-modules.php'>Adding Custom (Non-YUI) Content with YUI PHP Loader</a></li>
         <li><a href='examples/phploader-custom-modules-with-yui.php'>Adding Custom Modules with YUI Dependencies</a></li>
         <li><a href='examples/phploader-local-combo-handler.php'>Using the Local Combo Handler</a></li>
