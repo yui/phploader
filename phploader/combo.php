@@ -42,7 +42,7 @@ if (isset($queryString) && !empty($queryString)) {
     
     $cache = false;
     if (APC_AVAIL === true) {
-        //$cache = apc_fetch('combo:'.$queryString);
+        $cache = apc_fetch('combo:'.$queryString);
     }
     
     if ($cache) {
