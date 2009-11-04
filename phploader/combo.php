@@ -63,6 +63,13 @@ if (isset($queryString) && !empty($queryString)) {
         $base   = PATH_TO_LIB . $yuiVersion . "/build/";
         $baseWithoutBuild = PATH_TO_LIB . $yuiVersion . "/";
         $loader->base = $base; 
+
+        //Detect and set a filter as needed (defaults to minified version)
+        if (strpos($queryString, "-debug.js") !== false) {
+            $loader->filter = YUI_DEBUG;
+        } else if (strpos($queryString, "-min.js") === false && strpos($queryString, "-debug.js") === false) {
+            $loader->filter = YUI_RAW;
+        }
         
         //Verify this version of the library exists locally
         $localPathToBuild = "../lib/" . $yuiVersion . "/build/";
