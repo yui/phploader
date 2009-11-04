@@ -111,21 +111,20 @@ if (isset($queryString) && !empty($queryString)) {
                      $crtResourceContent = $loader->getRemoteContent($key);
                      
                      //Handle image path corrections (order is important)
-                     $crtResourceContent = preg_replace('/((url\()(\w+)(.*);)/', '${2}'. $crtResourceBase . '${3}${4}', $crtResourceContent); // subdirs (e.g) url(foo/foo.png)
-                     $crtResourceContent = preg_replace('/(url\([^\.\/]\))+/', $crtResourceBase, $crtResourceContent); // just filename (e.g.) url(picker_mask.png)
+                     $crtResourceContent = preg_replace('/((url\()([^\.\.|^http]\S+)(\)))/', '${2}'. $crtResourceBase . '${3}${4}', $crtResourceContent); // just filename or subdirs/filename (e.g) url(foo.png), url(foo/foo.png)
                      $crtResourceContent = str_replace("url(/", "url($crtResourceBase", $crtResourceContent); // slash filename (e.g.) url(/whatever)
-                     $crtResourceContent = preg_replace('/(\.\.\/)+/', $crtResourceBase, $crtResourceContent); // relative pathes (e.g.) url(../../foo.png)
+                     $crtResourceContent = preg_replace('/(url\()(\.\.\/)+/', 'url(' . $base, $crtResourceContent); // relative paths (e.g.) url(../../foo.png)
                      $crtResourceContent = preg_replace_callback(
                                             '/AlphaImageLoader\(src=[\'"](.*?)[\'"]/',
                                             'alphaImageLoaderPathCorrection',
                                             $crtResourceContent
-                                           ); // AlphaImageLoader relative pathes (e.g.) AlphaImageLoader(src='../../foo.png')
+                                           ); // AlphaImageLoader relative paths (e.g.) AlphaImageLoader(src='../../foo.png')
                      
                      $rawCSS .= $crtResourceContent;
                  }
             }
             
-            //Cleanup build path dups caused by relative pathes that already included the build directory
+            //Cleanup build path dups caused by relative paths that already included the build directory
             $rawCSS = str_replace("/build/build/", "/build/", $rawCSS);
             
             if (APC_AVAIL === true) {
