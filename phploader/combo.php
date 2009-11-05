@@ -61,7 +61,6 @@ if (isset($queryString) && !empty($queryString)) {
         include("./loader.php");
         $loader = new YAHOO_util_Loader($yuiVersion);
         $base   = PATH_TO_LIB . $yuiVersion . "/build/";
-        $baseWithoutBuild = PATH_TO_LIB . $yuiVersion . "/";
         $loader->base = $base; 
 
         //Detect and set a filter as needed (defaults to minified version)
