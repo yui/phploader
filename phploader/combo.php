@@ -128,7 +128,7 @@ if (isset($queryString) && !empty($queryString)) {
             $rawCSS = str_replace("/build/build/", "/build/", $rawCSS);
             
             if (APC_AVAIL === true) {
-                apc_store('combo:'.$queryString, $rawCSS, APC_TTL);
+                apc_store(server(true), $rawCSS, APC_TTL);
             }
             echo $rawCSS;
         }
