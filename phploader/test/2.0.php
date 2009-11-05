@@ -6,7 +6,7 @@
  *  version: 1.0.0b2
  */
  
-include("/home/y/share/pear/Yahoo/YUI/loader.php");
+include("../loader.php");
 
 function encoded_out($str) {
     echo (htmlentities($str));

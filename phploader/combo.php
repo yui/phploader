@@ -42,7 +42,7 @@ if (isset($queryString) && !empty($queryString)) {
     
     $cache = false;
     if (APC_AVAIL === true) {
-        $cache = apc_fetch('combo:'.$queryString);
+        $cache = apc_fetch(server(true));
     }
     
     if ($cache) {
@@ -99,7 +99,7 @@ if (isset($queryString) && !empty($queryString)) {
         if ($contentType == "application/x-javascript") {
             $rawScript = $loader->script_raw();
             if (APC_AVAIL === true) {
-                apc_store('combo:'.$queryString, $rawScript, APC_TTL);
+                apc_store(server(true), $rawScript, APC_TTL);
             }
             echo $rawScript;
         } else {
