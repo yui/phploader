@@ -808,14 +808,19 @@ class YAHOO_util_Loader {
             $this->baseOverrides[$name] = $base;
         }
     }
-
+    
+    /**
+    * Used to determine if one module is satisfied by provided array of modules
+    * @method listSatisfies
+    * @param {string} satisfied Module name
+    * @param {array} moduleList List of modules names
+    */
     function listSatisfies($satisfied, $moduleList) {
         //$this->log("listSatisfies: " . $satisfied . ", " . count($moduleList)); 
 
         if (isset($moduleList[$satisfied])) {
-            // $this->log("***satisfied by list " . $satisfied);
-
-            $this->log("***satisfied by list " .  var_export($moduleList[$satisfied], true) );
+            //$this->log("***satisfied by list " . $satisfied);
+            //$this->log("***satisfied by list " .  var_export($moduleList[$satisfied], true) );
             return true;
         } else {
             
@@ -870,7 +875,7 @@ class YAHOO_util_Loader {
         foreach ($globals as $name=>$dep) {
             $reqs[$name] = true;
         }
-
+        
         // get and store the full list of dependencies.
         foreach ($this->requests as $name=>$val) {
             $reqs[$name] = true;
@@ -996,7 +1001,7 @@ class YAHOO_util_Loader {
         if (count($top > 0)) {
             $notdone = array_merge($top, $notdone);
         }
-
+        
         //$this->log("Not done: " . var_export($notdone, true) . ", loaded: " . var_export($this->loaded, true));
         //$this->log("Not done: " . var_export($notdone, true));
 
@@ -1004,7 +1009,7 @@ class YAHOO_util_Loader {
         foreach ($this->loaded as $name=>$module) {
             $this->accountFor($name);
         }
-
+        
         // $this->log("done: " . var_export($this->loaded, true));
 
         // keep going until everything is sorted
@@ -1016,7 +1021,7 @@ class YAHOO_util_Loader {
                 error_log($msg, 0);
                 return array_merge($sorted, $notdone);
             }
-
+            
             // each pass only processed what has not been completed
             foreach ($notdone as $name => $val) {
                 //$this->log("processing notdone: " . $name . " of " . count($notdone));
@@ -1028,31 +1033,23 @@ class YAHOO_util_Loader {
                 //$this->log("----------------------------------------------------");
 
                 $dep = $this->modules[$name];
-
                 $newreqs = $this->getAllDependencies($name, $this->loadOptional);
-
-
+                
                 // $this->log($name . ": checking after " . var_export($newreqs, true));
                 // $this->log($name . ": checking after " . var_export($dep, true));
                 // add 'after' items
-
-                /*
+                
+                //Detect if this module needs to be included after another one of the upcoming dependencies
                 if (isset($dep[YUI_AFTER])) {
                     $after = $dep[YUI_AFTER];
-                    $this->log("* " .$name . ": has after " . $after);
+                    //$this->log("* " .$name . ": has after " . $after);
                     foreach($after as $a) {
-                        $this->log("** " .$name . ": needs to be after " . $a);
-
-                        // only react if the requirement is in the dependency list
-                        // if ($this->listSatisfies($newreqs, $a)) {
-                        // if (isset($newreqs[$a])) {
-                        // if (isset($this->loaded[$a])) {
-                        if ($this->listSatisfies($notdone, $a)) {
+                        //$this->log("** " .$name . ": needs to be after " . $a);
+                        if (in_array($a, $notdone)) {
                             $newreqs[$a] = true;
                         }
                     }
                 }
-                */
 
                 $failed = false;
 

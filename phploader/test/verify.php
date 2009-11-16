@@ -9,6 +9,7 @@
 error_reporting(E_ALL);
 
 include("../loader.php");
+define("YUI_VERSION_TO_TEST", "2.8.0r4");
 
 function verify($name, $url)  {
 
@@ -47,7 +48,7 @@ function verify($name, $url)  {
 // create the loader instance, this sets up the platform config as well,
 // which we need right away because we are iterating the packages to
 // generate a list of available modules.
-$loader = new YAHOO_util_Loader();
+$loader = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 
 $output  = "";
 $checked = "";

@@ -60,6 +60,8 @@ $GLOBALS['yui_current'] = array (
         0 => 'reset',
         1 => 'fonts',
         2 => 'grids',
+        3 => 'reset-fonts',
+        4 => 'reset-fonts-grids',
       ),
     ),
     'button' => 

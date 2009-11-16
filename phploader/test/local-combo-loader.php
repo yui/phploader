@@ -7,7 +7,9 @@
  */
  
     include("../loader.php");
-    $loader = new YAHOO_util_Loader("2.8.0r4");
+    define("YUI_VERSION_TO_TEST", "2.8.0r4");
+    
+    $loader = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 
     //Specify YUI components to load
     $loader->combine = true;

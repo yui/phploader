@@ -7,6 +7,7 @@
  */
  
 include("../loader.php");
+define("YUI_VERSION_TO_TEST", "2.8.0r4");
 
 function encoded_out($str) {
     echo (htmlentities($str));
@@ -52,7 +53,7 @@ $customConfig = array(
 //       the cache expires --- currently set to 30 minutes).
 // arg2: a list of custom modules
 // arg3: pass true if you do not want the YUI metadata
-$loader = new YAHOO_util_Loader('config_v_2', $customConfig);
+$loader = new YAHOO_util_Loader(YUI_VERSION_TO_TEST, 'config_v_2', $customConfig);
 
 // What to load
 $loader->load("menu", "animation", "test2");
@@ -72,7 +73,7 @@ $loader->base = "/build/";
 
 // Configure the base dir for a set of modules.  This overrides
 // the global base property
-$loader->overrideBase("/otherbasedir/", $customConfig);
+$loader->overrideBase("/otherbasedir/", array("test1", "test2", "test3"));
 
 // No filter is applied by default.  YUI_RAW ("RAW") and YUI_DEBUG 
 // ("DEBUG") are currently the only valid options.  The former will

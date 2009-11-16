@@ -9,6 +9,7 @@
 // header('Content-type: text/ascii');
 
 include("../loader.php");
+define("YUI_VERSION_TO_TEST", "2.8.0r4");
 
 function encoded_out($str) {
     echo (htmlentities($str));
@@ -22,7 +23,7 @@ function encoded_out($str) {
 
 encoded_out ("\n\nTest 1a:\n\n");
 
-$l1 = new YAHOO_util_Loader();
+$l1 = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 $l1->load("dragdrop");
 
 encoded_out ($l1->tags());
@@ -45,7 +46,7 @@ packages not already included.
 
 encoded_out ("\n\nTest 2:\n\n");
 
-$l2 = new YAHOO_util_Loader();
+$l2 = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 $l2->load("event");
 $l2->base = "http://makeover.corp.yahoo.com/2.4.0/build/";
 encoded_out ($l2->tags());
@@ -56,7 +57,7 @@ encoded_out ($l2->tags());
 
 encoded_out ("\n\nTest 3:\n\n");
 
-$l3 = new YAHOO_util_Loader();
+$l3 = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 $l3->load("dragdrop");
 $l3->load("utilities");
 encoded_out ($l3->tags());
@@ -71,7 +72,7 @@ was included, dragdrop, position, and event are omitted.
 
 encoded_out ("\n\nTest 4:\n\n");
 
-$l4 = new YAHOO_util_Loader();
+$l4 = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 $l4->load("dragdrop");
 $l4->load("animation");
 $l4->load("connection");
@@ -88,7 +89,7 @@ individual packages even though it wasn't requested directly.
 
 encoded_out ("\n\nTest 4b:\n\n");
 
-$l4b =  new YAHOO_util_Loader();
+$l4b =  new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 $l4b->load("dragdrop", "animation");
 $l4b->setLoaded("event", "dom");
 encoded_out ( $l4b -> tags() );
@@ -101,7 +102,7 @@ encoded_out ( $l4b -> tags() );
 
 encoded_out ("\n\nTest 5:\n\n");
 
-$l5 = new YAHOO_util_Loader();
+$l5 = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 $l5->load("slider");
 encoded_out ($l5->tags());
 
@@ -111,7 +112,7 @@ encoded_out ($l5->tags());
 
 encoded_out ("\n\nTest 6:\n\n");
 
-$l6 = new YAHOO_util_Loader();
+$l6 = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 $l6->loadOptional = true;
 //var_dump($yui_load_manager->modules["slider"]);
 
@@ -126,7 +127,7 @@ encoded_out ($l6->tags());
 
 encoded_out ("\n\nTest 6b:\n\n");
 
-$l6b = new YAHOO_util_Loader();
+$l6b = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 $l6b->loadOptional = true;
 $l6b->load("slider", "connection");
 encoded_out ($l6b->tags());
@@ -138,7 +139,7 @@ encoded_out ($l6b->tags());
 
 encoded_out ("\n\nTest 7:\n\n");
 
-$l7 = new YAHOO_util_Loader();
+$l7 = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 $l7->load('editor');
 $l7->skin['overrides']['button'] = array('skin1', 'skin2', 'skin3');
 encoded_out ($l7->tags());
@@ -149,10 +150,10 @@ encoded_out ($l7->tags());
 
 encoded_out ("\n\nTest 8:\n\n");
 
-$l8 = new YAHOO_util_Loader();
+$l8 = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 $l8->load("treeview");
 $l8->load("treeviewcss");
-$l8->setLoaded("skin-sam-treeview");
+$l8->setLoaded("treeview");
 encoded_out ("<!-- css -->\n");
 encoded_out ($l8->css());
 encoded_out ("<!-- js -->\n");
@@ -164,7 +165,7 @@ encoded_out ($l8->script());
 encoded_out ("\n\nTest 9:\n\n");
 
 
-$l9 = new YAHOO_util_Loader();
+$l9 = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 $l9->load("calendar");
 encoded_out ($l9->json());
 
@@ -173,7 +174,7 @@ encoded_out ($l9->json());
 //////////////////////////////////////////////////////////////////////////
 encoded_out ("\n\nTest 10:\n\n");
 
-$l10 = new YAHOO_util_Loader();
+$l10 = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 
 $l10->load("calendar");
 encoded_out ($l10->embed());
@@ -185,7 +186,7 @@ encoded_out ("\n\nTest 11:\n\n");
     //"menu" => true
 //));
 
-$l11 = new YAHOO_util_Loader();
+$l11 = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 $l11->base = "../../build/";
 $l11->filter = YUI_DEBUG;
 

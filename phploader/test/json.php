@@ -7,8 +7,9 @@
  */
  
 include("../loader.php");
+define("YUI_VERSION_TO_TEST", "2.8.0r4");
 
-$loader = new YAHOO_util_Loader();
+$loader = new YAHOO_util_Loader(YUI_VERSION_TO_TEST);
 
 $output = "";
 $checked = "";
