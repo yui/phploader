@@ -28,6 +28,8 @@ define('YUI_GLOBAL',     'global');
 define('YUI_JS',         'js');
 define('YUI_JSON',       'JSON');
 define('YUI_MODULES',    'modules');
+define('YUI_SUBMODULES', 'submodules');
+define('YUI_EXPOUND',    'expound');
 define('YUI_NAME',       'name');
 define('YUI_OPTIONAL',   'optional');
 define('YUI_OVERRIDES',  'overrides');
@@ -47,6 +49,7 @@ define('YUI_SUPERSEDES', 'supersedes');
 define('YUI_TAGS',       'TAGS');
 define('YUI_TYPE',       'type');
 define('YUI_URL',        'url');
+
 
 /**
  * The YUI PHP loader base class which provides dynamic server-side loading for YUI
@@ -707,25 +710,87 @@ class YAHOO_util_Loader {
     * @return {array}
     */
     function getAllDependencies($mname, $loadOptional=false, $completed=array()) {
-
-        // $this->log("Building deps list for " . $mname);
+        //$this->log("Building deps list for " . $mname);
 
         $key = YUI_REQUIRES . $mname;
         if ($loadOptional) {
             $key .= YUI_OPTIONAL;
         }
+        
         if (isset($this->depCache[$key])) {
             // $this->log("Using cache " . $mname);
             return $this->depCache[$key];
         }
-
+        
         $m = $this->modules[$mname];
+        $mProvides = $this->getProvides($mname);
         $reqs = array();
+    
+	    //Some modules pretend to be others (override if this is the case)
+        if (isset($this->modules[$mname][YUI_EXPOUND])) {
+			if (!isset($completed[$mname])) {
+				$reqs = array_merge($completed, $this->getAllDependencies($this->modules[$mname][YUI_EXPOUND], $loadOptional, array($mname => true)));
+			}
+        }
 
+        //Add any requirements defined on the module itself
         if (isset($m[YUI_REQUIRES])) {
             $origreqs = $m[YUI_REQUIRES];
             foreach($origreqs as $r) {
-                $reqs[$r] = true;
+            	if (!isset($reqs[$r])) {
+            		$reqs[$r] = true;
+                	$reqs = array_merge($reqs, $this->getAllDependencies($r, $loadOptional, $reqs));
+            	}
+            }
+        }
+         
+        //Add any submodule requirements not provided by the rollups
+        if (isset($m[YUI_SUBMODULES])) {
+            foreach($m[YUI_SUBMODULES] as $submodule) {
+                $subreqs = $submodule[YUI_REQUIRES];
+                foreach($subreqs as $sr) {     
+                    if (!in_array($sr, $mProvides) && !in_array($sr, $this->accountedFor)) {
+		            	if (!isset($reqs[$sr])) {
+	                    	$reqs[$sr] = true; 
+	                        $reqs = array_merge($reqs, $this->getAllDependencies($sr, $loadOptional, $reqs));
+		            	}
+                    }
+                }
+            }
+        }
+        
+        //Add any superseded requirements not provided by the rollup and/or rollup submodules
+        if (isset($m[YUI_SUPERSEDES])) {
+            foreach($m[YUI_SUPERSEDES] as $supersededModule) {
+                if (isset($this->modules[$supersededModule][YUI_REQUIRES])) {
+                    foreach($this->modules[$supersededModule][YUI_REQUIRES] as $supersededModuleReq) {
+                        if (!in_array($supersededModuleReq, $mProvides)) {
+			            	if (!isset($reqs[$supersededModuleReq]))
+			            	{
+	                            $reqs[$supersededModuleReq] = true;
+	                            $reqs = array_merge($reqs, $this->getAllDependencies($supersededModuleReq, $loadOptional, $reqs));
+			            	}
+                        }
+                    }
+                }
+                
+                //Add any submodule requirements not provided by the rollup or originally requested module
+                if (isset($this->modules[$supersededModule][YUI_SUBMODULES])) {
+                    foreach($this->modules[$supersededModule][YUI_SUBMODULES] as $supersededSubmodule) {
+                        $ssmProvides = $this->getProvides($supersededModule);
+                        $supersededSubreqs = $supersededSubmodule[YUI_REQUIRES];
+                        foreach($supersededSubreqs as $ssr) {     
+                            if (!in_array($ssr, $ssmProvides)) {
+				            	if (!isset($reqs[$ssr]))
+				            	{
+                           	
+	                                $reqs[$ssr] = true;
+	                                $reqs = array_merge($reqs, $this->getAllDependencies($ssr, $loadOptional, $reqs));
+				            	}
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -734,41 +799,10 @@ class YAHOO_util_Loader {
             foreach($o as $opt) {
                 $reqs[$opt] = true;
             }
-
-        }
-
-        foreach ($reqs as $name=>$val) {
-
-            $skinName = $this->skinSetup($name);
-
-            if ($skinName) {
-                // $this->log("Adding skin req for " . $name . ": " . $skinName);
-                $reqs[$skinName] = true;
-            }
-    
-            //$this->log("recursing deps for " . $name);
-            if (!isset($completed[$name]) && isset($this->modules[$name])) {
-                $dep = $this->modules[$name];
-
-                $newreqs = $this->getAllDependencies($name, $loadOptional, $completed);
-                $reqs = array_merge($reqs, $newreqs);
-
-                //foreach ($newreqs as $newname=>$newval) {
-                    //if (!isset($reqs[$newname])) {
-                        //$reqs[$newname] = true;
-                    //}
-                //}
-
-            } else {
-
-                //$this->log("ERROR " . $name . " not defined");
-                //print_r(array_keys($this->modules));
-            }
-
         }
 
         $this->depCache[$key] = $reqs;
-
+        
         return $reqs;
     }
 
@@ -871,7 +905,7 @@ class YAHOO_util_Loader {
 
         // add global dependenices so they are included when calculating rollups
         $globals = $this->getGlobalDependencies($moduleType);
-
+        
         foreach ($globals as $name=>$dep) {
             $reqs[$name] = true;
         }
@@ -881,13 +915,13 @@ class YAHOO_util_Loader {
             $reqs[$name] = true;
             $dep = $this->modules[$name];
             $newreqs = $this->getAllDependencies($name, $this->loadOptional);
+            
             foreach ($newreqs as $newname=>$newval) {
                 if (!isset($reqs[$newname])) {
                     $reqs[$newname] = true;
                 }
             }
         }
-
 
         // if we skip the sort, we just return the list that includes everything that
         // was requested, all of their requirements, and global modules.  This is
@@ -945,8 +979,8 @@ class YAHOO_util_Loader {
             }
         }
 
-    //var_export($reqs);
-    //exit;
+        //var_export($reqs);
+        //exit;
 
         //$t2 = split(" ", microtime());
         //$total = (($t2[1] - $t1[1]) + ($t2[0] - $t1[0]));
@@ -1014,7 +1048,7 @@ class YAHOO_util_Loader {
 
         // keep going until everything is sorted
         $count = 0;
-        while (count($notdone) > 0) {
+        while (count($notdone) > 0) {            
             //$this->log("processing loop " . $count);
             if ($count++ > 200) {
                 $msg = "YUI_LOADER ERROR: sorting could not be completed, there may be a circular dependency";
@@ -1031,9 +1065,10 @@ class YAHOO_util_Loader {
                 //$this->log("done: ");
                 //$this->log(var_export($this->loaded, true));
                 //$this->log("----------------------------------------------------");
-
-                $dep = $this->modules[$name];
+                
+                $dep = $this->modules[$name];                
                 $newreqs = $this->getAllDependencies($name, $this->loadOptional);
+                $this->accountFor($name);    
                 
                 // $this->log($name . ": checking after " . var_export($newreqs, true));
                 // $this->log($name . ": checking after " . var_export($dep, true));
@@ -1051,25 +1086,15 @@ class YAHOO_util_Loader {
                     }
                 }
 
-                $failed = false;
-
-                if (count($newreqs) == 0) {
-                    //$this->log("-----No requirements: "  . $name);
-                    $sorted[$name] = $name;
-                    $this->accountFor($name);
-                    unset($notdone[$name]);
-                } else {
-                    foreach ($newreqs as $depname=>$depval) {
+                if (!empty($newreqs)) {
+                    foreach ($newreqs as $depname=>$depval) {     
                         //$this->log("accountedFor: " . var_export($this->accountedFor, true));
                         //$this->log("checking " . $depname . " newreqs: " . var_export($newreqs, true));
                         // check if the item is accounted for in the $done list
-                        if (isset($this->accountedFor[$depname])) {
+                        if (isset($this->accountedFor[$depname]) || $this->listSatisfies($depname, $sorted)) {
+                        	//unset($notdone[$depname]);
                             //$this->log("----Satisfied by 'accountedfor' list: " . $depname);
-                        } else if ($this->listSatisfies($depname, $sorted)) {
-                            //$this->log("----Satisfied by 'done' list: " . $depname);
                         } else {
-                            $failed = true;
-
                             $tmp = array();
                             $found = false;
                             foreach ($notdone as $newname => $newval) {
@@ -1082,6 +1107,7 @@ class YAHOO_util_Loader {
                                     break; // found something that takes care of the dependency, so jump out
                                 }
                             }
+                            
                             if ($found) {
                                 //$this->log("found merge: "  . var_export($tmp, true).  ", " . var_export($notdone, true));
                                 // this should put the module that handles the dependency on top, immediately
@@ -1097,17 +1123,12 @@ class YAHOO_util_Loader {
                             
                             //$this->log("bouncing out of loops");
                             break(2); // break out of this iteration so we can get the missed dependency
-
                         }
                     }
-                    // if so, add to the the sorted array, removed from notdone and add to done
-                    if (!$failed) {
-                        //$this->log("----All requirements satisfied: " . $name);
-                        $sorted[$name] = $name;
-                        $this->accountFor($name);
-                        unset($notdone[$name]);
-                    }
                 }
+            
+                $sorted[$name] = $name;
+                unset($notdone[$name]);
             }
         }
 
