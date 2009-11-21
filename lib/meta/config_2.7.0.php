@@ -417,7 +417,7 @@ $GLOBALS['yui_current'] = array (
     'reset-fonts-grids' => 
     array (
       'path' => 'reset-fonts-grids/reset-fonts-grids.css',
-      'rollup' => 4,
+      'rollup' => 3,
       'supersedes' => 
       array (
         0 => 'reset',

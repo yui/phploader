@@ -512,7 +512,7 @@ $GLOBALS['yui_current'] = array (
         2 => 'grids',
         3 => 'reset-fonts',
       ),
-      'rollup' => 4,
+      'rollup' => 3,
     ),
     'reset-fonts' => 
     array (
