@@ -717,10 +717,12 @@ class YAHOO_util_Loader {
             $key .= YUI_OPTIONAL;
         }
         
+        /*
         if (isset($this->depCache[$key])) {
             // $this->log("Using cache " . $mname);
             return $this->depCache[$key];
         }
+        */
         
         $m = $this->modules[$mname];
         $mProvides = $this->getProvides($mname);
@@ -1087,7 +1089,7 @@ class YAHOO_util_Loader {
                 }
 
                 if (!empty($newreqs)) {
-                    foreach ($newreqs as $depname=>$depval) {     
+                    foreach ($newreqs as $depname=>$depval) {
                         //$this->log("accountedFor: " . var_export($this->accountedFor, true));
                         //$this->log("checking " . $depname . " newreqs: " . var_export($newreqs, true));
                         // check if the item is accounted for in the $done list
@@ -1115,10 +1117,15 @@ class YAHOO_util_Loader {
                                 $notdone = array_merge($tmp, $notdone);
                                 //$this->log("after merge: "  . var_export($notdone, true));
                             } else {
+                                /*
                                 $msg = "YUI_LOADER ERROR: requirement for " . $depname . " (needed for " . $name . ") not found when sorting";
                                 error_log($msg, 0);
                                 $notdone[$name] = $name;
                                 return array_merge($sorted, $notdone);
+                                */
+                                
+                                //Requirement was missing and not found within the current notdone list.  Add and try again.
+                                $notdone[$depname] = $depname;
                             }
                             
                             //$this->log("bouncing out of loops");
