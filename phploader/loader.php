@@ -1253,7 +1253,7 @@ class YAHOO_util_Loader {
     /**
     * Used to process the dependency list and retrieve the actual CSS and/or JavaScript resources
     * in requested output format (e.g.) json, link/script nodes, embeddable code, php array, etc.
-    * @method sortDependencies
+    * @method processDependencies
     * @param {string} outputType the format you like the response to be in
     * @param {string} moduleType Type of module to return (i.e.) js or css
     * @param {boolean} skipSort

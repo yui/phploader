@@ -77,6 +77,8 @@
 <span class="nb">define</span><span class="p">(</span><span class="s1">&#39;YUI_JS&#39;</span><span class="p">,</span>         <span class="s1">&#39;js&#39;</span><span class="p">);</span>
 <span class="nb">define</span><span class="p">(</span><span class="s1">&#39;YUI_JSON&#39;</span><span class="p">,</span>       <span class="s1">&#39;JSON&#39;</span><span class="p">);</span>
 <span class="nb">define</span><span class="p">(</span><span class="s1">&#39;YUI_MODULES&#39;</span><span class="p">,</span>    <span class="s1">&#39;modules&#39;</span><span class="p">);</span>
+<span class="nb">define</span><span class="p">(</span><span class="s1">&#39;YUI_SUBMODULES&#39;</span><span class="p">,</span> <span class="s1">&#39;submodules&#39;</span><span class="p">);</span>
+<span class="nb">define</span><span class="p">(</span><span class="s1">&#39;YUI_EXPOUND&#39;</span><span class="p">,</span>    <span class="s1">&#39;expound&#39;</span><span class="p">);</span>
 <span class="nb">define</span><span class="p">(</span><span class="s1">&#39;YUI_NAME&#39;</span><span class="p">,</span>       <span class="s1">&#39;name&#39;</span><span class="p">);</span>
 <span class="nb">define</span><span class="p">(</span><span class="s1">&#39;YUI_OPTIONAL&#39;</span><span class="p">,</span>   <span class="s1">&#39;optional&#39;</span><span class="p">);</span>
 <span class="nb">define</span><span class="p">(</span><span class="s1">&#39;YUI_OVERRIDES&#39;</span><span class="p">,</span>  <span class="s1">&#39;overrides&#39;</span><span class="p">);</span>
@@ -97,6 +99,7 @@
 <span class="nb">define</span><span class="p">(</span><span class="s1">&#39;YUI_TYPE&#39;</span><span class="p">,</span>       <span class="s1">&#39;type&#39;</span><span class="p">);</span>
 <span class="nb">define</span><span class="p">(</span><span class="s1">&#39;YUI_URL&#39;</span><span class="p">,</span>        <span class="s1">&#39;url&#39;</span><span class="p">);</span>
 
+
 <span class="sd">/**</span>
 <span class="sd"> * The YUI PHP loader base class which provides dynamic server-side loading for YUI</span>
 <span class="sd"> * @class YAHOO_util_Loader</span>
@@ -112,19 +115,33 @@
 <span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$base</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
 
-    <span class="k">var</span> <span class="nv">$filter</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-
-    <span class="c1">// current target not used</span>
-    <span class="k">var</span> <span class="nv">$target</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-
     <span class="sd">/**</span>
-<span class="sd">    * Combined into a single request using the combo service to pontentially reduce the number of </span>
-<span class="sd">    * http requests required.  This option is not supported when loading custom modules.</span>
-<span class="sd">    * @property combine</span>
-<span class="sd">    * @type boolean</span>
-<span class="sd">    * @default false</span>
+<span class="sd">    * A filter to apply to result urls. This filter will modify the default path for </span>
+<span class="sd">    * all modules. The default path is the minified version of the files (e.g., event-min.js). </span>
+<span class="sd">    * Changing the filter alows for picking up the unminified (raw) or debug sources.</span>
+<span class="sd">    * The default set of valid filters are:  YUI_DEBUG &amp; YUI_RAW</span>
+<span class="sd">    * @property filter</span>
+<span class="sd">    * @type string (e.g.) </span>
+<span class="sd">    * @default empty string (minified vesion)</span>
 <span class="sd">    */</span>
-    <span class="k">var</span> <span class="nv">$combine</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+    <span class="k">var</span> <span class="nv">$filter</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    
+    <span class="sd">/**</span>
+<span class="sd">    * An array of filters &amp; filter replacement rules.  Used with $filter.</span>
+<span class="sd">    * @property filters</span>
+<span class="sd">    * @type array</span>
+<span class="sd">    * @default</span>
+<span class="sd">    */</span>
+    <span class="k">var</span> <span class="nv">$filters</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+    
+    <span class="sd">/**</span>
+<span class="sd">    * A list of modules to apply the filter to.  If not supplied, all</span>
+<span class="sd">    * modules will have any defined filters applied.  Tip: Useful for debugging.</span>
+<span class="sd">    * @property filterList</span>
+<span class="sd">    * @type array</span>
+<span class="sd">    * @default null</span>
+<span class="sd">    */</span>
+    <span class="k">var</span> <span class="nv">$filterList</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
 
     <span class="sd">/**</span>
 <span class="sd">    * Should we allow rollups</span>
@@ -151,54 +168,117 @@
 <span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$rollupsToTop</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
 
-    <span class="c1">// first pass through we will check for meta-modules and remove </span>
-    <span class="c1">// dependencies where a supercedes is found.</span>
-    <span class="c1">// var $firstPass = true;</span>
-
-    <span class="c1">// the first time we output a module type we allow automatic rollups, this</span>
-    <span class="c1">// array keeps track of module types we have processed</span>
+    <span class="sd">/**</span>
+<span class="sd">    * The first time we output a module type we allow automatic rollups, this</span>
+<span class="sd">    * array keeps track of module types we have processed</span>
+<span class="sd">    * @property processedModuleTypes</span>
+<span class="sd">    * @type array</span>
+<span class="sd">    * @default</span>
+<span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$processedModuleTypes</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
 
-    <span class="c1">// all required modules</span>
+    <span class="sd">/**</span>
+<span class="sd">    * All required modules</span>
+<span class="sd">    * @property requests</span>
+<span class="sd">    * @type array</span>
+<span class="sd">    * @default</span>
+<span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$requests</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
 
-    <span class="c1">// modules that have been been outputted via getLink()</span>
+    <span class="sd">/**</span>
+<span class="sd">    * List of modules that have been been outputted via getLink() / getComboLink()</span>
+<span class="sd">    * @property loaded</span>
+<span class="sd">    * @type array</span>
+<span class="sd">    * @default</span>
+<span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$loaded</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
 
-    <span class="c1">// list of all modules superceded by the list of required modules </span>
+    <span class="sd">/**</span>
+<span class="sd">    * List of all modules superceded by the list of required modules </span>
+<span class="sd">    * @property superceded</span>
+<span class="sd">    * @type array</span>
+<span class="sd">    * @default</span>
+<span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$superceded</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
 
-    <span class="c1">// module load count to catch circular dependencies</span>
-    <span class="c1">// var $loadCount = array();</span>
-
-    <span class="c1">// keeps track of modules that were requested that are not defined</span>
-    <span class="k">var</span> <span class="nv">$undefined</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
-
-    <span class="k">var</span> <span class="nv">$dirty</span><span class="o">=</span><span class="k">true</span><span class="p">;</span>
-    
-    <span class="k">var</span> <span class="nv">$sorted</span><span class="o">=</span><span class="k">null</span><span class="p">;</span>
-    
-    <span class="k">var</span> <span class="nv">$accountedFor</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
-
     <span class="sd">/**</span>
-<span class="sd">    * A list of modules to apply the filter to.  If not supplied, all</span>
-<span class="sd">    * modules will have any defined filters applied.  Tip: Useful for debugging.</span>
-<span class="sd">    * @property filterList</span>
+<span class="sd">    * Keeps track of modules that were requested that are not defined</span>
+<span class="sd">    * @property undefined</span>
+<span class="sd">    * @type array</span>
+<span class="sd">    * @default</span>
+<span class="sd">    */</span>
+    <span class="k">var</span> <span class="nv">$undefined</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Used to determine if additional sorting of dependencies is required</span>
+<span class="sd">    * @property dirty</span>
+<span class="sd">    * @type boolean</span>
+<span class="sd">    * @default true</span>
+<span class="sd">    */</span>
+    <span class="k">var</span> <span class="nv">$dirty</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+    
+    <span class="sd">/**</span>
+<span class="sd">    * List of sorted modules</span>
+<span class="sd">    * @property sorted</span>
 <span class="sd">    * @type array</span>
 <span class="sd">    * @default null</span>
 <span class="sd">    */</span>
-    <span class="k">var</span> <span class="nv">$filterList</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+    <span class="k">var</span> <span class="nv">$sorted</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+    
+    <span class="sd">/**</span>
+<span class="sd">    * List of modules the loader has aleady accounted for</span>
+<span class="sd">    * @property accountedFor</span>
+<span class="sd">    * @type array</span>
+<span class="sd">    * @default</span>
+<span class="sd">    */</span>
+    <span class="k">var</span> <span class="nv">$accountedFor</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
 
-    <span class="c1">// the list of required skins</span>
+    <span class="sd">/**</span>
+<span class="sd">    * The list of required skins</span>
+<span class="sd">    * @property skins</span>
+<span class="sd">    * @type array</span>
+<span class="sd">    * @default</span>
+<span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$skins</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
-
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Contains the available module metadata</span>
+<span class="sd">    * @property modules</span>
+<span class="sd">    * @type array</span>
+<span class="sd">    * @default YUI module metadata for the specified release</span>
+<span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$modules</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
 
+    <span class="sd">/**</span>
+<span class="sd">    * The APC cache key</span>
+<span class="sd">    * @property fullCacheKey</span>
+<span class="sd">    * @type string</span>
+<span class="sd">    * @default null</span>
+<span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$fullCacheKey</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
 
+    <span class="sd">/**</span>
+<span class="sd">    * List of modules that have had their base pathes overridden</span>
+<span class="sd">    * @property baseOverrides</span>
+<span class="sd">    * @type array</span>
+<span class="sd">    * @default</span>
+<span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$baseOverrides</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
-
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Used to determine if we have an APC cache hit</span>
+<span class="sd">    * @property cacheFound</span>
+<span class="sd">    * @type boolean</span>
+<span class="sd">    * @default false</span>
+<span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$cacheFound</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Used to delay caching of module data</span>
+<span class="sd">    * @property delayCache</span>
+<span class="sd">    * @type boolean</span>
+<span class="sd">    * @default false</span>
+<span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$delayCache</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
     
     <span class="cm">/* If the version is set, a querystring parameter is appended to the</span>
@@ -211,14 +291,50 @@
     <span class="k">var</span> <span class="nv">$version</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
     <span class="k">var</span> <span class="nv">$versionKey</span> <span class="o">=</span> <span class="s2">&quot;_yuiversion&quot;</span><span class="p">;</span>
 
-    <span class="c1">// the skin definition</span>
+    <span class="cm">/* Holds the calculated skin definition</span>
+<span class="cm">    * @property skin</span>
+<span class="cm">    * @type array</span>
+<span class="cm">    * @default</span>
+<span class="cm">    */</span>
     <span class="k">var</span> <span class="nv">$skin</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
-
+    
+    <span class="cm">/* Holds the module rollup metadata</span>
+<span class="cm">    * @property rollupModules</span>
+<span class="cm">    * @type array</span>
+<span class="cm">    * @default</span>
+<span class="cm">    */</span>
     <span class="k">var</span> <span class="nv">$rollupModules</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+    
+    <span class="cm">/* Holds global module information.  Used for global dependency support.</span>
+<span class="cm">    * Note: Does not appear to be in use by recent metadata.  Might be deprecated?</span>
+<span class="cm">    * @property globalModules</span>
+<span class="cm">    * @type array</span>
+<span class="cm">    * @default</span>
+<span class="cm">    */</span>
     <span class="k">var</span> <span class="nv">$globalModules</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+    
+    <span class="cm">/* Holds information about what modules satisfy the requirements of others</span>
+<span class="cm">    * @property satisfactionMap</span>
+<span class="cm">    * @type array</span>
+<span class="cm">    * @default</span>
+<span class="cm">    */</span>
     <span class="k">var</span> <span class="nv">$satisfactionMap</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+    
+    <span class="cm">/* Holds a cached module dependency list</span>
+<span class="cm">    * @property depCache</span>
+<span class="cm">    * @type array</span>
+<span class="cm">    * @default</span>
+<span class="cm">    */</span>
     <span class="k">var</span> <span class="nv">$depCache</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
-    <span class="k">var</span> <span class="nv">$filters</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Combined into a single request using the combo service to pontentially reduce the number of </span>
+<span class="sd">    * http requests required.  This option is not supported when loading custom modules.</span>
+<span class="sd">    * @property combine</span>
+<span class="sd">    * @type boolean</span>
+<span class="sd">    * @default false</span>
+<span class="sd">    */</span>
+    <span class="k">var</span> <span class="nv">$combine</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
 
     <span class="sd">/**</span>
 <span class="sd">    * The base path to the combo service.  Uses the Yahoo! CDN service by default.</span>
@@ -230,8 +346,24 @@
 <span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$comboBase</span> <span class="o">=</span> <span class="s2">&quot;http://yui.yahooapis.com/combo?&quot;</span><span class="p">;</span>
     
-    <span class="c1">// additional vars used to assist with combo handling</span>
+    <span class="sd">/**</span>
+<span class="sd">    * Holds the current combo url for the loaded CSS resources.  This is </span>
+<span class="sd">    * built with addToCombo and retrieved with getComboLink.  Only used when the combine</span>
+<span class="sd">    * is enabled.</span>
+<span class="sd">    * @property cssComboLocation</span>
+<span class="sd">    * @type string</span>
+<span class="sd">    * @default null</span>
+<span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$cssComboLocation</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Holds the current combo url for the loaded JavaScript resources.  This is </span>
+<span class="sd">    * built with addToCombo and retrieved with getComboLink.  Only used when the combine</span>
+<span class="sd">    * is enabled.</span>
+<span class="sd">    * @property jsComboLocation</span>
+<span class="sd">    * @type string</span>
+<span class="sd">    * @default null</span>
+<span class="sd">    */</span>
     <span class="k">var</span> <span class="nv">$jsComboLocation</span>  <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
 
     <span class="sd">/**</span>
@@ -276,7 +408,7 @@
         <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">jsonAvail</span>  <span class="o">=</span> <span class="nb">function_exists</span><span class="p">(</span><span class="s1">&#39;json_encode&#39;</span><span class="p">);</span>
         <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">customModulesInUse</span> <span class="o">=</span> <span class="k">empty</span><span class="p">(</span><span class="nv">$modules</span><span class="p">)</span> <span class="o">?</span> <span class="k">false</span> <span class="o">:</span> <span class="k">true</span><span class="p">;</span>
         <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">base</span> <span class="o">=</span> <span class="nv">$yui_current</span><span class="p">[</span><span class="nx">YUI_BASE</span><span class="p">];</span>
-        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">comboDefaultVersion</span> <span class="o">=</span> <span class="nv">$yuiVersion</span><span class="p">;</span> <span class="c1">//$customModules</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">comboDefaultVersion</span> <span class="o">=</span> <span class="nv">$yuiVersion</span><span class="p">;</span>
         <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">fullCacheKey</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
         <span class="nv">$cache</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
 
@@ -286,12 +418,7 @@
         <span class="p">}</span> 
         
         <span class="k">if</span> <span class="p">(</span><span class="nv">$cache</span><span class="p">)</span> <span class="p">{</span>
-
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">cacheFound</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
-
-            <span class="c1">// $this-&gt;log(&quot;using cache -------------------------------------------------------&quot;);</span>
-            <span class="c1">// $this-&gt;log(var_export($cache[YUI_DEPCACHE], true));</span>
-            <span class="c1">// $this-&gt;log(&quot;----------------------------------------------------------&quot;);</span>
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span> <span class="o">=</span> <span class="nv">$cache</span><span class="p">[</span><span class="nx">YUI_MODULES</span><span class="p">];</span>
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skin</span> <span class="o">=</span> <span class="nv">$cache</span><span class="p">[</span><span class="nx">YUI_SKIN</span><span class="p">];</span>
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">rollupModules</span> <span class="o">=</span> <span class="nv">$cache</span><span class="p">[</span><span class="nx">YUI_ROLLUP</span><span class="p">];</span>
@@ -299,10 +426,7 @@
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">satisfactionMap</span> <span class="o">=</span> <span class="nv">$cache</span><span class="p">[</span><span class="nx">YUI_SATISFIES</span><span class="p">];</span>
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">depCache</span> <span class="o">=</span> <span class="nv">$cache</span><span class="p">[</span><span class="nx">YUI_DEPCACHE</span><span class="p">];</span>
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">filters</span> <span class="o">=</span> <span class="nv">$cache</span><span class="p">[</span><span class="nx">YUI_FILTERS</span><span class="p">];</span>
-
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-
-            <span class="c1">// $this-&gt;log(&quot;initializing metadata-------------------------------------------------------&quot;);</span>
             <span class="c1">// set up the YUI info for the current version of the lib</span>
             <span class="k">if</span> <span class="p">(</span><span class="nv">$noYUI</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
@@ -317,7 +441,6 @@
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skin</span> <span class="o">=</span> <span class="nv">$yui_current</span><span class="p">[</span><span class="nx">YUI_SKIN</span><span class="p">];</span>
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skin</span><span class="p">[</span><span class="s1">&#39;overrides&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skin</span><span class="p">[</span><span class="nx">YUI_PREFIX</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;skin-&quot;</span><span class="p">;</span>
-
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">filters</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
                     <span class="nx">YUI_RAW</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
                             <span class="nx">YUI_SEARCH</span> <span class="o">=&gt;</span> <span class="s2">&quot;-min\.js&quot;</span><span class="p">,</span>
@@ -345,6 +468,10 @@
         <span class="p">}</span>
     <span class="p">}</span>
     
+    <span class="sd">/**</span>
+<span class="sd">    * Used to update the APC cache</span>
+<span class="sd">    * @method updateCache</span>
+<span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">updateCache</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">fullCacheKey</span><span class="p">)</span> <span class="p">{</span>
             <span class="nv">$cache</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
@@ -371,11 +498,21 @@
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loadSingle</span><span class="p">(</span><span class="nv">$arg</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
-
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Used to mark a module type as processed</span>
+<span class="sd">    * @method setProcessedModuleType</span>
+<span class="sd">    * @param string $moduleType</span>
+<span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">setProcessedModuleType</span><span class="p">(</span><span class="nv">$moduleType</span><span class="o">=</span><span class="s1">&#39;ALL&#39;</span><span class="p">)</span> <span class="p">{</span>
         <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">processedModuleTypes</span><span class="p">[</span><span class="nv">$moduleType</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
     <span class="p">}</span>
-
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Used to determine if a module type has been processed</span>
+<span class="sd">    * @method hasProcessedModuleType</span>
+<span class="sd">    * @param string $moduleType</span>
+<span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">hasProcessedModuleType</span><span class="p">(</span><span class="nv">$moduleType</span><span class="o">=</span><span class="s1">&#39;ALL&#39;</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">processedModuleTypes</span><span class="p">[</span><span class="nv">$moduleType</span><span class="p">]);</span>
     <span class="p">}</span>
@@ -388,17 +525,14 @@
     <span class="k">function</span> <span class="nf">setLoaded</span><span class="p">()</span> <span class="p">{</span>
         <span class="nv">$args</span> <span class="o">=</span> <span class="nb">func_get_args</span><span class="p">();</span>
 
-        <span class="c1">// prevent rollups when no module type is specified</span>
-        <span class="c1">//$this-&gt;setProcessedModuleType(null);</span>
-
         <span class="k">foreach</span> <span class="p">(</span><span class="nv">$args</span> <span class="k">as</span> <span class="nv">$arg</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$arg</span><span class="p">]))</span> <span class="p">{</span>
                 <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loaded</span><span class="p">[</span><span class="nv">$arg</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$arg</span><span class="p">;</span>
                 <span class="nv">$mod</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$arg</span><span class="p">];</span>
 
                 <span class="nv">$sups</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getSuperceded</span><span class="p">(</span><span class="nv">$arg</span><span class="p">);</span>
+                <span class="c1">// accounting for by way of supersede</span>
                 <span class="k">foreach</span> <span class="p">(</span><span class="nv">$sups</span> <span class="k">as</span> <span class="nv">$supname</span><span class="o">=&gt;</span><span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="c1">//$this-&gt;log(&quot;accounting for by way of supersede: &quot; . $supname);</span>
                     <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loaded</span><span class="p">[</span><span class="nv">$supname</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$supname</span><span class="p">;</span>
                 <span class="p">}</span>
 
@@ -409,21 +543,87 @@
                 <span class="nb">error_log</span><span class="p">(</span><span class="nv">$msg</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
-
-        <span class="c1">//var_export($this-&gt;loaded);</span>
     <span class="p">}</span>
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Sets up skin for skinnable modules</span>
+<span class="sd">    * @method skinSetup</span>
+<span class="sd">    * @param string $name module name</span>
+<span class="sd">    * @return {string}</span>
+<span class="sd">    */</span>
+    <span class="k">function</span> <span class="nf">skinSetup</span><span class="p">(</span><span class="nv">$name</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$skinName</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+        <span class="nv">$dep</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$name</span><span class="p">];</span>
 
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$dep</span> <span class="o">&amp;&amp;</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$dep</span><span class="p">[</span><span class="nx">YUI_SKINNABLE</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="nv">$s</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skin</span><span class="p">;</span>
+            
+            <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_OVERRIDES</span><span class="p">][</span><span class="nv">$name</span><span class="p">]))</span> <span class="p">{</span>
+                <span class="k">foreach</span> <span class="p">(</span><span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_OVERRIDES</span><span class="p">][</span><span class="nv">$name</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$name2</span> <span class="o">=&gt;</span> <span class="nv">$over2</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nv">$skinName</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">formatSkin</span><span class="p">(</span><span class="nv">$over2</span><span class="p">,</span> <span class="nv">$name</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nv">$skinName</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">formatSkin</span><span class="p">(</span><span class="nv">$s</span><span class="p">[</span><span class="s2">&quot;defaultSkin&quot;</span><span class="p">],</span> <span class="nv">$name</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="c1">// adding new skin module</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skins</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$skinName</span><span class="p">;</span>
+            <span class="nv">$skin</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">parseSkin</span><span class="p">(</span><span class="nv">$skinName</span><span class="p">);</span>
+
+            <span class="c1">// module-specific</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$skin</span><span class="p">[</span><span class="m">2</span><span class="p">]))</span> <span class="p">{</span>
+                <span class="nv">$dep</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$skin</span><span class="p">[</span><span class="m">2</span><span class="p">]];</span>
+                <span class="nv">$package</span> <span class="o">=</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$dep</span><span class="p">[</span><span class="nx">YUI_PKG</span><span class="p">]))</span> <span class="o">?</span> <span class="nv">$dep</span><span class="p">[</span><span class="nx">YUI_PKG</span><span class="p">]</span> <span class="o">:</span> <span class="nv">$skin</span><span class="p">[</span><span class="m">2</span><span class="p">];</span>
+                <span class="nv">$path</span> <span class="o">=</span> <span class="nv">$package</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_BASE</span><span class="p">]</span> <span class="o">.</span> <span class="nv">$skin</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$skin</span><span class="p">[</span><span class="m">2</span><span class="p">]</span> <span class="o">.</span> <span class="s1">&#39;.css&#39;</span><span class="p">;</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$skinName</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+                        <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="nv">$skinName</span><span class="p">,</span>
+                        <span class="s2">&quot;type&quot;</span> <span class="o">=&gt;</span> <span class="nx">YUI_CSS</span><span class="p">,</span>
+                        <span class="s2">&quot;path&quot;</span> <span class="o">=&gt;</span> <span class="nv">$path</span><span class="p">,</span>
+                        <span class="s2">&quot;after&quot;</span> <span class="o">=&gt;</span> <span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_AFTER</span><span class="p">]</span>
+                    <span class="p">);</span>
+
+            <span class="c1">// rollup skin</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nv">$path</span> <span class="o">=</span> <span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_BASE</span><span class="p">]</span> <span class="o">.</span> <span class="nv">$skin</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_PATH</span><span class="p">];</span>
+                <span class="nv">$newmod</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+                        <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="nv">$skinName</span><span class="p">,</span>
+                        <span class="s2">&quot;type&quot;</span> <span class="o">=&gt;</span> <span class="nx">YUI_CSS</span><span class="p">,</span>
+                        <span class="s2">&quot;path&quot;</span> <span class="o">=&gt;</span> <span class="nv">$path</span><span class="p">,</span>
+                        <span class="s2">&quot;rollup&quot;</span> <span class="o">=&gt;</span> <span class="m">3</span><span class="p">,</span>
+                        <span class="s2">&quot;after&quot;</span> <span class="o">=&gt;</span> <span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_AFTER</span><span class="p">]</span>
+                    <span class="p">);</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$skinName</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$newmod</span><span class="p">;</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">rollupModules</span><span class="p">[</span><span class="nv">$skinName</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$newmod</span><span class="p">;</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>    
+
+        <span class="k">return</span> <span class="nv">$skinName</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Parses a module&#39;s skin.  A modules skin is typically prefixed.</span>
+<span class="sd">    * @method parseSkin</span>
+<span class="sd">    * @param string $name the name of a module to parse</span>
+<span class="sd">    * @return {array}</span>
+<span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">parseSkin</span><span class="p">(</span><span class="nv">$moduleName</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">strpos</span><span class="p">(</span> <span class="nv">$moduleName</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skin</span><span class="p">[</span><span class="nx">YUI_PREFIX</span><span class="p">]</span> <span class="p">)</span> <span class="o">===</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nb">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="nv">$moduleName</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">explode</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="nv">$moduleName</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
     <span class="p">}</span>
-
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Add prefix to module skin</span>
+<span class="sd">    * @method formatSkin</span>
+<span class="sd">    * @param string $skin the skin name</span>
+<span class="sd">    * @param string $moduleName the name of a module</span>
+<span class="sd">    * @return {string} prefixed skin name</span>
+<span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">formatSkin</span><span class="p">(</span><span class="nv">$skin</span><span class="p">,</span> <span class="nv">$moduleName</span><span class="p">)</span> <span class="p">{</span>
         <span class="nv">$prefix</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skin</span><span class="p">[</span><span class="nx">YUI_PREFIX</span><span class="p">];</span>
-        <span class="c1">//$prefix = (isset($this-&gt;skin[YUI_PREFIX])) ? $this-&gt;skin[YUI_PREFIX] : &#39;skin-&#39;;</span>
         <span class="nv">$s</span> <span class="o">=</span> <span class="nv">$prefix</span> <span class="o">.</span> <span class="nv">$skin</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nv">$moduleName</span><span class="p">)</span> <span class="p">{</span>
             <span class="nv">$s</span> <span class="o">=</span> <span class="nv">$s</span> <span class="o">.</span> <span class="s1">&#39;-&#39;</span> <span class="o">.</span> <span class="nv">$moduleName</span><span class="p">;</span>
@@ -431,10 +631,13 @@
 
         <span class="k">return</span> <span class="nv">$s</span><span class="p">;</span>
     <span class="p">}</span>
-
-    <span class="k">function</span> <span class="nf">addSkin</span><span class="p">(</span><span class="nv">$skin</span><span class="p">)</span> <span class="p">{</span>
-    <span class="p">}</span>
-
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Loads the requested module</span>
+<span class="sd">    * @method loadSingle</span>
+<span class="sd">    * @param string $name the name of a module to load</span>
+<span class="sd">    * @return {boolean}</span>
+<span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">loadSingle</span><span class="p">(</span><span class="nv">$name</span><span class="p">)</span> <span class="p">{</span>
         <span class="nv">$skin</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">parseSkin</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>
 
@@ -451,9 +654,6 @@
 
         <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loaded</span><span class="p">[</span><span class="nv">$name</span><span class="p">])</span> <span class="o">||</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">accountedFor</span><span class="p">[</span><span class="nv">$name</span><span class="p">]))</span> <span class="p">{</span>
             <span class="c1">// skip</span>
-            <span class="c1">//print_r($name);</span>
-            <span class="c1">//var_export($this-&gt;loaded);</span>
-            <span class="c1">//var_export($this-&gt;accountedFor);</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">requests</span><span class="p">[</span><span class="nv">$name</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$name</span><span class="p">;</span>
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">dirty</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
@@ -584,7 +784,6 @@
 <span class="sd">    * @return {string} Returns a JSON object with the required JavaScript and CSS components</span>
 <span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">json</span><span class="p">(</span><span class="nv">$moduleType</span><span class="o">=</span><span class="k">null</span><span class="p">,</span> <span class="nv">$allowRollups</span><span class="o">=</span><span class="k">false</span><span class="p">,</span> <span class="nv">$skipSort</span><span class="o">=</span><span class="k">false</span><span class="p">,</span> <span class="nv">$full</span><span class="o">=</span><span class="k">false</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">//$this-&gt;firstPass = $allowRollups; // TODO: Seems like an awkward way to force it to not use rollups</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$allowRollups</span><span class="p">)</span> <span class="p">{</span>
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setProcessedModuleType</span><span class="p">(</span><span class="nv">$moduleType</span><span class="p">);</span>
         <span class="p">}</span>
@@ -628,26 +827,41 @@
     <span class="k">function</span> <span class="nf">raw</span><span class="p">(</span><span class="nv">$moduleType</span><span class="o">=</span><span class="k">null</span><span class="p">,</span> <span class="nv">$allowRollups</span><span class="o">=</span><span class="k">false</span><span class="p">,</span> <span class="nv">$skipSort</span><span class="o">=</span><span class="k">false</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">processDependencies</span><span class="p">(</span><span class="nx">YUI_RAW</span><span class="p">,</span> <span class="nv">$moduleType</span><span class="p">,</span> <span class="nv">$skipSort</span><span class="p">);</span>
     <span class="p">}</span>
-
+    
+    <span class="sd">/**</span>
+<span class="sd">    * General logging function.  Writes a message to the PHP error log.</span>
+<span class="sd">    * @method log</span>
+<span class="sd">    * @param {string} msg Message to write</span>
+<span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">log</span><span class="p">(</span><span class="nv">$msg</span><span class="p">)</span> <span class="p">{</span>
         <span class="nb">error_log</span><span class="p">(</span><span class="nv">$msg</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
     <span class="p">}</span>
     
+    <span class="sd">/**</span>
+<span class="sd">    * Markes a module as being accounted for.  Used in dependency testing.</span>
+<span class="sd">    * @method accountFor</span>
+<span class="sd">    * @param {string} name Module to mark as being accounted for</span>
+<span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">accountFor</span><span class="p">(</span><span class="nv">$name</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">//$this-&gt;log(&quot;accountFor: &quot; . $name);</span>
         <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">accountedFor</span><span class="p">[</span><span class="nv">$name</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$name</span><span class="p">;</span>
         
         <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$name</span><span class="p">]))</span> <span class="p">{</span>
             <span class="nv">$dep</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$name</span><span class="p">];</span>
             <span class="nv">$sups</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getSuperceded</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>
             <span class="k">foreach</span> <span class="p">(</span><span class="nv">$sups</span> <span class="k">as</span> <span class="nv">$supname</span><span class="o">=&gt;</span><span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
-                <span class="c1">// $this-&gt;log(&quot;accounting for by way of supersede: &quot; . $supname);</span>
+                <span class="c1">// accounting for by way of supersede package</span>
                 <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">accountedFor</span><span class="p">[</span><span class="nv">$supname</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
-    
+    <span class="sd">/**</span>
+<span class="sd">    * Used during dependecy processing to prune modules from the list of modules requiring further processing</span>
+<span class="sd">    * @method prune</span>
+<span class="sd">    * @param {array} deps List of module dependencies</span>
+<span class="sd">    * @param {string} moduleType Type of modules to prune (i.e.) js or css</span>
+<span class="sd">    * @return {array}</span>
+<span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">prune</span><span class="p">(</span><span class="nv">$deps</span><span class="p">,</span> <span class="nv">$moduleType</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nv">$moduleType</span><span class="p">)</span> <span class="p">{</span>
             <span class="nv">$newdeps</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
@@ -662,7 +876,13 @@
             <span class="k">return</span> <span class="nv">$deps</span><span class="p">;</span>
         <span class="p">}</span>
    <span class="p">}</span>
-
+   
+   <span class="sd">/**</span>
+<span class="sd">   * Use to get a list of modules superseded by the given module name</span>
+<span class="sd">   * @method getSuperceded</span>
+<span class="sd">   * @param {string} name Module name</span>
+<span class="sd">   * @return {array}</span>
+<span class="sd">   */</span>
    <span class="k">function</span> <span class="nf">getSuperceded</span><span class="p">(</span><span class="nv">$name</span><span class="p">)</span> <span class="p">{</span>
         <span class="nv">$key</span> <span class="o">=</span> <span class="nx">YUI_SUPERSEDES</span> <span class="o">.</span> <span class="nv">$name</span><span class="p">;</span>
 
@@ -690,62 +910,6 @@
         <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">depCache</span><span class="p">[</span><span class="nv">$key</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$sups</span><span class="p">;</span>
         <span class="k">return</span> <span class="nv">$sups</span><span class="p">;</span>
     <span class="p">}</span>
-
-    
-    <span class="k">function</span> <span class="nf">skinSetup</span><span class="p">(</span><span class="nv">$name</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nv">$skinName</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
-        <span class="nv">$dep</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$name</span><span class="p">];</span>
-
-        <span class="c1">// $this-&gt;log(&quot;Checking skin for &quot; . $name);</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nv">$dep</span> <span class="o">&amp;&amp;</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$dep</span><span class="p">[</span><span class="nx">YUI_SKINNABLE</span><span class="p">]))</span> <span class="p">{</span>
-
-            <span class="nv">$s</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skin</span><span class="p">;</span>
-            <span class="c1">//print_r($s);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_OVERRIDES</span><span class="p">][</span><span class="nv">$name</span><span class="p">]))</span> <span class="p">{</span>
-                <span class="k">foreach</span> <span class="p">(</span><span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_OVERRIDES</span><span class="p">][</span><span class="nv">$name</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$name2</span> <span class="o">=&gt;</span> <span class="nv">$over2</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nv">$skinName</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">formatSkin</span><span class="p">(</span><span class="nv">$over2</span><span class="p">,</span> <span class="nv">$name</span><span class="p">);</span>
-                <span class="p">}</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="nv">$skinName</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">formatSkin</span><span class="p">(</span><span class="nv">$s</span><span class="p">[</span><span class="s2">&quot;defaultSkin&quot;</span><span class="p">],</span> <span class="nv">$name</span><span class="p">);</span>
-            <span class="p">}</span>
-            
-            <span class="c1">// $this-&gt;log(&quot;Adding new skin module &quot; . $name . &quot;: &quot; . $skinName);</span>
-
-            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skins</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$skinName</span><span class="p">;</span>
-
-            <span class="nv">$skin</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">parseSkin</span><span class="p">(</span><span class="nv">$skinName</span><span class="p">);</span>
-
-            <span class="c1">// module-specific</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$skin</span><span class="p">[</span><span class="m">2</span><span class="p">]))</span> <span class="p">{</span>
-                <span class="nv">$dep</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$skin</span><span class="p">[</span><span class="m">2</span><span class="p">]];</span>
-                <span class="nv">$package</span> <span class="o">=</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$dep</span><span class="p">[</span><span class="nx">YUI_PKG</span><span class="p">]))</span> <span class="o">?</span> <span class="nv">$dep</span><span class="p">[</span><span class="nx">YUI_PKG</span><span class="p">]</span> <span class="o">:</span> <span class="nv">$skin</span><span class="p">[</span><span class="m">2</span><span class="p">];</span>
-                <span class="nv">$path</span> <span class="o">=</span> <span class="nv">$package</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_BASE</span><span class="p">]</span> <span class="o">.</span> <span class="nv">$skin</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$skin</span><span class="p">[</span><span class="m">2</span><span class="p">]</span> <span class="o">.</span> <span class="s1">&#39;.css&#39;</span><span class="p">;</span>
-                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$skinName</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-                        <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="nv">$skinName</span><span class="p">,</span>
-                        <span class="s2">&quot;type&quot;</span> <span class="o">=&gt;</span> <span class="nx">YUI_CSS</span><span class="p">,</span>
-                        <span class="s2">&quot;path&quot;</span> <span class="o">=&gt;</span> <span class="nv">$path</span><span class="p">,</span>
-                        <span class="s2">&quot;after&quot;</span> <span class="o">=&gt;</span> <span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_AFTER</span><span class="p">]</span>
-                    <span class="p">);</span>
-
-            <span class="c1">// rollup skin</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="nv">$path</span> <span class="o">=</span> <span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_BASE</span><span class="p">]</span> <span class="o">.</span> <span class="nv">$skin</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_PATH</span><span class="p">];</span>
-                <span class="nv">$newmod</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-                        <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="nv">$skinName</span><span class="p">,</span>
-                        <span class="s2">&quot;type&quot;</span> <span class="o">=&gt;</span> <span class="nx">YUI_CSS</span><span class="p">,</span>
-                        <span class="s2">&quot;path&quot;</span> <span class="o">=&gt;</span> <span class="nv">$path</span><span class="p">,</span>
-                        <span class="s2">&quot;rollup&quot;</span> <span class="o">=&gt;</span> <span class="m">3</span><span class="p">,</span>
-                        <span class="s2">&quot;after&quot;</span> <span class="o">=&gt;</span> <span class="nv">$s</span><span class="p">[</span><span class="nx">YUI_AFTER</span><span class="p">]</span>
-                    <span class="p">);</span>
-                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$skinName</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$newmod</span><span class="p">;</span>
-                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">rollupModules</span><span class="p">[</span><span class="nv">$skinName</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$newmod</span><span class="p">;</span>
-            <span class="p">}</span>
-
-        <span class="p">}</span>    
-
-        <span class="k">return</span> <span class="nv">$skinName</span><span class="p">;</span>
-    <span class="p">}</span>
     
     <span class="sd">/**</span>
 <span class="sd">    * Identify dependencies for a give module name</span>
@@ -756,25 +920,84 @@
 <span class="sd">    * @return {array}</span>
 <span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">getAllDependencies</span><span class="p">(</span><span class="nv">$mname</span><span class="p">,</span> <span class="nv">$loadOptional</span><span class="o">=</span><span class="k">false</span><span class="p">,</span> <span class="nv">$completed</span><span class="o">=</span><span class="k">array</span><span class="p">())</span> <span class="p">{</span>
-
-        <span class="c1">// $this-&gt;log(&quot;Building deps list for &quot; . $mname);</span>
-
         <span class="nv">$key</span> <span class="o">=</span> <span class="nx">YUI_REQUIRES</span> <span class="o">.</span> <span class="nv">$mname</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nv">$loadOptional</span><span class="p">)</span> <span class="p">{</span>
             <span class="nv">$key</span> <span class="o">.=</span> <span class="nx">YUI_OPTIONAL</span><span class="p">;</span>
         <span class="p">}</span>
+        
         <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">depCache</span><span class="p">[</span><span class="nv">$key</span><span class="p">]))</span> <span class="p">{</span>
-            <span class="c1">// $this-&gt;log(&quot;Using cache &quot; . $mname);</span>
             <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">depCache</span><span class="p">[</span><span class="nv">$key</span><span class="p">];</span>
         <span class="p">}</span>
-
+        
         <span class="nv">$m</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$mname</span><span class="p">];</span>
+        <span class="nv">$mProvides</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getProvides</span><span class="p">(</span><span class="nv">$mname</span><span class="p">);</span>
         <span class="nv">$reqs</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+    
+	    <span class="c1">//Some modules pretend to be others (override if this is the case)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$mname</span><span class="p">][</span><span class="nx">YUI_EXPOUND</span><span class="p">]))</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$completed</span><span class="p">[</span><span class="nv">$mname</span><span class="p">]))</span> <span class="p">{</span>
+				<span class="nv">$reqs</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$completed</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getAllDependencies</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$mname</span><span class="p">][</span><span class="nx">YUI_EXPOUND</span><span class="p">],</span> <span class="nv">$loadOptional</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="nv">$mname</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">)));</span>
+			<span class="p">}</span>
+        <span class="p">}</span>
 
+        <span class="c1">//Add any requirements defined on the module itself</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$m</span><span class="p">[</span><span class="nx">YUI_REQUIRES</span><span class="p">]))</span> <span class="p">{</span>
             <span class="nv">$origreqs</span> <span class="o">=</span> <span class="nv">$m</span><span class="p">[</span><span class="nx">YUI_REQUIRES</span><span class="p">];</span>
             <span class="k">foreach</span><span class="p">(</span><span class="nv">$origreqs</span> <span class="k">as</span> <span class="nv">$r</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nv">$reqs</span><span class="p">[</span><span class="nv">$r</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+            	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$r</span><span class="p">]))</span> <span class="p">{</span>
+            		<span class="nv">$reqs</span><span class="p">[</span><span class="nv">$r</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+                	<span class="nv">$reqs</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getAllDependencies</span><span class="p">(</span><span class="nv">$r</span><span class="p">,</span> <span class="nv">$loadOptional</span><span class="p">,</span> <span class="nv">$reqs</span><span class="p">));</span>
+            	<span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+         
+        <span class="c1">//Add any submodule requirements not provided by the rollups</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$m</span><span class="p">[</span><span class="nx">YUI_SUBMODULES</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="k">foreach</span><span class="p">(</span><span class="nv">$m</span><span class="p">[</span><span class="nx">YUI_SUBMODULES</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$submodule</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$subreqs</span> <span class="o">=</span> <span class="nv">$submodule</span><span class="p">[</span><span class="nx">YUI_REQUIRES</span><span class="p">];</span>
+                <span class="k">foreach</span><span class="p">(</span><span class="nv">$subreqs</span> <span class="k">as</span> <span class="nv">$sr</span><span class="p">)</span> <span class="p">{</span>     
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">in_array</span><span class="p">(</span><span class="nv">$sr</span><span class="p">,</span> <span class="nv">$mProvides</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nb">in_array</span><span class="p">(</span><span class="nv">$sr</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">accountedFor</span><span class="p">))</span> <span class="p">{</span>
+		            	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$sr</span><span class="p">]))</span> <span class="p">{</span>
+	                    	<span class="nv">$reqs</span><span class="p">[</span><span class="nv">$sr</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span> 
+	                        <span class="nv">$reqs</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getAllDependencies</span><span class="p">(</span><span class="nv">$sr</span><span class="p">,</span> <span class="nv">$loadOptional</span><span class="p">,</span> <span class="nv">$reqs</span><span class="p">));</span>
+		            	<span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        
+        <span class="c1">//Add any superseded requirements not provided by the rollup and/or rollup submodules</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$m</span><span class="p">[</span><span class="nx">YUI_SUPERSEDES</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="k">foreach</span><span class="p">(</span><span class="nv">$m</span><span class="p">[</span><span class="nx">YUI_SUPERSEDES</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$supersededModule</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$supersededModule</span><span class="p">][</span><span class="nx">YUI_REQUIRES</span><span class="p">]))</span> <span class="p">{</span>
+                    <span class="k">foreach</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$supersededModule</span><span class="p">][</span><span class="nx">YUI_REQUIRES</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$supersededModuleReq</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">in_array</span><span class="p">(</span><span class="nv">$supersededModuleReq</span><span class="p">,</span> <span class="nv">$mProvides</span><span class="p">))</span> <span class="p">{</span>
+			            	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$supersededModuleReq</span><span class="p">]))</span>
+			            	<span class="p">{</span>
+	                            <span class="nv">$reqs</span><span class="p">[</span><span class="nv">$supersededModuleReq</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+	                            <span class="nv">$reqs</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getAllDependencies</span><span class="p">(</span><span class="nv">$supersededModuleReq</span><span class="p">,</span> <span class="nv">$loadOptional</span><span class="p">,</span> <span class="nv">$reqs</span><span class="p">));</span>
+			            	<span class="p">}</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                
+                <span class="c1">//Add any submodule requirements not provided by the rollup or originally requested module</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$supersededModule</span><span class="p">][</span><span class="nx">YUI_SUBMODULES</span><span class="p">]))</span> <span class="p">{</span>
+                    <span class="k">foreach</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$supersededModule</span><span class="p">][</span><span class="nx">YUI_SUBMODULES</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$supersededSubmodule</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nv">$ssmProvides</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getProvides</span><span class="p">(</span><span class="nv">$supersededModule</span><span class="p">);</span>
+                        <span class="nv">$supersededSubreqs</span> <span class="o">=</span> <span class="nv">$supersededSubmodule</span><span class="p">[</span><span class="nx">YUI_REQUIRES</span><span class="p">];</span>
+                        <span class="k">foreach</span><span class="p">(</span><span class="nv">$supersededSubreqs</span> <span class="k">as</span> <span class="nv">$ssr</span><span class="p">)</span> <span class="p">{</span>     
+                            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">in_array</span><span class="p">(</span><span class="nv">$ssr</span><span class="p">,</span> <span class="nv">$ssmProvides</span><span class="p">))</span> <span class="p">{</span>
+				            	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$ssr</span><span class="p">]))</span>
+				            	<span class="p">{</span>
+                           	
+	                                <span class="nv">$reqs</span><span class="p">[</span><span class="nv">$ssr</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+	                                <span class="nv">$reqs</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getAllDependencies</span><span class="p">(</span><span class="nv">$ssr</span><span class="p">,</span> <span class="nv">$loadOptional</span><span class="p">,</span> <span class="nv">$reqs</span><span class="p">));</span>
+				            	<span class="p">}</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
@@ -783,41 +1006,10 @@
             <span class="k">foreach</span><span class="p">(</span><span class="nv">$o</span> <span class="k">as</span> <span class="nv">$opt</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nv">$reqs</span><span class="p">[</span><span class="nv">$opt</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
             <span class="p">}</span>
-
-        <span class="p">}</span>
-
-        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$reqs</span> <span class="k">as</span> <span class="nv">$name</span><span class="o">=&gt;</span><span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
-
-            <span class="nv">$skinName</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skinSetup</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="nv">$skinName</span><span class="p">)</span> <span class="p">{</span>
-                <span class="c1">// $this-&gt;log(&quot;Adding skin req for &quot; . $name . &quot;: &quot; . $skinName);</span>
-                <span class="nv">$reqs</span><span class="p">[</span><span class="nv">$skinName</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
-            <span class="p">}</span>
-    
-            <span class="c1">//$this-&gt;log(&quot;recursing deps for &quot; . $name);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$completed</span><span class="p">[</span><span class="nv">$name</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$name</span><span class="p">]))</span> <span class="p">{</span>
-                <span class="nv">$dep</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$name</span><span class="p">];</span>
-
-                <span class="nv">$newreqs</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getAllDependencies</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$loadOptional</span><span class="p">,</span> <span class="nv">$completed</span><span class="p">);</span>
-                <span class="nv">$reqs</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">,</span> <span class="nv">$newreqs</span><span class="p">);</span>
-
-                <span class="c1">//foreach ($newreqs as $newname=&gt;$newval) {</span>
-                    <span class="c1">//if (!isset($reqs[$newname])) {</span>
-                        <span class="c1">//$reqs[$newname] = true;</span>
-                    <span class="c1">//}</span>
-                <span class="c1">//}</span>
-
-            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-
-                <span class="c1">//$this-&gt;log(&quot;ERROR &quot; . $name . &quot; not defined&quot;);</span>
-                <span class="c1">//print_r(array_keys($this-&gt;modules));</span>
-            <span class="p">}</span>
-
         <span class="p">}</span>
 
         <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">depCache</span><span class="p">[</span><span class="nv">$key</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$reqs</span><span class="p">;</span>
-
+        
         <span class="k">return</span> <span class="nv">$reqs</span><span class="p">;</span>
     <span class="p">}</span>
 
@@ -831,9 +1023,7 @@
 <span class="sd">     * supplied $satisfier module</span>
 <span class="sd">     */</span>
     <span class="k">function</span> <span class="nf">moduleSatisfies</span><span class="p">(</span><span class="nv">$satisfied</span><span class="p">,</span> <span class="nv">$satisfier</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">//$this-&gt;log(&quot;moduleSatisfies: &quot; . $satisfied . &quot;, &quot; . $satisfier); </span>
-        <span class="k">if</span><span class="p">(</span><span class="nv">$satisfied</span> <span class="o">==</span> <span class="nv">$satisfier</span><span class="p">)</span> <span class="p">{</span> 
-            <span class="c1">//$this-&gt;log(&quot;true&quot;);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nv">$satisfied</span> <span class="o">==</span> <span class="nv">$satisfier</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
         <span class="p">}</span>
 
@@ -842,7 +1032,6 @@
             <span class="k">return</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$satisfiers</span><span class="p">[</span><span class="nv">$satisfier</span><span class="p">]);</span>
         <span class="p">}</span>
 
-        <span class="c1">//$this-&gt;log(&quot;false&quot;);</span>
         <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
     <span class="p">}</span>
 
@@ -857,17 +1046,18 @@
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">baseOverrides</span><span class="p">[</span><span class="nv">$name</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$base</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">}</span>
-
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Used to determine if one module is satisfied by provided array of modules</span>
+<span class="sd">    * @method listSatisfies</span>
+<span class="sd">    * @param {string} satisfied Module name</span>
+<span class="sd">    * @param {array} moduleList List of modules names</span>
+<span class="sd">    * @return {boolean}</span>
+<span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">listSatisfies</span><span class="p">(</span><span class="nv">$satisfied</span><span class="p">,</span> <span class="nv">$moduleList</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">//$this-&gt;log(&quot;listSatisfies: &quot; . $satisfied . &quot;, &quot; . count($moduleList)); </span>
-
         <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$moduleList</span><span class="p">[</span><span class="nv">$satisfied</span><span class="p">]))</span> <span class="p">{</span>
-            <span class="c1">// $this-&gt;log(&quot;***satisfied by list &quot; . $satisfied);</span>
-
-            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">log</span><span class="p">(</span><span class="s2">&quot;***satisfied by list &quot;</span> <span class="o">.</span>  <span class="nb">var_export</span><span class="p">(</span><span class="nv">$moduleList</span><span class="p">[</span><span class="nv">$satisfied</span><span class="p">],</span> <span class="k">true</span><span class="p">)</span> <span class="p">);</span>
             <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            
             <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">satisfactionMap</span><span class="p">[</span><span class="nv">$satisfied</span><span class="p">]))</span> <span class="p">{</span>
                 <span class="nv">$satisfiers</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">satisfactionMap</span><span class="p">[</span><span class="nv">$satisfied</span><span class="p">];</span>
                 <span class="k">foreach</span> <span class="p">(</span><span class="nv">$satisfiers</span> <span class="k">as</span> <span class="nv">$name</span><span class="o">=&gt;</span><span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
@@ -876,36 +1066,42 @@
                     <span class="p">}</span>
                 <span class="p">}</span>
             <span class="p">}</span>
-        
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
     <span class="p">}</span>
-
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Determine if rollup replacement threshold has been met</span>
+<span class="sd">    * @method checkThreshold</span>
+<span class="sd">    * @param {string} Module name</span>
+<span class="sd">    * @param {array} moduleList List of modules names</span>
+<span class="sd">    * @return {boolean}</span>
+<span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">checkThreshold</span><span class="p">(</span><span class="nv">$module</span><span class="p">,</span> <span class="nv">$moduleList</span><span class="p">)</span> <span class="p">{</span>
-
         <span class="k">if</span> <span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$moduleList</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$module</span><span class="p">[</span><span class="nx">YUI_ROLLUP</span><span class="p">]))</span> <span class="p">{</span>
             <span class="nv">$matched</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span>
-            <span class="c1">//$thresh = (isset($module[YUI_ROLLUP])) ? $module[YUI_ROLLUP] : count($module[YUI_SUPERSEDES]);</span>
             <span class="nv">$thresh</span> <span class="o">=</span> <span class="nv">$module</span><span class="p">[</span><span class="nx">YUI_ROLLUP</span><span class="p">];</span>
             <span class="k">foreach</span> <span class="p">(</span><span class="nv">$moduleList</span> <span class="k">as</span> <span class="nv">$moduleName</span><span class="o">=&gt;</span><span class="nv">$moddef</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nb">in_array</span><span class="p">(</span><span class="nv">$moduleName</span><span class="p">,</span> <span class="nv">$module</span><span class="p">[</span><span class="nx">YUI_SUPERSEDES</span><span class="p">]))</span> <span class="p">{</span>
                     <span class="nv">$matched</span><span class="o">++</span><span class="p">;</span>
                 <span class="p">}</span>
             <span class="p">}</span>
-
-            <span class="c1">//$this-&gt;log(&quot;Module: &quot; . var_export($module, true));</span>
-            <span class="c1">//$this-&gt;log(&quot;threshold number &quot; . $matched . &quot; of &quot; . $thresh);</span>
-
+            
             <span class="k">return</span> <span class="p">(</span><span class="nv">$matched</span> <span class="o">&gt;=</span> <span class="nv">$thresh</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
     <span class="p">}</span>
-
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Used to sort dependencies in the proper order (Note: only call this if the loader is dirty)</span>
+<span class="sd">    * @method sortDependencies</span>
+<span class="sd">    * @param {string} Module name</span>
+<span class="sd">    * @param {array} moduleList List of modules names</span>
+<span class="sd">    * @return {boolean}</span>
+<span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">sortDependencies</span><span class="p">(</span><span class="nv">$moduleType</span><span class="p">,</span> <span class="nv">$skipSort</span><span class="o">=</span><span class="k">false</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// only call this if the loader is dirty</span>
-
         <span class="nv">$reqs</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
         <span class="nv">$top</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
         <span class="nv">$bot</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
@@ -915,23 +1111,23 @@
 
         <span class="c1">// add global dependenices so they are included when calculating rollups</span>
         <span class="nv">$globals</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getGlobalDependencies</span><span class="p">(</span><span class="nv">$moduleType</span><span class="p">);</span>
-
+        
         <span class="k">foreach</span> <span class="p">(</span><span class="nv">$globals</span> <span class="k">as</span> <span class="nv">$name</span><span class="o">=&gt;</span><span class="nv">$dep</span><span class="p">)</span> <span class="p">{</span>
             <span class="nv">$reqs</span><span class="p">[</span><span class="nv">$name</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
         <span class="p">}</span>
-
+        
         <span class="c1">// get and store the full list of dependencies.</span>
         <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">requests</span> <span class="k">as</span> <span class="nv">$name</span><span class="o">=&gt;</span><span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
             <span class="nv">$reqs</span><span class="p">[</span><span class="nv">$name</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
             <span class="nv">$dep</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$name</span><span class="p">];</span>
             <span class="nv">$newreqs</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getAllDependencies</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loadOptional</span><span class="p">);</span>
+            
             <span class="k">foreach</span> <span class="p">(</span><span class="nv">$newreqs</span> <span class="k">as</span> <span class="nv">$newname</span><span class="o">=&gt;</span><span class="nv">$newval</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$newname</span><span class="p">]))</span> <span class="p">{</span>
                     <span class="nv">$reqs</span><span class="p">[</span><span class="nv">$newname</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
-
 
         <span class="c1">// if we skip the sort, we just return the list that includes everything that</span>
         <span class="c1">// was requested, all of their requirements, and global modules.  This is</span>
@@ -940,42 +1136,29 @@
             <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">prune</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">,</span> <span class="nv">$moduleType</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="c1">// $this-&gt;log(&quot;------------------------------------------------------------------&quot;);</span>
-        <span class="c1">// $this-&gt;log(var_export($reqs, true));</span>
-        <span class="c1">// $this-&gt;log(&quot;rollups------------------------------------------------------------------&quot;);</span>
-        <span class="c1">//$t1 = split(&quot; &quot;, microtime());</span>
-        
-        <span class="c1">//$this-&gt;log(&quot;accountedFor: &quot; . var_export($this-&gt;accountedFor, true));</span>
-
         <span class="c1">// if we are sorting again after new modules have been requested, we</span>
         <span class="c1">// do not rollup, and we can remove the accounted for modules</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">accountedFor</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">||</span> <span class="nb">count</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loaded</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">accountedFor</span> <span class="k">as</span> <span class="nv">$name</span><span class="o">=&gt;</span><span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$name</span><span class="p">]))</span> <span class="p">{</span>
-                    <span class="c1">// $this-&gt;log( &quot;removing satisfied req (accountedFor) &quot; . $name . &quot;\n&quot;);</span>
                     <span class="nb">unset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$name</span><span class="p">]);</span>
                 <span class="p">}</span>
             <span class="p">}</span>
-
+            
+            <span class="c1">// removing satisfied req (loaded)</span>
             <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loaded</span> <span class="k">as</span> <span class="nv">$name</span><span class="o">=&gt;</span><span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$name</span><span class="p">]))</span> <span class="p">{</span>
-                    <span class="c1">// $this-&gt;log( &quot;removing satisfied req (loaded) &quot; . $name . &quot;\n&quot;);</span>
                     <span class="nb">unset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$name</span><span class="p">]);</span>
                 <span class="p">}</span>
             <span class="p">}</span>
-
-        <span class="c1">// otherwise, check for rollups</span>
-        <span class="c1">// } else if (!$this-&gt;hasProcessedModuleType($moduleType)) {</span>
         <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">allowRollups</span><span class="p">)</span> <span class="p">{</span>
             <span class="c1">// First we go through the meta-modules we know about to </span>
             <span class="c1">// see if the replacement threshold has been met.</span>
             <span class="nv">$rollups</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">rollupModules</span><span class="p">;</span>
-            <span class="c1">//$this-&gt;log( &quot;testing rollups &quot; . count($rollups) . &quot;\n&quot;);</span>
+
             <span class="k">if</span> <span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$rollups</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">))</span> <span class="p">{</span>
                 <span class="k">foreach</span> <span class="p">(</span><span class="nv">$rollups</span> <span class="k">as</span> <span class="nv">$name</span> <span class="o">=&gt;</span> <span class="nv">$rollup</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="c1">//$this-&gt;log( &quot;checking rollup &quot; . $name . &quot;\n&quot;);</span>
                     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$name</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">checkThreshold</span><span class="p">(</span><span class="nv">$rollup</span><span class="p">,</span> <span class="nv">$reqs</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-                        <span class="c1">// $this-&gt;log( &quot;rollup &quot; . $name . &quot;\n&quot;);</span>
                         <span class="nv">$reqs</span><span class="p">[</span><span class="nv">$name</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
                         <span class="nv">$dep</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$name</span><span class="p">];</span>
                         <span class="nv">$newreqs</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getAllDependencies</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loadOptional</span><span class="p">,</span> <span class="nv">$reqs</span><span class="p">);</span>
@@ -989,42 +1172,24 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-    <span class="c1">//var_export($reqs);</span>
-    <span class="c1">//exit;</span>
-
-        <span class="c1">//$t2 = split(&quot; &quot;, microtime());</span>
-        <span class="c1">//$total = (($t2[1] - $t1[1]) + ($t2[0] - $t1[0]));</span>
-        <span class="c1">//$this-&gt;log(&quot;&lt;----rollups: &quot; . $total . &quot;----------------------------&quot;);</span>
-
         <span class="c1">// clear out superceded packages</span>
         <span class="k">foreach</span> <span class="p">(</span><span class="nv">$reqs</span> <span class="k">as</span> <span class="nv">$name</span> <span class="o">=&gt;</span> <span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
-
             <span class="nv">$dep</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$name</span><span class="p">];</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$dep</span><span class="p">[</span><span class="nx">YUI_SUPERSEDES</span><span class="p">]))</span> <span class="p">{</span>
                 <span class="nv">$override</span> <span class="o">=</span> <span class="nv">$dep</span><span class="p">[</span><span class="nx">YUI_SUPERSEDES</span><span class="p">];</span>
-                <span class="c1">//$this-&gt;log(&quot;override &quot; . $name . &quot;, val: &quot; . $val . &quot;\n&quot;);</span>
+                
                 <span class="k">foreach</span> <span class="p">(</span><span class="nv">$override</span> <span class="k">as</span> <span class="nv">$i</span><span class="o">=&gt;</span><span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
                     <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$val</span><span class="p">]))</span> <span class="p">{</span>
                         <span class="nb">unset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$val</span><span class="p">]);</span>
-                        <span class="c1">// $this-&gt;log( &quot;Removing (superceded by val) &quot; . $val . &quot;\n&quot;);</span>
                     <span class="p">}</span>
 
-                    <span class="c1">// debugging</span>
                     <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$i</span><span class="p">]))</span> <span class="p">{</span>
                         <span class="nb">unset</span><span class="p">(</span><span class="nv">$reqs</span><span class="p">[</span><span class="nv">$i</span><span class="p">]);</span>
-                        <span class="c1">// $this-&gt;log( &quot;Removing (superceded by i) &quot; . $i . &quot;\n&quot;);</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
-
-        <span class="c1">//$this-&gt;log(&quot;------------------------------------------------------------------&quot;);</span>
-        <span class="c1">//$this-&gt;log(var_export($reqs, true));</span>
-        <span class="c1">//$this-&gt;log(&quot;------------------------------------------------------------------&quot;);</span>
-
-        <span class="c1">//$this-&gt;log(&quot;globals to top------------------------------------------------------------------&quot;);</span>
-        <span class="c1">//$t1 = split(&quot; &quot;, microtime());</span>
 
         <span class="c1">// move globals to the top</span>
         <span class="k">foreach</span> <span class="p">(</span><span class="nv">$reqs</span> <span class="k">as</span> <span class="nv">$name</span> <span class="o">=&gt;</span> <span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
@@ -1036,142 +1201,82 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-        <span class="c1">//$t2 = split(&quot; &quot;, microtime());</span>
-        <span class="c1">//$total = (($t2[1] - $t1[1]) + ($t2[0] - $t1[0]));</span>
-        <span class="c1">//$this-&gt;log(&quot;&lt;----globals to top: &quot; . $total . &quot;-----------------------------&quot; );</span>
-
-        <span class="c1">// merge new order if we have globals</span>
-        
+        <span class="c1">// merge new order if we have globals   </span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$top</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">))</span> <span class="p">{</span>
             <span class="nv">$notdone</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$top</span><span class="p">,</span> <span class="nv">$notdone</span><span class="p">);</span>
         <span class="p">}</span>
-
-        <span class="c1">//$this-&gt;log(&quot;Not done: &quot; . var_export($notdone, true) . &quot;, loaded: &quot; . var_export($this-&gt;loaded, true));</span>
-        <span class="c1">//$this-&gt;log(&quot;Not done: &quot; . var_export($notdone, true));</span>
 
         <span class="c1">// keep track of what is accounted for</span>
         <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loaded</span> <span class="k">as</span> <span class="nv">$name</span><span class="o">=&gt;</span><span class="nv">$module</span><span class="p">)</span> <span class="p">{</span>
             <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">accountFor</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="c1">// $this-&gt;log(&quot;done: &quot; . var_export($this-&gt;loaded, true));</span>
-
         <span class="c1">// keep going until everything is sorted</span>
         <span class="nv">$count</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span>
         <span class="k">while</span> <span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$notdone</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">//$this-&gt;log(&quot;processing loop &quot; . $count);</span>
             <span class="k">if</span> <span class="p">(</span><span class="nv">$count</span><span class="o">++</span> <span class="o">&gt;</span> <span class="m">200</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&quot;YUI_LOADER ERROR: sorting could not be completed, there may be a circular dependency&quot;</span><span class="p">;</span>
                 <span class="nb">error_log</span><span class="p">(</span><span class="nv">$msg</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
                 <span class="k">return</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$sorted</span><span class="p">,</span> <span class="nv">$notdone</span><span class="p">);</span>
             <span class="p">}</span>
-
+            
             <span class="c1">// each pass only processed what has not been completed</span>
             <span class="k">foreach</span> <span class="p">(</span><span class="nv">$notdone</span> <span class="k">as</span> <span class="nv">$name</span> <span class="o">=&gt;</span> <span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
-                <span class="c1">//$this-&gt;log(&quot;processing notdone: &quot; . $name . &quot; of &quot; . count($notdone));</span>
-                <span class="c1">//$this-&gt;log(&quot;----------------------------------------------------&quot;);</span>
-                <span class="c1">//$this-&gt;log(var_export($notdone, true));</span>
-                <span class="c1">//$this-&gt;log(&quot;----------------------------------------------------&quot;);</span>
-                <span class="c1">//$this-&gt;log(&quot;done: &quot;);</span>
-                <span class="c1">//$this-&gt;log(var_export($this-&gt;loaded, true));</span>
-                <span class="c1">//$this-&gt;log(&quot;----------------------------------------------------&quot;);</span>
-
-                <span class="nv">$dep</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$name</span><span class="p">];</span>
-
+                <span class="nv">$dep</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$name</span><span class="p">];</span>                
                 <span class="nv">$newreqs</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getAllDependencies</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loadOptional</span><span class="p">);</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">accountFor</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>    
+                
+                <span class="c1">//Detect if this module needs to be included after another one of the upcoming dependencies</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$dep</span><span class="p">[</span><span class="nx">YUI_AFTER</span><span class="p">]))</span> <span class="p">{</span>
+                    <span class="nv">$after</span> <span class="o">=</span> <span class="nv">$dep</span><span class="p">[</span><span class="nx">YUI_AFTER</span><span class="p">];</span>
+                    
+                    <span class="k">foreach</span><span class="p">(</span><span class="nv">$after</span> <span class="k">as</span> <span class="nv">$a</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nb">in_array</span><span class="p">(</span><span class="nv">$a</span><span class="p">,</span> <span class="nv">$notdone</span><span class="p">))</span> <span class="p">{</span>
+                            <span class="nv">$newreqs</span><span class="p">[</span><span class="nv">$a</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
 
-
-                <span class="c1">// $this-&gt;log($name . &quot;: checking after &quot; . var_export($newreqs, true));</span>
-                <span class="c1">// $this-&gt;log($name . &quot;: checking after &quot; . var_export($dep, true));</span>
-                <span class="c1">// add &#39;after&#39; items</span>
-
-                <span class="cm">/*</span>
-<span class="cm">                if (isset($dep[YUI_AFTER])) {</span>
-<span class="cm">                    $after = $dep[YUI_AFTER];</span>
-<span class="cm">                    $this-&gt;log(&quot;* &quot; .$name . &quot;: has after &quot; . $after);</span>
-<span class="cm">                    foreach($after as $a) {</span>
-<span class="cm">                        $this-&gt;log(&quot;** &quot; .$name . &quot;: needs to be after &quot; . $a);</span>
-
-<span class="cm">                        // only react if the requirement is in the dependency list</span>
-<span class="cm">                        // if ($this-&gt;listSatisfies($newreqs, $a)) {</span>
-<span class="cm">                        // if (isset($newreqs[$a])) {</span>
-<span class="cm">                        // if (isset($this-&gt;loaded[$a])) {</span>
-<span class="cm">                        if ($this-&gt;listSatisfies($notdone, $a)) {</span>
-<span class="cm">                            $newreqs[$a] = true;</span>
-<span class="cm">                        }</span>
-<span class="cm">                    }</span>
-<span class="cm">                }</span>
-<span class="cm">                */</span>
-
-                <span class="nv">$failed</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
-
-                <span class="k">if</span> <span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$newreqs</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="c1">//$this-&gt;log(&quot;-----No requirements: &quot;  . $name);</span>
-                    <span class="nv">$sorted</span><span class="p">[</span><span class="nv">$name</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$name</span><span class="p">;</span>
-                    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">accountFor</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>
-                    <span class="nb">unset</span><span class="p">(</span><span class="nv">$notdone</span><span class="p">[</span><span class="nv">$name</span><span class="p">]);</span>
-                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$newreqs</span><span class="p">))</span> <span class="p">{</span>
                     <span class="k">foreach</span> <span class="p">(</span><span class="nv">$newreqs</span> <span class="k">as</span> <span class="nv">$depname</span><span class="o">=&gt;</span><span class="nv">$depval</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="c1">//$this-&gt;log(&quot;accountedFor: &quot; . var_export($this-&gt;accountedFor, true));</span>
-                        <span class="c1">//$this-&gt;log(&quot;checking &quot; . $depname . &quot; newreqs: &quot; . var_export($newreqs, true));</span>
                         <span class="c1">// check if the item is accounted for in the $done list</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">accountedFor</span><span class="p">[</span><span class="nv">$depname</span><span class="p">]))</span> <span class="p">{</span>
-                            <span class="c1">//$this-&gt;log(&quot;----Satisfied by &#39;accountedfor&#39; list: &quot; . $depname);</span>
-                        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">listSatisfies</span><span class="p">(</span><span class="nv">$depname</span><span class="p">,</span> <span class="nv">$sorted</span><span class="p">))</span> <span class="p">{</span>
-                            <span class="c1">//$this-&gt;log(&quot;----Satisfied by &#39;done&#39; list: &quot; . $depname);</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">accountedFor</span><span class="p">[</span><span class="nv">$depname</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">listSatisfies</span><span class="p">(</span><span class="nv">$depname</span><span class="p">,</span> <span class="nv">$sorted</span><span class="p">))</span> <span class="p">{</span>
+                        	<span class="c1">//unset($notdone[$depname]);</span>
                         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                            <span class="nv">$failed</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
-
                             <span class="nv">$tmp</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
                             <span class="nv">$found</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
                             <span class="k">foreach</span> <span class="p">(</span><span class="nv">$notdone</span> <span class="k">as</span> <span class="nv">$newname</span> <span class="o">=&gt;</span> <span class="nv">$newval</span><span class="p">)</span> <span class="p">{</span>
                                 <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">moduleSatisfies</span><span class="p">(</span><span class="nv">$depname</span><span class="p">,</span> <span class="nv">$newname</span><span class="p">))</span> <span class="p">{</span>
-                                <span class="c1">//if ($newname != $depname &amp;&amp; $this-&gt;moduleSatisfies($depname, $newname)) {</span>
                                     <span class="nv">$tmp</span><span class="p">[</span><span class="nv">$newname</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$newname</span><span class="p">;</span>
                                     <span class="nb">unset</span><span class="p">(</span><span class="nv">$notdone</span><span class="p">[</span><span class="nv">$newname</span><span class="p">]);</span>
                                     <span class="nv">$found</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
-                                    <span class="c1">//$this-&gt;log(&quot;moving &quot; . $depname . &quot; because it satisfies &quot; . $name);</span>
                                     <span class="k">break</span><span class="p">;</span> <span class="c1">// found something that takes care of the dependency, so jump out</span>
                                 <span class="p">}</span>
                             <span class="p">}</span>
+                            
                             <span class="k">if</span> <span class="p">(</span><span class="nv">$found</span><span class="p">)</span> <span class="p">{</span>
-                                <span class="c1">//$this-&gt;log(&quot;found merge: &quot;  . var_export($tmp, true).  &quot;, &quot; . var_export($notdone, true));</span>
                                 <span class="c1">// this should put the module that handles the dependency on top, immediately</span>
                                 <span class="c1">// over the the item with the missing dependency</span>
                                 <span class="nv">$notdone</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$tmp</span><span class="p">,</span> <span class="nv">$notdone</span><span class="p">);</span>
-                                <span class="c1">//$this-&gt;log(&quot;after merge: &quot;  . var_export($notdone, true));</span>
                             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                                <span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&quot;YUI_LOADER ERROR: requirement for &quot;</span> <span class="o">.</span> <span class="nv">$depname</span> <span class="o">.</span> <span class="s2">&quot; (needed for &quot;</span> <span class="o">.</span> <span class="nv">$name</span> <span class="o">.</span> <span class="s2">&quot;) not found when sorting&quot;</span><span class="p">;</span>
-                                <span class="nb">error_log</span><span class="p">(</span><span class="nv">$msg</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-                                <span class="nv">$notdone</span><span class="p">[</span><span class="nv">$name</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$name</span><span class="p">;</span>
-                                <span class="k">return</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$sorted</span><span class="p">,</span> <span class="nv">$notdone</span><span class="p">);</span>
+                                <span class="c1">//Requirement was missing and not found within the current notdone list.  Add and try again.</span>
+                                <span class="nv">$notdone</span><span class="p">[</span><span class="nv">$depname</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$depname</span><span class="p">;</span>
                             <span class="p">}</span>
                             
-                            <span class="c1">//$this-&gt;log(&quot;bouncing out of loops&quot;);</span>
                             <span class="k">break</span><span class="p">(</span><span class="m">2</span><span class="p">);</span> <span class="c1">// break out of this iteration so we can get the missed dependency</span>
-
                         <span class="p">}</span>
                     <span class="p">}</span>
-                    <span class="c1">// if so, add to the the sorted array, removed from notdone and add to done</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$failed</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="c1">//$this-&gt;log(&quot;----All requirements satisfied: &quot; . $name);</span>
-                        <span class="nv">$sorted</span><span class="p">[</span><span class="nv">$name</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$name</span><span class="p">;</span>
-                        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">accountFor</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>
-                        <span class="nb">unset</span><span class="p">(</span><span class="nv">$notdone</span><span class="p">[</span><span class="nv">$name</span><span class="p">]);</span>
-                    <span class="p">}</span>
                 <span class="p">}</span>
+            
+                <span class="nv">$sorted</span><span class="p">[</span><span class="nv">$name</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$name</span><span class="p">;</span>
+                <span class="nb">unset</span><span class="p">(</span><span class="nv">$notdone</span><span class="p">[</span><span class="nv">$name</span><span class="p">]);</span>
             <span class="p">}</span>
         <span class="p">}</span>
-
-        <span class="c1">//print_r(&quot;before skin&quot;);</span>
-
-        <span class="c1">//foreach ($reqs as $name =&gt; $val) {</span>
+        
+        <span class="c1">//Deal with module skins</span>
         <span class="k">foreach</span> <span class="p">(</span><span class="nv">$sorted</span> <span class="k">as</span> <span class="nv">$name</span> <span class="o">=&gt;</span> <span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
             <span class="nv">$skinName</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skinSetup</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>
         <span class="p">}</span>
-
-        <span class="c1">//print_r(&quot;mid skin&quot;);</span>
-        <span class="c1">//print_r($this-&gt;skins);</span>
 
         <span class="k">if</span> <span class="p">(</span> <span class="nb">count</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skins</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">)</span> <span class="p">{</span>
             <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">skins</span> <span class="k">as</span> <span class="nv">$name</span> <span class="o">=&gt;</span> <span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
@@ -1179,20 +1284,11 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-        <span class="c1">//print_r(&quot;after skin&quot;);</span>
-
-        <span class="c1">//$this-&gt;log(&quot;skins &quot; . $this-&gt;skins);</span>
-        <span class="c1">//print_r(&quot; &lt;br /&gt;&lt;br /&gt;&lt;br /&gt; skin&quot;);</span>
-        <span class="c1">//print_r($this-&gt;skins);</span>
-        <span class="c1">//print_r(&quot; &lt;br /&gt;&lt;br /&gt;&lt;br /&gt; skin&quot;);</span>
-
-        <span class="c1">//$this-&gt;log(&quot;iterations&quot; + $count);</span>
         <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">dirty</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
         <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">sorted</span> <span class="o">=</span> <span class="nv">$sorted</span><span class="p">;</span>
 
         <span class="c1">// store the results, set clear the diry flag</span>
         <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">prune</span><span class="p">(</span><span class="nv">$sorted</span><span class="p">,</span> <span class="nv">$moduleType</span><span class="p">);</span>
-
     <span class="p">}</span>
  
     <span class="k">function</span> <span class="nf">mapSatisfyingModule</span><span class="p">(</span><span class="nv">$satisfied</span><span class="p">,</span> <span class="nv">$satisfier</span><span class="p">)</span> <span class="p">{</span>
@@ -1202,9 +1298,18 @@
 
         <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">satisfactionMap</span><span class="p">[</span><span class="nv">$satisfied</span><span class="p">][</span><span class="nv">$satisfier</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
     <span class="p">}</span>
-
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Used to process the dependency list and retrieve the actual CSS and/or JavaScript resources</span>
+<span class="sd">    * in requested output format (e.g.) json, link/script nodes, embeddable code, php array, etc.</span>
+<span class="sd">    * @method processDependencies</span>
+<span class="sd">    * @param {string} outputType the format you like the response to be in</span>
+<span class="sd">    * @param {string} moduleType Type of module to return (i.e.) js or css</span>
+<span class="sd">    * @param {boolean} skipSort</span>
+<span class="sd">    * @param {boolean} showLoaded</span>
+<span class="sd">    * @return {varies} output format based on requested outputType</span>
+<span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">processDependencies</span><span class="p">(</span><span class="nv">$outputType</span><span class="p">,</span> <span class="nv">$moduleType</span><span class="p">,</span> <span class="nv">$skipSort</span><span class="o">=</span><span class="k">false</span><span class="p">,</span> <span class="nv">$showLoaded</span><span class="o">=</span><span class="k">false</span><span class="p">)</span> <span class="p">{</span>
-
         <span class="nv">$html</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
 
         <span class="c1">// sort the output with css on top unless the output type is json</span>
@@ -1230,7 +1335,6 @@
         <span class="p">}</span>
 
         <span class="k">foreach</span> <span class="p">(</span><span class="nv">$sorted</span> <span class="k">as</span> <span class="nv">$name</span> <span class="o">=&gt;</span> <span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
-            
             <span class="k">if</span> <span class="p">(</span><span class="nv">$showLoaded</span> <span class="o">||</span> <span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loaded</span><span class="p">[</span><span class="nv">$name</span><span class="p">]))</span> <span class="p">{</span>
                 <span class="nv">$dep</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">modules</span><span class="p">[</span><span class="nv">$name</span><span class="p">];</span>
                 <span class="c1">// only generate the tag once</span>
@@ -1247,7 +1351,6 @@
                         <span class="nv">$json</span><span class="p">[</span><span class="nv">$dep</span><span class="p">[</span><span class="nx">YUI_TYPE</span><span class="p">]][]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
                                 <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getUrl</span><span class="p">(</span><span class="nv">$name</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getProvides</span><span class="p">(</span><span class="nv">$name</span><span class="p">)</span>
                             <span class="p">);</span>
-
                         <span class="k">break</span><span class="p">;</span>
                     <span class="k">case</span> <span class="nx">YUI_FULLJSON</span><span class="o">:</span>
                         <span class="nv">$json</span><span class="p">[</span><span class="nv">$dep</span><span class="p">[</span><span class="nx">YUI_NAME</span><span class="p">]]</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
@@ -1290,6 +1393,9 @@
         <span class="c1">// keep track of all the stuff we loaded so that we don&#39;t reload </span>
         <span class="c1">// scripts if the page makes multiple calls to tags</span>
         <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loaded</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loaded</span><span class="p">,</span> <span class="nv">$sorted</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">combine</span> <span class="o">===</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">clearComboLink</span><span class="p">(</span><span class="nv">$outputType</span><span class="p">);</span>
+        <span class="p">}</span>
 
         <span class="c1">// return the raw data structure</span>
         <span class="k">if</span> <span class="p">(</span><span class="nv">$outputType</span> <span class="o">==</span> <span class="nx">YUI_DATA</span><span class="p">)</span> <span class="p">{</span>
@@ -1301,7 +1407,6 @@
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="nv">$html</span><span class="p">;</span>
-
     <span class="p">}</span>
 
     <span class="sd">/**</span>
@@ -1329,11 +1434,8 @@
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">)</span> <span class="p">{</span>
-
             <span class="k">if</span> <span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">filterList</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">filterList</span><span class="p">[</span><span class="nv">$name</span><span class="p">]))</span> <span class="p">{</span>
-
                 <span class="c1">// skip the filter</span>
-
             <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">filters</span><span class="p">[</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">]))</span> <span class="p">{</span>
                 <span class="nv">$filter</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">filters</span><span class="p">[</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">];</span>
                 <span class="nv">$url</span> <span class="o">=</span> <span class="nb">ereg_replace</span><span class="p">(</span><span class="nv">$filter</span><span class="p">[</span><span class="nx">YUI_SEARCH</span><span class="p">],</span> <span class="nv">$filter</span><span class="p">[</span><span class="nx">YUI_REPLACE</span><span class="p">],</span> <span class="nv">$url</span><span class="p">);</span>
@@ -1344,9 +1446,7 @@
             <span class="nv">$pre</span> <span class="o">=</span> <span class="p">(</span><span class="nb">strstr</span><span class="p">(</span><span class="nv">$url</span><span class="p">,</span> <span class="s1">&#39;?&#39;</span><span class="p">))</span> <span class="o">?</span> <span class="s1">&#39;&amp;&#39;</span> <span class="o">:</span> <span class="s1">&#39;?&#39;</span><span class="p">;</span>
             <span class="nv">$url</span> <span class="o">.=</span> <span class="nv">$pre</span> <span class="o">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">versionKey</span> <span class="o">.</span> <span class="s1">&#39;=&#39;</span> <span class="o">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">version</span><span class="p">;</span>
         <span class="p">}</span>
-
-        <span class="c1">//$this-&gt;log(&quot;URL: &quot; . $url, 0);</span>
-
+        
         <span class="k">return</span> <span class="nv">$url</span><span class="p">;</span>
     <span class="p">}</span>
 
@@ -1357,17 +1457,14 @@
 <span class="sd">    * @return raw source</span>
 <span class="sd">    */</span>
     <span class="k">function</span> <span class="nf">getRemoteContent</span><span class="p">(</span><span class="nv">$url</span><span class="p">)</span> <span class="p">{</span>
-        
         <span class="nv">$remote_content</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">apcAvail</span> <span class="o">===</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
             <span class="nv">$remote_content</span> <span class="o">=</span> <span class="nx">apc_fetch</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
         <span class="p">}</span>        
 
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$remote_content</span><span class="p">)</span> <span class="p">{</span>
-
             <span class="nv">$ch</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">();</span>
-
-            <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="nv">$url</span><span class="p">);</span> <span class="c1">// set url to post to </span>
+            <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="nv">$url</span><span class="p">);</span>
             <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_FAILONERROR</span><span class="p">,</span> <span class="m">1</span><span class="p">);</span> 
             
             <span class="c1">//Doesn&#39;t work in safe mode or with openbase_dir enabled, see http://au.php.net/manual/ro/function.curl-setopt.php#71313.</span>
@@ -1380,8 +1477,6 @@
             <span class="c1">// curl_setopt($ch, CURLOPT_TIMEOUT, 3); // times out after 4s</span>
 
             <span class="nv">$remote_content</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
-
-            <span class="c1">//$this-&gt;log(&quot;CONTENT: &quot; . $remote_content);</span>
 
             <span class="c1">// save the contents of the remote url for 30 minutes</span>
             <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">apcAvail</span> <span class="o">===</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
@@ -1488,6 +1583,23 @@
         <span class="p">}</span>
         
         <span class="k">return</span> <span class="nv">$url</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="sd">/**</span>
+<span class="sd">    * Clears the combo url of already loaded modules for a specific resource type.  Prevents</span>
+<span class="sd">    * duplicate loading of modules if the page makes multiple calls to tags, css, or script.</span>
+<span class="sd">    * @method clearComboLink</span>
+<span class="sd">    * @param {string} type Resource type (i.e.) YUI_JS or YUI_CSS</span>
+<span class="sd">    */</span>
+    <span class="k">function</span> <span class="nf">clearComboLink</span><span class="p">(</span><span class="nv">$type</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$type</span> <span class="o">==</span> <span class="nx">YUI_CSS</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">cssComboLocation</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$type</span> <span class="o">==</span> <span class="nx">YUI_JS</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">jsComboLocation</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">cssComboLocation</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">jsComboLocation</span>  <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+        <span class="p">}</span>
     <span class="p">}</span>
     
     <span class="sd">/**</span>
@@ -1623,7 +1735,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"url": "PHP.YAHOO_util_Loader.html#method_addToCombo", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "addToCombo"}, {"url": "PHP.YAHOO_util_Loader.html#property_allowRollups", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "allowRollups"}, {"url": "PHP.YAHOO_util_Loader.html#property_base", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "base"}, {"url": "PHP.YAHOO_util_Loader.html#method_canJSON", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "canJSON"}, {"url": "PHP.YAHOO_util_Loader.html#property_combine", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "combine"}, {"url": "PHP.YAHOO_util_Loader.html#property_comboBase", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "comboBase"}, {"url": "PHP.YAHOO_util_Loader.html#method_css", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css"}, {"url": "PHP.YAHOO_util_Loader.html#method_css_data", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css_data"}, {"url": "PHP.YAHOO_util_Loader.html#method_css_embed", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css_embed"}, {"url": "PHP.YAHOO_util_Loader.html#method_css_json", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css_json"}, {"url": "PHP.YAHOO_util_Loader.html#method_css_raw", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css_raw"}, {"url": "PHP.YAHOO_util_Loader.html#method_data", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "data"}, {"url": "PHP.YAHOO_util_Loader.html#method_embed", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "embed"}, {"url": "PHP.YAHOO_util_Loader.html#property_filterList", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "filterList"}, {"url": "PHP.YAHOO_util_Loader.html#method_getAllDependencies", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getAllDependencies"}, {"url": "PHP.YAHOO_util_Loader.html#method_getComboLink", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getComboLink"}, {"url": "PHP.YAHOO_util_Loader.html#method_getContent", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getContent"}, {"url": "PHP.YAHOO_util_Loader.html#method_getLink", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getLink"}, {"url": "PHP.YAHOO_util_Loader.html#method_getLoadedModules", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getLoadedModules"}, {"url": "PHP.YAHOO_util_Loader.html#method_getLoadedModulesAsJSON", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getLoadedModulesAsJSON"}, {"url": "PHP.YAHOO_util_Loader.html#method_getProvides", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getProvides"}, {"url": "PHP.YAHOO_util_Loader.html#method_getRaw", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getRaw"}, {"url": "PHP.YAHOO_util_Loader.html#method_getRemoteContent", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getRemoteContent"}, {"url": "PHP.YAHOO_util_Loader.html#method_getUrl", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getUrl"}, {"url": "PHP.YAHOO_util_Loader.html#method_json", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "json"}, {"url": "PHP.YAHOO_util_Loader.html#method_load", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "load"}, {"url": "PHP.YAHOO_util_Loader.html#property_loadOptional", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "loadOptional"}, {"url": "PHP.YAHOO_util_Loader.html#method_overrideBase", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "overrideBase"}, {"url": "PHP.YAHOO_util_Loader.html#method_raw", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "raw"}, {"url": "PHP.YAHOO_util_Loader.html#property_rollupsToTop", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "rollupsToTop"}, {"url": "PHP.YAHOO_util_Loader.html#method_script", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script"}, {"url": "PHP.YAHOO_util_Loader.html#method_script_data", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script_data"}, {"url": "PHP.YAHOO_util_Loader.html#method_script_embed", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script_embed"}, {"url": "PHP.YAHOO_util_Loader.html#method_script_json", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script_json"}, {"url": "PHP.YAHOO_util_Loader.html#method_script_raw", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script_raw"}, {"url": "PHP.YAHOO_util_Loader.html#method_setLoaded", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "setLoaded"}, {"url": "PHP.YAHOO_util_Loader.html#method_tags", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "tags"}];
+    ALL_YUI_PROPS = [{"url": "PHP.YAHOO_util_Loader.html#property_accountedFor", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "accountedFor"}, {"url": "PHP.YAHOO_util_Loader.html#method_accountFor", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "accountFor"}, {"url": "PHP.YAHOO_util_Loader.html#method_addToCombo", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "addToCombo"}, {"url": "PHP.YAHOO_util_Loader.html#property_allowRollups", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "allowRollups"}, {"url": "PHP.YAHOO_util_Loader.html#property_base", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "base"}, {"url": "PHP.YAHOO_util_Loader.html#property_baseOverrides", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "baseOverrides"}, {"url": "PHP.YAHOO_util_Loader.html#property_cacheFound", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "cacheFound"}, {"url": "PHP.YAHOO_util_Loader.html#method_canJSON", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "canJSON"}, {"url": "PHP.YAHOO_util_Loader.html#method_checkThreshold", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "checkThreshold"}, {"url": "PHP.YAHOO_util_Loader.html#method_clearComboLink", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "clearComboLink"}, {"url": "PHP.YAHOO_util_Loader.html#property_combine", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "combine"}, {"url": "PHP.YAHOO_util_Loader.html#property_comboBase", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "comboBase"}, {"url": "PHP.YAHOO_util_Loader.html#method_css", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css"}, {"url": "PHP.YAHOO_util_Loader.html#property_cssComboLocation", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "cssComboLocation"}, {"url": "PHP.YAHOO_util_Loader.html#method_css_data", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css_data"}, {"url": "PHP.YAHOO_util_Loader.html#method_css_embed", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css_embed"}, {"url": "PHP.YAHOO_util_Loader.html#method_css_json", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css_json"}, {"url": "PHP.YAHOO_util_Loader.html#method_css_raw", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "css_raw"}, {"url": "PHP.YAHOO_util_Loader.html#method_data", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "data"}, {"url": "PHP.YAHOO_util_Loader.html#property_delayCache", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "delayCache"}, {"url": "PHP.YAHOO_util_Loader.html#property_dirty", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "dirty"}, {"url": "PHP.YAHOO_util_Loader.html#method_embed", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "embed"}, {"url": "PHP.YAHOO_util_Loader.html#property_filter", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "filter"}, {"url": "PHP.YAHOO_util_Loader.html#property_filterList", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "filterList"}, {"url": "PHP.YAHOO_util_Loader.html#property_filters", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "filters"}, {"url": "PHP.YAHOO_util_Loader.html#method_formatSkin", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "formatSkin"}, {"url": "PHP.YAHOO_util_Loader.html#property_fullCacheKey", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "fullCacheKey"}, {"url": "PHP.YAHOO_util_Loader.html#method_getAllDependencies", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getAllDependencies"}, {"url": "PHP.YAHOO_util_Loader.html#method_getComboLink", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getComboLink"}, {"url": "PHP.YAHOO_util_Loader.html#method_getContent", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getContent"}, {"url": "PHP.YAHOO_util_Loader.html#method_getLink", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getLink"}, {"url": "PHP.YAHOO_util_Loader.html#method_getLoadedModules", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getLoadedModules"}, {"url": "PHP.YAHOO_util_Loader.html#method_getLoadedModulesAsJSON", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getLoadedModulesAsJSON"}, {"url": "PHP.YAHOO_util_Loader.html#method_getProvides", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getProvides"}, {"url": "PHP.YAHOO_util_Loader.html#method_getRaw", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getRaw"}, {"url": "PHP.YAHOO_util_Loader.html#method_getRemoteContent", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getRemoteContent"}, {"url": "PHP.YAHOO_util_Loader.html#method_getSuperceded", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getSuperceded"}, {"url": "PHP.YAHOO_util_Loader.html#method_getUrl", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "getUrl"}, {"url": "PHP.YAHOO_util_Loader.html#method_hasProcessedModuleType", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "hasProcessedModuleType"}, {"url": "PHP.YAHOO_util_Loader.html#property_jsComboLocation", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "jsComboLocation"}, {"url": "PHP.YAHOO_util_Loader.html#method_json", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "json"}, {"url": "PHP.YAHOO_util_Loader.html#method_listSatisfies", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "listSatisfies"}, {"url": "PHP.YAHOO_util_Loader.html#method_load", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "load"}, {"url": "PHP.YAHOO_util_Loader.html#property_loaded", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "loaded"}, {"url": "PHP.YAHOO_util_Loader.html#property_loadOptional", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "loadOptional"}, {"url": "PHP.YAHOO_util_Loader.html#method_loadSingle", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "loadSingle"}, {"url": "PHP.YAHOO_util_Loader.html#method_log", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "log"}, {"url": "PHP.YAHOO_util_Loader.html#property_modules", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "modules"}, {"url": "PHP.YAHOO_util_Loader.html#method_overrideBase", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "overrideBase"}, {"url": "PHP.YAHOO_util_Loader.html#method_parseSkin", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "parseSkin"}, {"url": "PHP.YAHOO_util_Loader.html#method_processDependencies", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "processDependencies"}, {"url": "PHP.YAHOO_util_Loader.html#property_processedModuleTypes", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "processedModuleTypes"}, {"url": "PHP.YAHOO_util_Loader.html#method_prune", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "prune"}, {"url": "PHP.YAHOO_util_Loader.html#method_raw", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "raw"}, {"url": "PHP.YAHOO_util_Loader.html#property_requests", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "requests"}, {"url": "PHP.YAHOO_util_Loader.html#property_rollupsToTop", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "rollupsToTop"}, {"url": "PHP.YAHOO_util_Loader.html#method_script", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script"}, {"url": "PHP.YAHOO_util_Loader.html#method_script_data", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script_data"}, {"url": "PHP.YAHOO_util_Loader.html#method_script_embed", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script_embed"}, {"url": "PHP.YAHOO_util_Loader.html#method_script_json", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script_json"}, {"url": "PHP.YAHOO_util_Loader.html#method_script_raw", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "script_raw"}, {"url": "PHP.YAHOO_util_Loader.html#method_setLoaded", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "setLoaded"}, {"url": "PHP.YAHOO_util_Loader.html#method_setProcessedModuleType", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "setProcessedModuleType"}, {"url": "PHP.YAHOO_util_Loader.html#property_skins", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "skins"}, {"url": "PHP.YAHOO_util_Loader.html#method_skinSetup", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "skinSetup"}, {"url": "PHP.YAHOO_util_Loader.html#method_sortDependencies", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "sortDependencies"}, {"url": "PHP.YAHOO_util_Loader.html#property_sorted", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "sorted"}, {"url": "PHP.YAHOO_util_Loader.html#property_superceded", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "superceded"}, {"url": "PHP.YAHOO_util_Loader.html#method_tags", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "tags"}, {"url": "PHP.YAHOO_util_Loader.html#property_undefined", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "property", "name": "undefined"}, {"url": "PHP.YAHOO_util_Loader.html#method_updateCache", "access": "", "host": "PHP.YAHOO_util_Loader", "type": "method", "name": "updateCache"}];
 </script>
 </body>
 </html>
