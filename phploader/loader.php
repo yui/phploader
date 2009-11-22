@@ -717,12 +717,10 @@ class YAHOO_util_Loader {
             $key .= YUI_OPTIONAL;
         }
         
-        /*
         if (isset($this->depCache[$key])) {
             // $this->log("Using cache " . $mname);
             return $this->depCache[$key];
         }
-        */
         
         $m = $this->modules[$mname];
         $mProvides = $this->getProvides($mname);
@@ -1266,6 +1264,9 @@ class YAHOO_util_Loader {
         // keep track of all the stuff we loaded so that we don't reload 
         // scripts if the page makes multiple calls to tags
         $this->loaded = array_merge($this->loaded, $sorted);
+        if ($this->combine === true) {
+            $this->clearComboLink($outputType);
+        }
 
         // return the raw data structure
         if ($outputType == YUI_DATA) {
@@ -1464,6 +1465,23 @@ class YAHOO_util_Loader {
         }
         
         return $url;
+    }
+    
+    /**
+    * Clears the combo url of already loaded modules for a specific resource type.  Prevents
+    * duplicate loading of modules if the page makes multiple calls to tags, css, or script.
+    * @method clearComboLink
+    * @param {string} type Resource type (i.e.) YUI_JS or YUI_CSS
+    */
+    function clearComboLink($type) {
+        if ($type == YUI_CSS) {
+            $this->cssComboLocation = null;
+        } else if ($type == YUI_JS) {
+            $this->jsComboLocation = null;
+        } else {
+            $this->cssComboLocation = null;
+            $this->jsComboLocation  = null;
+        }
     }
     
     /**
