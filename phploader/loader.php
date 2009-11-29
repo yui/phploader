@@ -394,11 +394,11 @@ class YAHOO_util_Loader {
             $this->skin[YUI_PREFIX] = "skin-";
             $this->filters = array(
                     YUI_RAW => array(
-                            YUI_SEARCH => "-min\.js",
+                            YUI_SEARCH => "/-min\.js/",
                             YUI_REPLACE => ".js"
                         ),
                     YUI_DEBUG => array(
-                            YUI_SEARCH => "-min\.js",
+                            YUI_SEARCH => "/-min\.js/",
                             YUI_REPLACE => "-debug.js"
                         )
                );
@@ -923,8 +923,7 @@ class YAHOO_util_Loader {
                 if (isset($this->modules[$supersededModule][YUI_REQUIRES])) {
                     foreach($this->modules[$supersededModule][YUI_REQUIRES] as $supersededModuleReq) {
                         if (!in_array($supersededModuleReq, $mProvides)) {
-			            	if (!isset($reqs[$supersededModuleReq]))
-			            	{
+			            	if (!isset($reqs[$supersededModuleReq])) {
 	                            $reqs[$supersededModuleReq] = true;
 	                            $reqs = array_merge($reqs, $this->getAllDependencies($supersededModuleReq, $loadOptional, $reqs));
 			            	}
@@ -939,9 +938,7 @@ class YAHOO_util_Loader {
                         $supersededSubreqs = $supersededSubmodule[YUI_REQUIRES];
                         foreach($supersededSubreqs as $ssr) {     
                             if (!in_array($ssr, $ssmProvides)) {
-				            	if (!isset($reqs[$ssr]))
-				            	{
-                           	
+				            	if (!isset($reqs[$ssr])) {
 	                                $reqs[$ssr] = true;
 	                                $reqs = array_merge($reqs, $this->getAllDependencies($ssr, $loadOptional, $reqs));
 				            	}
@@ -1389,7 +1386,7 @@ class YAHOO_util_Loader {
                 // skip the filter
             } else if (isset($this->filters[$this->filter])) {
                 $filter = $this->filters[$this->filter];
-                $url = ereg_replace($filter[YUI_SEARCH], $filter[YUI_REPLACE], $url);
+                $url = preg_replace($filter[YUI_SEARCH], $filter[YUI_REPLACE], $url);
             }
         }
 
@@ -1414,27 +1411,31 @@ class YAHOO_util_Loader {
         }        
 
         if (!$remote_content) {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_FAILONERROR, 1); 
-            
-            //Doesn't work in safe mode or with openbase_dir enabled, see http://au.php.net/manual/ro/function.curl-setopt.php#71313.
-            $open_basedir = ini_get("open_basedir");
-            if (empty($open_basedir) && !ini_get('safe_mode')) {
-                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);// allow redirects
-            }
-            
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER,1); // return into a variable 
-            // curl_setopt($ch, CURLOPT_TIMEOUT, 3); // times out after 4s
+            if($this->curlAvail === true) {
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_FAILONERROR, 1); 
 
-            $remote_content = curl_exec($ch);
+                //Doesn't work in safe mode or with openbase_dir enabled, see http://au.php.net/manual/ro/function.curl-setopt.php#71313.
+                $open_basedir = ini_get("open_basedir");
+                if (empty($open_basedir) && !ini_get('safe_mode')) {
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);// allow redirects
+                }
 
-            // save the contents of the remote url for 30 minutes
-            if ($this->apcAvail === true) {
-                apc_store($url, $remote_content, $this->apcttl);
-            }
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER,1); // return into a variable 
+                // curl_setopt($ch, CURLOPT_TIMEOUT, 3); // times out after 4s
 
-            curl_close ($ch);
+                $remote_content = curl_exec($ch);
+
+                // save the contents of the remote url for 30 minutes
+                if ($this->apcAvail === true) {
+                    apc_store($url, $remote_content, $this->apcttl);
+                }
+
+                curl_close ($ch);
+            } else {
+                $remote_content = "<!--// cURL was not detected, so the content cannot be fetched -->";
+            }   
         }
 
         return $remote_content;
@@ -1529,7 +1530,7 @@ class YAHOO_util_Loader {
                 // skip the filter
             } else if (isset($this->filters[$this->filter])) {
                 $filter = $this->filters[$this->filter];
-                $url = ereg_replace($filter[YUI_SEARCH], $filter[YUI_REPLACE], $url);
+                $url = preg_replace($filter[YUI_SEARCH], $filter[YUI_REPLACE], $url);
             }
         }
         
