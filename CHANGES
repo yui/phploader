@@ -5,10 +5,30 @@ ChangeLog
     * Initial release
 
 1.0.0b2
-    * Documentation and example cleanup
+    * General code cleanup and bug fix work
+    * Improved documentation and examples
+    * Added a new example to demonstrate mixed loading methods
     * Combo script incorrectly exploded the query string on &amp; not &.
     * Modified APC/Curl support checks
     * Adding APC support for combo.php
+    * Adding support for the filter option in the local combo script
     * Combo.php was not handling relative image pathes in the raw css.  Now 
         converts to absolute paths.
-    * Adding a new example to demonstrate mixed loading methods
+    * Added metadata files for 2.8.0r4 and 3.0.0
+        - http://yuilibrary.com/projects/phploader/ticket/4
+    * Removing ereg_replace usage in loader since it was deprecated in 
+        PHP 5.3.  Swapping with preg_replace().
+    * Fixed loading order inconsistencies 
+        - http://yuilibrary.com/projects/phploader/ticket/2
+    * Fixed duplicate loading of resources with combine option during multiple 
+        calls to the tags, scripts, and/or css methods for a single page
+        - http://yuilibrary.com/projects/phploader/ticket/6
+    * Adjusting rollup level for reset-font-grids (was only rolling up reset-font)
+    * Update metadata for the base module. Should include AFTER entries for 
+        reset-fonts and reset-fonts-grids.
+    * Better handling of missing dependencies within the sort
+    * Changes to support expound property. Adding logic to scan module rollups, 
+        supersedes, and submodules packages for additional module requirements.
+        -  http://yuilibrary.com/projects/phploader/ticket/5
+    * Removed loader-inc.php and related files.  Removed unencoded script and 
+        link tag output in that was contained within comment blocks.
