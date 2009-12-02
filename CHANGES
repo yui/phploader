@@ -1,9 +1,6 @@
 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.0.0b1
-    * Initial release
-
 1.0.0b2
     * General code cleanup and bug fix work
     * Improved documentation and examples
@@ -32,3 +29,7 @@ ChangeLog
         -  http://yuilibrary.com/projects/phploader/ticket/5
     * Removed loader-inc.php and related files.  Removed unencoded script and 
         link tag output in that was contained within comment blocks.
+
+1.0.0b1
+    * Initial release
+
