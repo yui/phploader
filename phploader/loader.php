@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /**
  *  Copyright (c) 2009, Yahoo! Inc. All rights reserved.
  *  Code licensed under the BSD License:
@@ -7,57 +7,59 @@
  */
  
 /**
- * Used to specify JavaScript and CSS module requirements.  It maintains a dependency
- * tree for these modules so when a module is requested, all of the other modules it 
- * depends on are included as well.  By default, the YUI Library is configured, and 
- * other modules and their dependencies can be added via PHP.
+ * Used to specify JavaScript and CSS module requirements.  It maintains a 
+ * dependency tree for these modules so when a module is requested, all of the 
+ * other modules it  depends on are included as well.  By default, the YUI 
+ * Library is configured, and other modules and their dependencies can be added
+ * via PHP.
  * @module phploader
  */
 
-define('YUI_AFTER',      'after');
-define('YUI_BASE',       'base');
-define('YUI_CSS',        'css');
-define('YUI_DATA',       'DATA');
-define('YUI_DEPCACHE',   'depCache');
-define('YUI_DEBUG',      'DEBUG');
-define('YUI_EMBED',      'EMBED');
-define('YUI_FILTERS',    'filters');
-define('YUI_FULLPATH',   'fullpath');
-define('YUI_FULLJSON',   'FULLJSON');
-define('YUI_GLOBAL',     'global');
-define('YUI_JS',         'js');
-define('YUI_JSON',       'JSON');
-define('YUI_MODULES',    'modules');
+define('YUI_AFTER', 'after');
+define('YUI_BASE', 'base');
+define('YUI_CSS', 'css');
+define('YUI_DATA', 'DATA');
+define('YUI_DEPCACHE', 'depCache');
+define('YUI_DEBUG', 'DEBUG');
+define('YUI_EMBED', 'EMBED');
+define('YUI_FILTERS', 'filters');
+define('YUI_FULLPATH', 'fullpath');
+define('YUI_FULLJSON', 'FULLJSON');
+define('YUI_GLOBAL', 'global');
+define('YUI_JS', 'js');
+define('YUI_JSON', 'JSON');
+define('YUI_MODULES', 'modules');
 define('YUI_SUBMODULES', 'submodules');
-define('YUI_EXPOUND',    'expound');
-define('YUI_NAME',       'name');
-define('YUI_OPTIONAL',   'optional');
-define('YUI_OVERRIDES',  'overrides');
-define('YUI_PATH',       'path');
-define('YUI_PKG',        'pkg');
-define('YUI_PREFIX',     'prefix');
-define('YUI_PROVIDES',   'provides');
-define('YUI_RAW',        'RAW');
-define('YUI_REPLACE',    'replace');
-define('YUI_REQUIRES',   'requires');
-define('YUI_ROLLUP',     'rollup');
-define('YUI_SATISFIES',  'satisfies');
-define('YUI_SEARCH',     'search');
-define('YUI_SKIN',       'skin');
-define('YUI_SKINNABLE',  'skinnable');
+define('YUI_EXPOUND', 'expound');
+define('YUI_NAME', 'name');
+define('YUI_OPTIONAL', 'optional');
+define('YUI_OVERRIDES', 'overrides');
+define('YUI_PATH', 'path');
+define('YUI_PKG', 'pkg');
+define('YUI_PREFIX', 'prefix');
+define('YUI_PROVIDES', 'provides');
+define('YUI_RAW', 'RAW');
+define('YUI_REPLACE', 'replace');
+define('YUI_REQUIRES', 'requires');
+define('YUI_ROLLUP', 'rollup');
+define('YUI_SATISFIES', 'satisfies');
+define('YUI_SEARCH', 'search');
+define('YUI_SKIN', 'skin');
+define('YUI_SKINNABLE', 'skinnable');
 define('YUI_SUPERSEDES', 'supersedes');
-define('YUI_TAGS',       'TAGS');
-define('YUI_TYPE',       'type');
-define('YUI_URL',        'url');
+define('YUI_TAGS', 'TAGS');
+define('YUI_TYPE', 'type');
+define('YUI_URL', 'url');
 
 
 /**
- * The YUI PHP loader base class which provides dynamic server-side loading for YUI
+ * The YUI PHP loader base class which provides dynamic server-side loading for
+ * YUI
  * @class YAHOO_util_Loader
  * @namespace PHP
  */
-class YAHOO_util_Loader {
-    
+class YAHOO_util_Loader 
+{
     /**
     * The base directory
     * @property base
@@ -67,10 +69,11 @@ class YAHOO_util_Loader {
     var $base = "";
 
     /**
-    * A filter to apply to result urls. This filter will modify the default path for 
-    * all modules. The default path is the minified version of the files (e.g., event-min.js). 
-    * Changing the filter alows for picking up the unminified (raw) or debug sources.
-    * The default set of valid filters are:  YUI_DEBUG & YUI_RAW
+    * A filter to apply to result urls. This filter will modify the default 
+    * path for all modules. The default path is the minified version of the 
+    * files (e.g., event-min.js). Changing the filter alows for picking up 
+    * the unminified (raw) or debug sources. The default set of valid filters 
+    * are:  YUI_DEBUG & YUI_RAW
     * @property filter
     * @type string (e.g.) 
     * @default empty string (minified vesion)
@@ -112,7 +115,8 @@ class YAHOO_util_Loader {
 
     /**
     * Force rollup modules to be sorted as moved to the top of
-    * the stack when performing an automatic rollup.  This has a very small performance consequence.
+    * the stack when performing an automatic rollup.  This has a very small 
+    * performance consequence.
     * @property rollupsToTop
     * @type boolean
     * @default false
@@ -137,7 +141,8 @@ class YAHOO_util_Loader {
     var $requests = array();
 
     /**
-    * List of modules that have been been outputted via getLink() / getComboLink()
+    * List of modules that have been been outputted via getLink() / 
+    * getComboLink()
     * @property loaded
     * @type array
     * @default
@@ -257,7 +262,8 @@ class YAHOO_util_Loader {
     var $rollupModules = array();
     
     /* Holds global module information.  Used for global dependency support.
-    * Note: Does not appear to be in use by recent metadata.  Might be deprecated?
+    * Note: Does not appear to be in use by recent metadata.  Might be 
+    * deprecated?
     * @property globalModules
     * @type array
     * @default
@@ -279,8 +285,9 @@ class YAHOO_util_Loader {
     var $depCache = array();
     
     /**
-    * Combined into a single request using the combo service to pontentially reduce the number of 
-    * http requests required.  This option is not supported when loading custom modules.
+    * Combined into a single request using the combo service to pontentially 
+    * reduce the number of http requests required.  This option is not 
+    * supported when loading custom modules.
     * @property combine
     * @type boolean
     * @default false
@@ -288,9 +295,10 @@ class YAHOO_util_Loader {
     var $combine = false;
 
     /**
-    * The base path to the combo service.  Uses the Yahoo! CDN service by default.
-    * You do not have to set this property to use the combine option. YUI PHP Loader ships 
-    * with an intrinsic, lightweight combo-handler as well (see combo.php).
+    * The base path to the combo service.  Uses the Yahoo! CDN service by 
+    * default. You do not have to set this property to use the combine option.
+    * YUI PHP Loader ships with an intrinsic, lightweight combo-handler as 
+    * well (see combo.php).
     * @property comboBase
     * @type string
     * @default http://yui.yahooapis.com/combo?
@@ -299,8 +307,8 @@ class YAHOO_util_Loader {
     
     /**
     * Holds the current combo url for the loaded CSS resources.  This is 
-    * built with addToCombo and retrieved with getComboLink.  Only used when the combine
-    * is enabled.
+    * built with addToCombo and retrieved with getComboLink.  Only used when 
+    * the combine is enabled.
     * @property cssComboLocation
     * @type string
     * @default null
@@ -309,8 +317,8 @@ class YAHOO_util_Loader {
     
     /**
     * Holds the current combo url for the loaded JavaScript resources.  This is 
-    * built with addToCombo and retrieved with getComboLink.  Only used when the combine
-    * is enabled.
+    * built with addToCombo and retrieved with getComboLink.  Only used when the
+    * combine is enabled.
     * @property jsComboLocation
     * @type string
     * @default null
@@ -321,29 +329,40 @@ class YAHOO_util_Loader {
     * The YAHOO_util_Loader class constructor
     * @constructor
     * @param {string} yuiVersion Defines which version of YUI metadata to load
-    * @param {string} cacheKey Unique APC cache key.  This is combined with the YUI base
-    * so that updates to YUI will force a new cache entry.  However, if your custom config 
-    * changes, this key should be changed (otherwise the old values will be used until the cache expires).
+    * @param {string} cacheKey Unique APC cache key.  This is combined with the
+    * YUI base so that updates to YUI will force a new cache entry.  However, 
+    * if your custom config 
+    * changes, this key should be changed (otherwise the old values will be 
+    * used until the cache expires).
     * @param {array} modules A list of custom modules
     * @param {boolean} noYUI Pass true if you do not want the YUI metadata
     */
-    function YAHOO_util_Loader($yuiVersion, $cacheKey=null, $modules=null, $noYUI=false) {
+    function YAHOO_util_Loader(
+        $yuiVersion, $cacheKey=null, $modules=null, $noYUI=false
+    ) 
+    {
         if (!isset($yuiVersion)) {
-            die("Error: The first parameter of YAHOO_util_Loader must specify which version of YUI to use!");
+            die("Error: The first parameter of YAHOO_util_Loader must specify " . 
+                "which version of YUI to use!");
         }
         
         /* 
-        * Include the metadata config file that corresponds to the requested YUI version
-        * Note: we attempt to find a prebuilt config_{version}.php file which contains an associative array,
-        * but if not available we'll attempt to find and parse the YUI json dependency file.
+        * Include the metadata config file that corresponds to the requested YUI
+        * version Note: we attempt to find a prebuilt config_{version}.php file
+        * which contains an associative array, but if not available we'll 
+        * attempt to find and parse the YUI json dependency file.
         */
         $parentDir = dirname(dirname(__FILE__));
-        $phpConfigFile = $parentDir . '/lib/meta/config_' . $yuiVersion . '.php';
+        $phpConfigFile = $parentDir . '/lib/meta/config_' . $yuiVersion . 
+            '.php';
         $jsonConfigFile = $parentDir . '/lib/meta/json_' . $yuiVersion . '.txt';
         
         if (file_exists($phpConfigFile) && is_readable($phpConfigFile)) {
             require($phpConfigFile);
-        } else if (file_exists($jsonConfigFile) && is_readable($jsonConfigFile) && function_exists('json_encode')) {
+        } else if (
+            file_exists($jsonConfigFile) && is_readable($jsonConfigFile) 
+            && function_exists('json_encode')
+        ) {
             $jsonConfigString = file_get_contents($jsonConfigFile);
             $inf = json_decode($jsonConfigString, true);
             $GLOBALS['yui_current'] = $inf;
@@ -351,14 +370,14 @@ class YAHOO_util_Loader {
             die("Unable to find a suitable YUI metadata file!");
         }
         
-        global $yui_current;
+        global $yuiCurrent;
 
         $this->apcttl = 0;
         $this->curlAvail  = function_exists('curl_exec');
         $this->apcAvail   = function_exists('apc_fetch');
         $this->jsonAvail  = function_exists('json_encode');
         $this->customModulesInUse = empty($modules) ? false : true;
-        $this->base = $yui_current[YUI_BASE];
+        $this->base = $yuiCurrent[YUI_BASE];
         $this->comboDefaultVersion = $yuiVersion;
         $this->fullCacheKey = null;
         $cache = null;
@@ -382,14 +401,16 @@ class YAHOO_util_Loader {
             if ($noYUI) {
                 $this->modules = array();
             } else {
-                $this->modules = $yui_current['moduleInfo'];
+                $this->modules = $yuiCurrent['moduleInfo'];
             }
 
             if ($modules) {
-                $this->modules = array_merge_recursive($this->modules, $modules);
+                $this->modules = array_merge_recursive(
+                    $this->modules, $modules
+                );
             }
 
-            $this->skin = $yui_current[YUI_SKIN];
+            $this->skin = $yuiCurrent[YUI_SKIN];
             $this->skin['overrides'] = array();
             $this->skin[YUI_PREFIX] = "skin-";
             $this->filters = array(
@@ -423,7 +444,8 @@ class YAHOO_util_Loader {
     * Used to update the APC cache
     * @method updateCache
     */
-    function updateCache() {
+    function updateCache() 
+    {
         if ($this->fullCacheKey) {
             $cache = array();
             $cache[YUI_MODULES] = $this->modules;
@@ -442,7 +464,8 @@ class YAHOO_util_Loader {
     * @method load
     * @param string $varname [, string $... ] List of component names
     */
-    function load() {
+    function load() 
+    {
         //Expects N-number of named components to load 
         $args = func_get_args();
         foreach ($args as $arg) {
@@ -455,7 +478,8 @@ class YAHOO_util_Loader {
     * @method setProcessedModuleType
     * @param string $moduleType
     */
-    function setProcessedModuleType($moduleType='ALL') {
+    function setProcessedModuleType($moduleType='ALL') 
+    {
         $this->processedModuleTypes[$moduleType] = true;
     }
     
@@ -464,16 +488,19 @@ class YAHOO_util_Loader {
     * @method hasProcessedModuleType
     * @param string $moduleType
     */
-    function hasProcessedModuleType($moduleType='ALL') {
+    function hasProcessedModuleType($moduleType='ALL') 
+    {
         return isset($this->processedModuleTypes[$moduleType]);
     }
 
     /**
-    * Used to specify modules that are already on the page that should not be loaded again
+    * Used to specify modules that are already on the page that should not be 
+    * loaded again
     * @method setLoaded
     * @param string $varname [, string $... ] List of module names
     */
-    function setLoaded() {
+    function setLoaded() 
+    {
         $args = func_get_args();
 
         foreach ($args as $arg) {
@@ -490,7 +517,8 @@ class YAHOO_util_Loader {
                 // prevent rollups for this module type
                 $this->setProcessedModuleType($mod[YUI_TYPE]);
             } else {
-                $msg = "YUI_LOADER: undefined module name provided to setLoaded(): " . $arg;
+                $msg = "YUI_LOADER: undefined module name provided to " . 
+                    "setLoaded(): " . $arg;
                 error_log($msg, 0);
             }
         }
@@ -502,7 +530,8 @@ class YAHOO_util_Loader {
     * @param string $name module name
     * @return {string}
     */
-    function skinSetup($name) {
+    function skinSetup($name) 
+    {
         $skinName = null;
         $dep = $this->modules[$name];
 
@@ -510,8 +539,8 @@ class YAHOO_util_Loader {
             $s = $this->skin;
             
             if (isset($s[YUI_OVERRIDES][$name])) {
-                foreach ($s[YUI_OVERRIDES][$name] as $name2 => $over2) {
-                    $skinName = $this->formatSkin($over2, $name);
+                foreach ($s[YUI_OVERRIDES][$name] as $nameKey => $overValue) {
+                    $skinName = $this->formatSkin($overValue, $name);
                 }
             } else {
                 $skinName = $this->formatSkin($s["defaultSkin"], $name);
@@ -525,7 +554,8 @@ class YAHOO_util_Loader {
             if (isset($skin[2])) {
                 $dep = $this->modules[$skin[2]];
                 $package = (isset($dep[YUI_PKG])) ? $dep[YUI_PKG] : $skin[2];
-                $path = $package . '/' . $s[YUI_BASE] . $skin[1] . '/' . $skin[2] . '.css';
+                $path = $package . '/' . $s[YUI_BASE] . $skin[1] . '/' . 
+                    $skin[2] . '.css';
                 $this->modules[$skinName] = array(
                         "name" => $skinName,
                         "type" => YUI_CSS,
@@ -558,8 +588,9 @@ class YAHOO_util_Loader {
     * @param string $name the name of a module to parse
     * @return {array}
     */
-    function parseSkin($moduleName) {
-        if (strpos( $moduleName, $this->skin[YUI_PREFIX] ) === 0) {
+    function parseSkin($moduleName) 
+    {
+        if (strpos($moduleName, $this->skin[YUI_PREFIX]) === 0) {
             return explode('-', $moduleName);
         }
 
@@ -573,7 +604,8 @@ class YAHOO_util_Loader {
     * @param string $moduleName the name of a module
     * @return {string} prefixed skin name
     */
-    function formatSkin($skin, $moduleName) {
+    function formatSkin($skin, $moduleName) 
+    {
         $prefix = $this->skin[YUI_PREFIX];
         $s = $prefix . $skin;
         if ($moduleName) {
@@ -589,7 +621,8 @@ class YAHOO_util_Loader {
     * @param string $name the name of a module to load
     * @return {boolean}
     */
-    function loadSingle($name) {
+    function loadSingle($name) 
+    {
         $skin = $this->parseSkin($name);
 
         if ($skin) {
@@ -618,7 +651,8 @@ class YAHOO_util_Loader {
     * @method script
     * @return {string}
     */
-    function script() {
+    function script() 
+    {
         return $this->tags(YUI_JS);
     }
     
@@ -627,18 +661,21 @@ class YAHOO_util_Loader {
     * @method css
     * @return {string}
     */
-    function css() {
+    function css() 
+    {
         return $this->tags(YUI_CSS);
     }
 
     /**
     * Used to output each of the required html tags (i.e.) script or link
     * @method tags
-    * @param {string} moduleType Type of html tag to return (i.e.) js or css.  Default is both.
+    * @param {string} moduleType Type of html tag to return (i.e.) js or css. 
+    * Default is both.
     * @param {boolean} skipSort
     * @return {string}
     */
-    function tags($moduleType=null, $skipSort=false) {
+    function tags($moduleType=null, $skipSort=false) 
+    {
         return $this->processDependencies(YUI_TAGS, $moduleType, $skipSort);
     }
     
@@ -647,7 +684,8 @@ class YAHOO_util_Loader {
     * @method script_embed
     * @return {string} Returns the script tag(s) with the JavaScript inline
     */
-    function script_embed() {
+    function script_embed() 
+    {
         return $this->embed(YUI_JS);
     }
     
@@ -656,48 +694,60 @@ class YAHOO_util_Loader {
     * @method css_embed
     * @return {string} (e.g.) Returns the style tag(s) with the CSS inline
     */
-    function css_embed() {
+    function css_embed() 
+    {
         return $this->embed(YUI_CSS);
     }
 
     /**
-    * Used to output each of the required html tags inline (i.e.) script and/or style
+    * Used to output each of the required html tags inline (i.e.) script 
+    * and/or style
     * @method embed
-    * @param {string} moduleType Type of html tag to return (i.e.) js or css.  Default is both.
+    * @param {string} moduleType Type of html tag to return (i.e.) js or css. 
+    * Default is both.
     * @param {boolean} skipSort
-    * @return {string} Returns the style tag(s) with the CSS inline and/or the script tag(s) with the JavaScript inline
+    * @return {string} Returns the style tag(s) with the CSS inline and/or the 
+    * script tag(s) with the JavaScript inline
     */
-    function embed($moduleType=null, $skipSort=false) {
+    function embed($moduleType=null, $skipSort=false) 
+    {
         return $this->processDependencies(YUI_EMBED, $moduleType, $skipSort);
     }
 
     /**
     * Used to fetch an array of the required JavaScript components 
     * @method script_data
-    * @return {array} Returns an array of data about each of the identified JavaScript components
+    * @return {array} Returns an array of data about each of the identified 
+    * JavaScript components
     */
-    function script_data() {
+    function script_data() 
+    {
         return $this->data(YUI_JS);
     }
 
     /**
     * Used to fetch an array of the required CSS components
     * @method css_data
-    * @return {array} Returns an array of data about each of the identified JavaScript components
+    * @return {array} Returns an array of data about each of the identified 
+    * JavaScript components
     */
-    function css_data() {
+    function css_data() 
+    {
         return $this->data(YUI_CSS);
     }
     
     /**
-    * Used to output an Array which contains data about the required JavaScript & CSS components
+    * Used to output an Array which contains data about the required JavaScript
+    * & CSS components
     * @method data
-    * @param {string} moduleType Type of html tag to return (i.e.) js or css.  Default is both.
+    * @param {string} moduleType Type of html tag to return (i.e.) js or css. 
+    * Default is both.
     * @param {boolean} allowRollups
     * @param {boolean} skipSort
     * @return {string}
     */
-    function data($moduleType=null, $allowRollups=false, $skipSort=false) {
+    function data($moduleType=null, $allowRollups=false, $skipSort=false) 
+    {
         if (!$allowRollups) {
             $this->setProcessedModuleType($moduleType);
         }
@@ -710,36 +760,45 @@ class YAHOO_util_Loader {
     /**
     * Used to fetch a JSON object with the required JavaScript components 
     * @method script_json
-    * @return {string} Returns a JSON object containing urls for each JavaScript component
+    * @return {string} Returns a JSON object containing urls for each JavaScript
+    * component
     */
-    function script_json() {
+    function script_json() 
+    {
         return $this->json(YUI_JS);
     }
     
     /**
     * Used to fetch a JSON object with the required CSS components
     * @method css_json
-    * @return {string} Returns a JSON object containing urls for each CSS component
+    * @return {string} Returns a JSON object containing urls for each CSS 
+    * component
     */
-    function css_json() {
+    function css_json() 
+    {
         return $this->json(YUI_CSS);
     }
 
     /**
-    *  Used to fetch a JSON object with the required JavaScript and CSS components
+    * Used to fetch a JSON object with the required JavaScript and CSS 
+    * components
     * @method json
     * @param {string} moduleType
     * @param {boolean} allowRollups
     * @param {boolean} skipSort
     * @param {boolean} full
-    * @return {string} Returns a JSON object with the required JavaScript and CSS components
+    * @return {string} Returns a JSON object with the required JavaScript and 
+    * CSS components
     */
-    function json($moduleType=null, $allowRollups=false, $skipSort=false, $full=false) {
+    function json(
+        $moduleType=null, $allowRollups=false, $skipSort=false, $full=false
+    ) 
+    {
         if (!$allowRollups) {
             $this->setProcessedModuleType($moduleType);
         }
 
-        // the original JSON output only sent the provides data, not the requires
+        //the original JSON output only sent the provides data, not the requires
         $type = YUI_JSON;
 
         if ($full) {
@@ -750,32 +809,40 @@ class YAHOO_util_Loader {
     }
  
     /**
-    * Used to produce the raw JavaScript code inline without the actual script tags
+    * Used to produce the raw JavaScript code inline without the actual script 
+    * tags
     * @method script_raw
-    * @return {string} Returns the raw JavaScript code inline without the actual script tags
+    * @return {string} Returns the raw JavaScript code inline without the actual
+    * script tags
     */
-    function script_raw() {
+    function script_raw() 
+    {
         return $this->raw(YUI_JS);
     }
 
     /**
     * Used to produce the raw CSS code inline without the actual style tags
     * @method css_raw
-    * @return {string} Returns the raw CSS code inline without the actual style tags
+    * @return {string} Returns the raw CSS code inline without the actual style
+    * tags
     */
-    function css_raw() {
+    function css_raw() 
+    {
         return $this->raw(YUI_CSS);
     }
 
     /**
-    * Used to produce the raw Javacript and CSS code inline without the actual script or style tags
+    * Used to produce the raw Javacript and CSS code inline without the actual 
+    * script or style tags
     * @method raw
     * @param {string} moduleType
     * @param {boolean} allowRollups
     * @param {boolean} skipSort
-    * @return {string} Returns the raw JavaScript and/or CSS code inline without the actual style tags
+    * @return {string} Returns the raw JavaScript and/or CSS code inline 
+    * without the actual style tags
     */
-    function raw($moduleType=null, $allowRollups=false, $skipSort=false) {
+    function raw($moduleType=null, $allowRollups=false, $skipSort=false) 
+    {
         return $this->processDependencies(YUI_RAW, $moduleType, $skipSort);
     }
     
@@ -784,7 +851,8 @@ class YAHOO_util_Loader {
     * @method log
     * @param {string} msg Message to write
     */
-    function log($msg) {
+    function log($msg) 
+    {
         error_log($msg, 0);
     }
     
@@ -793,7 +861,8 @@ class YAHOO_util_Loader {
     * @method accountFor
     * @param {string} name Module to mark as being accounted for
     */
-    function accountFor($name) {
+    function accountFor($name) 
+    {
         $this->accountedFor[$name] = $name;
         
         if (isset($this->modules[$name])) {
@@ -807,13 +876,15 @@ class YAHOO_util_Loader {
     }
 
     /**
-    * Used during dependecy processing to prune modules from the list of modules requiring further processing
+    * Used during dependecy processing to prune modules from the list of 
+    * modules requiring further processing
     * @method prune
     * @param {array} deps List of module dependencies
     * @param {string} moduleType Type of modules to prune (i.e.) js or css
     * @return {array}
     */
-    function prune($deps, $moduleType) {
+    function prune($deps, $moduleType) 
+    {
         if ($moduleType) {
             $newdeps = array();
             foreach ($deps as $name=>$val) {
@@ -826,7 +897,7 @@ class YAHOO_util_Loader {
         } else {
             return $deps;
         }
-   }
+    }
    
    /**
    * Use to get a list of modules superseded by the given module name
@@ -834,7 +905,8 @@ class YAHOO_util_Loader {
    * @param {string} name Module name
    * @return {array}
    */
-   function getSuperceded($name) {
+   function getSuperceded($name) 
+   {
         $key = YUI_SUPERSEDES . $name;
 
         if (isset($this->depCache[$key])) {
@@ -860,7 +932,7 @@ class YAHOO_util_Loader {
 
         $this->depCache[$key] = $sups;
         return $sups;
-    }
+   }
     
     /**
     * Identify dependencies for a give module name
@@ -870,7 +942,10 @@ class YAHOO_util_Loader {
     * @param {array} completed
     * @return {array}
     */
-    function getAllDependencies($mname, $loadOptional=false, $completed=array()) {
+    function getAllDependencies(
+        $mname, $loadOptional=false, $completed=array()
+    ) 
+    {
         $key = YUI_REQUIRES . $mname;
         if ($loadOptional) {
             $key .= YUI_OPTIONAL;
@@ -884,64 +959,102 @@ class YAHOO_util_Loader {
         $mProvides = $this->getProvides($mname);
         $reqs = array();
     
-	    //Some modules pretend to be others (override if this is the case)
+        //Some modules pretend to be others (override if this is the case)
         if (isset($this->modules[$mname][YUI_EXPOUND])) {
-			if (!isset($completed[$mname])) {
-				$reqs = array_merge($completed, $this->getAllDependencies($this->modules[$mname][YUI_EXPOUND], $loadOptional, array($mname => true)));
-			}
+            if (!isset($completed[$mname])) {
+                $reqs = array_merge(
+                    $completed, 
+                    $this->getAllDependencies(
+                        $this->modules[$mname][YUI_EXPOUND], 
+                        $loadOptional, array($mname => true)
+                    )
+                );
+            }
         }
 
         //Add any requirements defined on the module itself
         if (isset($m[YUI_REQUIRES])) {
             $origreqs = $m[YUI_REQUIRES];
-            foreach($origreqs as $r) {
-            	if (!isset($reqs[$r])) {
-            		$reqs[$r] = true;
-                	$reqs = array_merge($reqs, $this->getAllDependencies($r, $loadOptional, $reqs));
-            	}
+            foreach ($origreqs as $r) {
+                if (!isset($reqs[$r])) {
+                    $reqs[$r] = true;
+                    $reqs = array_merge(
+                        $reqs, 
+                        $this->getAllDependencies(
+                            $r, $loadOptional, $reqs
+                        )
+                    );
+                }
             }
         }
          
         //Add any submodule requirements not provided by the rollups
         if (isset($m[YUI_SUBMODULES])) {
-            foreach($m[YUI_SUBMODULES] as $submodule) {
+            foreach ($m[YUI_SUBMODULES] as $submodule) {
                 $subreqs = $submodule[YUI_REQUIRES];
-                foreach($subreqs as $sr) {     
-                    if (!in_array($sr, $mProvides) && !in_array($sr, $this->accountedFor)) {
-		            	if (!isset($reqs[$sr])) {
-	                    	$reqs[$sr] = true; 
-	                        $reqs = array_merge($reqs, $this->getAllDependencies($sr, $loadOptional, $reqs));
-		            	}
+                foreach ($subreqs as $sr) {     
+                    if (
+                        !in_array($sr, $mProvides) && 
+                        !in_array($sr, $this->accountedFor)
+                    ) {
+                        if (!isset($reqs[$sr])) {
+                            $reqs[$sr] = true; 
+                            $reqs = array_merge(
+                                $reqs, 
+                                $this->getAllDependencies(
+                                    $sr, $loadOptional, $reqs
+                                )
+                            );
+                        }
                     }
                 }
             }
         }
         
-        //Add any superseded requirements not provided by the rollup and/or rollup submodules
+        //Add any superseded requirements not provided by the rollup and/or 
+        //rollup submodules
         if (isset($m[YUI_SUPERSEDES])) {
-            foreach($m[YUI_SUPERSEDES] as $supersededModule) {
+            foreach ($m[YUI_SUPERSEDES] as $supersededModule) {
                 if (isset($this->modules[$supersededModule][YUI_REQUIRES])) {
-                    foreach($this->modules[$supersededModule][YUI_REQUIRES] as $supersededModuleReq) {
+                    foreach (
+                        $this->modules[$supersededModule][YUI_REQUIRES] as 
+                        $supersededModuleReq
+                    ) {
                         if (!in_array($supersededModuleReq, $mProvides)) {
-			            	if (!isset($reqs[$supersededModuleReq])) {
-	                            $reqs[$supersededModuleReq] = true;
-	                            $reqs = array_merge($reqs, $this->getAllDependencies($supersededModuleReq, $loadOptional, $reqs));
-			            	}
+                            if (!isset($reqs[$supersededModuleReq])) {
+                                $reqs[$supersededModuleReq] = true;
+                                $reqs = array_merge(
+                                    $reqs, 
+                                    $this->getAllDependencies(
+                                        $supersededModuleReq, $loadOptional, 
+                                        $reqs
+                                    )
+                                );
+                            }
                         }
                     }
                 }
                 
-                //Add any submodule requirements not provided by the rollup or originally requested module
+                //Add any submodule requirements not provided by the rollup or 
+                //originally requested module
                 if (isset($this->modules[$supersededModule][YUI_SUBMODULES])) {
-                    foreach($this->modules[$supersededModule][YUI_SUBMODULES] as $supersededSubmodule) {
+                    foreach (
+                        $this->modules[$supersededModule][YUI_SUBMODULES] 
+                        as $supersededSubmodule
+                    ) {
                         $ssmProvides = $this->getProvides($supersededModule);
                         $supersededSubreqs = $supersededSubmodule[YUI_REQUIRES];
-                        foreach($supersededSubreqs as $ssr) {     
+                        foreach ($supersededSubreqs as $ssr) {     
                             if (!in_array($ssr, $ssmProvides)) {
-				            	if (!isset($reqs[$ssr])) {
-	                                $reqs[$ssr] = true;
-	                                $reqs = array_merge($reqs, $this->getAllDependencies($ssr, $loadOptional, $reqs));
-				            	}
+                                if (!isset($reqs[$ssr])) {
+                                    $reqs[$ssr] = true;
+                                    $reqs = array_merge(
+                                        $reqs, 
+                                        $this->getAllDependencies(
+                                            $ssr, $loadOptional, $reqs
+                                        )
+                                    );
+                                }
                             }
                         }
                     }
@@ -951,7 +1064,7 @@ class YAHOO_util_Loader {
 
         if ($loadOptional && isset($m[YUI_OPTIONAL])) {
             $o = $m[YUI_OPTIONAL];
-            foreach($o as $opt) {
+            foreach ($o as $opt) {
                 $reqs[$opt] = true;
             }
         }
@@ -962,7 +1075,8 @@ class YAHOO_util_Loader {
     }
 
     // @todo restore global dependency support
-    function getGlobalDependencies() {
+    function getGlobalDependencies() 
+    {
         return $this->globalModules;
     }
 
@@ -970,8 +1084,9 @@ class YAHOO_util_Loader {
      * Returns true if the supplied $satisfied module is satisfied by the
      * supplied $satisfier module
      */
-    function moduleSatisfies($satisfied, $satisfier) {
-        if($satisfied == $satisfier) {
+    function moduleSatisfies($satisfied, $satisfier) 
+    {
+        if ($satisfied == $satisfier) {
             return true;
         }
 
@@ -984,12 +1099,14 @@ class YAHOO_util_Loader {
     }
 
     /**
-    * Used to override the base dir for specific set of modules (Note: not supported when using the combo service)
+    * Used to override the base dir for specific set of modules (Note: not 
+    * supported when using the combo service)
     * @method overrideBase
     * @param {string} base Base path (e.g.) 2.6.0/build
     * @param {array} modules Module names of which to override base
     */
-    function overrideBase($base, $modules) {
+    function overrideBase($base, $modules) 
+    {
         foreach ($modules as $name) {
             $this->baseOverrides[$name] = $base;
         }
@@ -1002,7 +1119,8 @@ class YAHOO_util_Loader {
     * @param {array} moduleList List of modules names
     * @return {boolean}
     */
-    function listSatisfies($satisfied, $moduleList) {
+    function listSatisfies($satisfied, $moduleList) 
+    {
         if (isset($moduleList[$satisfied])) {
             return true;
         } else {
@@ -1026,7 +1144,8 @@ class YAHOO_util_Loader {
     * @param {array} moduleList List of modules names
     * @return {boolean}
     */
-    function checkThreshold($module, $moduleList) {
+    function checkThreshold($module, $moduleList) 
+    {
         if (count($moduleList) > 0 && isset($module[YUI_ROLLUP])) {
             $matched = 0;
             $thresh = $module[YUI_ROLLUP];
@@ -1043,13 +1162,15 @@ class YAHOO_util_Loader {
     }
     
     /**
-    * Used to sort dependencies in the proper order (Note: only call this if the loader is dirty)
+    * Used to sort dependencies in the proper order (Note: only call this if the
+    * loader is dirty)
     * @method sortDependencies
     * @param {string} Module name
     * @param {array} moduleList List of modules names
     * @return {boolean}
     */
-    function sortDependencies($moduleType, $skipSort=false) {
+    function sortDependencies($moduleType, $skipSort=false) 
+    {
         $reqs = array();
         $top = array();
         $bot = array();
@@ -1077,9 +1198,9 @@ class YAHOO_util_Loader {
             }
         }
 
-        // if we skip the sort, we just return the list that includes everything that
-        // was requested, all of their requirements, and global modules.  This is
-        // filtered by module type if supplied
+        // if we skip the sort, we just return the list that includes everything
+        // that was requested, all of their requirements, and global modules. 
+        // This is filtered by module type if supplied
         if ($skipSort) {
             return $this->prune($reqs, $moduleType);
         }
@@ -1106,10 +1227,15 @@ class YAHOO_util_Loader {
 
             if (count($rollups > 0)) {
                 foreach ($rollups as $name => $rollup) {
-                    if (!isset($reqs[$name]) && $this->checkThreshold($rollup, $reqs) ) {
+                    if (
+                        !isset($reqs[$name]) && 
+                        $this->checkThreshold($rollup, $reqs)
+                    ) {
                         $reqs[$name] = true;
                         $dep = $this->modules[$name];
-                        $newreqs = $this->getAllDependencies($name, $this->loadOptional, $reqs);
+                        $newreqs = $this->getAllDependencies(
+                            $name, $this->loadOptional, $reqs
+                        );
                         foreach ($newreqs as $newname=>$newval) {
                             if (!isset($reqs[$newname])) {
                                 $reqs[$newname] = true;
@@ -1163,7 +1289,8 @@ class YAHOO_util_Loader {
         $count = 0;
         while (count($notdone) > 0) {
             if ($count++ > 200) {
-                $msg = "YUI_LOADER ERROR: sorting could not be completed, there may be a circular dependency";
+                $msg = "YUI_LOADER ERROR: sorting could not be completed, there"
+                    . " may be a circular dependency";
                 error_log($msg, 0);
                 return array_merge($sorted, $notdone);
             }
@@ -1171,14 +1298,17 @@ class YAHOO_util_Loader {
             // each pass only processed what has not been completed
             foreach ($notdone as $name => $val) {
                 $dep = $this->modules[$name];                
-                $newreqs = $this->getAllDependencies($name, $this->loadOptional);
+                $newreqs = $this->getAllDependencies(
+                    $name, $this->loadOptional
+                );
                 $this->accountFor($name);    
                 
-                //Detect if this module needs to be included after another one of the upcoming dependencies
+                //Detect if this module needs to be included after another one 
+                //of the upcoming dependencies
                 if (isset($dep[YUI_AFTER])) {
                     $after = $dep[YUI_AFTER];
                     
-                    foreach($after as $a) {
+                    foreach ($after as $a) {
                         if (in_array($a, $notdone)) {
                             $newreqs[$a] = true;
                         }
@@ -1188,30 +1318,41 @@ class YAHOO_util_Loader {
                 if (!empty($newreqs)) {
                     foreach ($newreqs as $depname=>$depval) {
                         // check if the item is accounted for in the $done list
-                        if (isset($this->accountedFor[$depname]) || $this->listSatisfies($depname, $sorted)) {
-                        	//unset($notdone[$depname]);
+                        if (
+                            isset($this->accountedFor[$depname]) || 
+                            $this->listSatisfies($depname, $sorted)
+                        ) {
+                            //unset($notdone[$depname]);
                         } else {
                             $tmp = array();
                             $found = false;
                             foreach ($notdone as $newname => $newval) {
-                                if ($this->moduleSatisfies($depname, $newname)) {
+                                if (
+                                    $this->moduleSatisfies($depname, $newname)
+                                ) {
                                     $tmp[$newname] = $newname;
                                     unset($notdone[$newname]);
                                     $found = true;
-                                    break; // found something that takes care of the dependency, so jump out
+
+                                    // found something that takes care of the 
+                                    // dependency, so jump out
+                                    break;                                 
                                 }
                             }
                             
                             if ($found) {
-                                // this should put the module that handles the dependency on top, immediately
-                                // over the the item with the missing dependency
+                                // this should put the module that handles the 
+                                // dependency on top, immediately over the the 
+                                // item with the missing dependency
                                 $notdone = array_merge($tmp, $notdone);
                             } else {
-                                //Requirement was missing and not found within the current notdone list.  Add and try again.
+                                //Requirement was missing and not found within 
+                                // the current notdone list.  Add and try again.
                                 $notdone[$depname] = $depname;
                             }
-                            
-                            break(2); // break out of this iteration so we can get the missed dependency
+                            // break out of this iteration so we can get the 
+                            // missed dependency
+                            break(2); 
                         }
                     }
                 }
@@ -1239,7 +1380,8 @@ class YAHOO_util_Loader {
         return $this->prune($sorted, $moduleType);
     }
  
-    function mapSatisfyingModule($satisfied, $satisfier) {
+    function mapSatisfyingModule($satisfied, $satisfier) 
+    {
         if (!isset($this->satisfactionMap[$satisfied])) {
             $this->satisfactionMap[$satisfied] = array();
         }
@@ -1248,8 +1390,9 @@ class YAHOO_util_Loader {
     }
     
     /**
-    * Used to process the dependency list and retrieve the actual CSS and/or JavaScript resources
-    * in requested output format (e.g.) json, link/script nodes, embeddable code, php array, etc.
+    * Used to process the dependency list and retrieve the actual CSS and/or 
+    * JavaScript resources in requested output format (e.g.) json, link/script 
+    * nodes, embeddable code, php array, etc.
     * @method processDependencies
     * @param {string} outputType the format you like the response to be in
     * @param {string} moduleType Type of module to return (i.e.) js or css
@@ -1257,14 +1400,24 @@ class YAHOO_util_Loader {
     * @param {boolean} showLoaded
     * @return {varies} output format based on requested outputType
     */
-    function processDependencies($outputType, $moduleType, $skipSort=false, $showLoaded=false) {
+    function processDependencies(
+        $outputType, $moduleType, $skipSort=false, $showLoaded=false
+    )
+    {
         $html = '';
 
         // sort the output with css on top unless the output type is json
-        if ((!$moduleType) && (strpos($outputType, YUI_JSON) === false) && $outputType != YUI_DATA) {
+        if (
+            (!$moduleType) && (strpos($outputType, YUI_JSON) === false) && 
+            $outputType != YUI_DATA
+        ) {
             $this->delayCache = true;
-            $css = $this->processDependencies($outputType, YUI_CSS, $skipSort, $showLoaded);
-            $js  = $this->processDependencies($outputType, YUI_JS, $skipSort, $showLoaded);
+            $css = $this->processDependencies(
+                $outputType, YUI_CSS, $skipSort, $showLoaded
+            );
+            $js  = $this->processDependencies(
+                $outputType, YUI_JS, $skipSort, $showLoaded
+            );
 
             // If the data has not been cached, cache what we have
             if (!$this->cacheFound) {
@@ -1295,9 +1448,11 @@ class YAHOO_util_Loader {
                         break;
                     case YUI_JSON:
                     case YUI_DATA:
-                        //$json[$dep[YUI_TYPE]][$this->getUrl($name)] = $this->getProvides($name);
+                        //$json[$dep[YUI_TYPE]][$this->getUrl($name)] = 
+                        //$this->getProvides($name);
                         $json[$dep[YUI_TYPE]][] = array(
-                                $this->getUrl($name) => $this->getProvides($name)
+                                $this->getUrl($name) => 
+                                $this->getProvides($name)
                             );
                         break;
                     case YUI_FULLJSON:
@@ -1311,7 +1466,10 @@ class YAHOO_util_Loader {
                         break;
                     case YUI_TAGS:
                     default:
-                        if ($this->combine === true && $this->customModulesInUse === false) {
+                        if (
+                            $this->combine === true && 
+                            $this->customModulesInUse === false
+                        ) {
                             $this->addToCombo($name, $dep[YUI_TYPE]);
                             $html = $this->getComboLink($dep[YUI_TYPE]);
                         } else {
@@ -1351,7 +1509,8 @@ class YAHOO_util_Loader {
         }
 
         if ( count($this->undefined) > 0 ) {
-            $html .= "<!-- The following modules were requested but are not defined: " . join($this -> undefined, ",") . " -->\n";
+            $html .= "<!-- The following modules were requested but are not " . 
+                "defined: " . join($this -> undefined, ",") . " -->\n";
         }
 
         return $html;
@@ -1362,7 +1521,8 @@ class YAHOO_util_Loader {
     * @method getUrl
     * @param {string} name YUI component name
     */
-    function getUrl($name) {
+    function getUrl($name) 
+    {
         // figure out how to set targets and filters
         $url = "";
         $b = $this->base;
@@ -1382,11 +1542,15 @@ class YAHOO_util_Loader {
         }
 
         if ($this->filter) {
-            if (count($this->filterList) > 0 && !isset($this->filterList[$name])) {
+            if (
+                count($this->filterList) > 0 && !isset($this->filterList[$name])
+            ) {
                 // skip the filter
             } else if (isset($this->filters[$this->filter])) {
                 $filter = $this->filters[$this->filter];
-                $url = preg_replace($filter[YUI_SEARCH], $filter[YUI_REPLACE], $url);
+                $url = preg_replace(
+                    $filter[YUI_SEARCH], $filter[YUI_REPLACE], $url
+                );
             }
         }
 
@@ -1404,41 +1568,46 @@ class YAHOO_util_Loader {
     * @param {string} url URL to fetch data from
     * @return raw source
     */
-    function getRemoteContent($url) {
-        $remote_content = null;
+    function getRemoteContent($url) 
+    {
+        $remoteContent = null;
         if ($this->apcAvail === true) {
-            $remote_content = apc_fetch($url);
+            $remoteContent = apc_fetch($url);
         }        
 
-        if (!$remote_content) {
-            if($this->curlAvail === true) {
+        if (!$remoteContent) {
+            if ($this->curlAvail === true) {
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $url);
                 curl_setopt($ch, CURLOPT_FAILONERROR, 1); 
 
-                //Doesn't work in safe mode or with openbase_dir enabled, see http://au.php.net/manual/ro/function.curl-setopt.php#71313.
-                $open_basedir = ini_get("open_basedir");
-                if (empty($open_basedir) && !ini_get('safe_mode')) {
-                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);// allow redirects
+                //Doesn't work in safe mode or with openbase_dir enabled, see 
+                //http://au.php.net/manual/ro/function.curl-setopt.php#71313.
+                $openBasedir = ini_get("open_basedir");
+                if (empty($openBasedir) && !ini_get('safe_mode')) {
+                    // allow redirects
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
                 }
 
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER,1); // return into a variable 
+                // return into a variable 
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
                 // curl_setopt($ch, CURLOPT_TIMEOUT, 3); // times out after 4s
 
-                $remote_content = curl_exec($ch);
+                $remoteContent = curl_exec($ch);
 
                 // save the contents of the remote url for 30 minutes
                 if ($this->apcAvail === true) {
-                    apc_store($url, $remote_content, $this->apcttl);
+                    apc_store($url, $remoteContent, $this->apcttl);
                 }
 
-                curl_close ($ch);
+                curl_close($ch);
             } else {
-                $remote_content = "<!--// cURL was not detected, so the content cannot be fetched -->";
+                $remoteContent = "<!--// cURL was not detected, so the content"
+                    . " cannot be fetched -->";
             }   
         }
 
-        return $remote_content;
+        return $remoteContent;
     }
     
     /**
@@ -1447,9 +1616,11 @@ class YAHOO_util_Loader {
     * @param {string} name The module name you wish to fetch the source from
     * @return {string} raw source
     */
-    function getRaw($name) {        
-        if(!$this->curlAvail) {
-            return "<!--// cURL was not detected, so the content cannot be fetched -->";
+    function getRaw($name) 
+    {        
+        if (!$this->curlAvail) {
+            return "<!--// cURL was not detected, so the content cannot be" . 
+                "fetched -->";
         }
 
         $url = $this->getUrl($name);
@@ -1457,15 +1628,18 @@ class YAHOO_util_Loader {
     }
 
     /**
-    * Retrieve the style or script node with embedded source for a given module name and resource type
+    * Retrieve the style or script node with embedded source for a given module
+    * name and resource type
     * @method getContent
     * @param {string} name The module name to fetch the source from
     * @param {string} type Resource type (i.e.) YUI_JS or YUI_CSS
     * @return {string} style or script node with embedded source
     */
-    function getContent($name, $type) {
-        if(!$this->curlAvail) {
-            return "<!--// cURL was not detected, so the content cannot be fetched/embedded -->" . $this->getLink($name, $type);
+    function getContent($name, $type) 
+    {
+        if (!$this->curlAvail) {
+            return "<!--// cURL was not detected, so the content cannot be" .
+                "fetched/embedded -->" . $this->getLink($name, $type);
         }
 
         $url = $this->getUrl($name);
@@ -1473,43 +1647,52 @@ class YAHOO_util_Loader {
         if (!$url) {
             return '<!-- PATH FOR "'. $name . '" NOT SPECIFIED -->';
         } else if ($type == YUI_CSS) {
-            return '<style type="text/css">' . $this->getRemoteContent($url) . '</style>';
+            return '<style type="text/css">' . $this->getRemoteContent($url) . 
+                '</style>';
         } else {
-            return '<script type="text/javascript">' . $this->getRemoteContent($url) . '</script>'; 
+            return '<script type="text/javascript">' . 
+                $this->getRemoteContent($url) . '</script>'; 
         }
     }
     
     /**
-    * Retrieve the link or script include for a given module name and resource type
+    * Retrieve the link or script include for a given module name and resource 
+    * type
     * @method getLink
     * @param {string} name The module name to fetch the include for
     * @param {string} type Resource type (i.e.) YUI_JS or YUI_CSS
     * @return {string} link or script include
     */
-    function getLink($name, $type) {
+    function getLink($name, $type) 
+    {
         $url = $this->getUrl($name);
 
         if (!$url) {
             return '<!-- PATH FOR "'. $name . '" NOT SPECIFIED -->';
         } else if ($type == YUI_CSS) {
-            return '<link rel="stylesheet" type="text/css" href="' . $url . '" />';
+            return '<link rel="stylesheet" type="text/css" href="' . $url . 
+                '" />';
         } else {
-            return '<script type="text/javascript" src="' . $url . '"></script>';
+            return '<script type="text/javascript" src="' . $url .
+                '"></script>';
         }
     }
   
     /**
-    * Retrieves the combo link or script include for the currently loaded modules of a specific resource type
+    * Retrieves the combo link or script include for the currently loaded 
+    * modules of a specific resource type
     * @method getComboLink
     * @param {string} type Resource type (i.e.) YUI_JS or YUI_CSS
     * @return {string} link or script include
     */
-    function getComboLink($type) {
+    function getComboLink($type) 
+    {
         $url = '';
         
         if ($type == YUI_CSS) {
             if ($this->cssComboLocation !== null) {
-                $url = "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$this->cssComboLocation}\" />";
+                $url = "<link rel=\"stylesheet\" type=\"text/css\"" . 
+                    "href=\"{$this->cssComboLocation}\" />";
             } else {
                 $url = "<!-- NO YUI CSS COMPONENTS IDENTIFIED -->";
             }
@@ -1518,7 +1701,8 @@ class YAHOO_util_Loader {
                 if ($this->cssComboLocation !== null) {
                     $url = "\n";
                 }
-                $url .= "<script type=\"text/javascript\" src=\"{$this->jsComboLocation}\"></script>";
+                $url .= "<script type=\"text/javascript\"" .
+                    "src=\"{$this->jsComboLocation}\"></script>";
             } else {
                 $url = "<!-- NO YUI JAVASCRIPT COMPONENTS IDENTIFIED -->";
             }
@@ -1526,11 +1710,15 @@ class YAHOO_util_Loader {
         
         //Allow for RAW & DEBUG over minified default
         if ($this->filter) {
-            if (count($this->filterList) > 0 && !isset($this->filterList[$name])) {
+            if (
+                count($this->filterList) > 0 && !isset($this->filterList[$name])
+            ) {
                 // skip the filter
             } else if (isset($this->filters[$this->filter])) {
                 $filter = $this->filters[$this->filter];
-                $url = preg_replace($filter[YUI_SEARCH], $filter[YUI_REPLACE], $url);
+                $url = preg_replace(
+                    $filter[YUI_SEARCH], $filter[YUI_REPLACE], $url
+                );
             }
         }
         
@@ -1538,12 +1726,14 @@ class YAHOO_util_Loader {
     }
     
     /**
-    * Clears the combo url of already loaded modules for a specific resource type.  Prevents
-    * duplicate loading of modules if the page makes multiple calls to tags, css, or script.
+    * Clears the combo url of already loaded modules for a specific resource 
+    * type.  Prevents duplicate loading of modules if the page makes multiple
+    * calls to tags, css, or script.
     * @method clearComboLink
     * @param {string} type Resource type (i.e.) YUI_JS or YUI_CSS
     */
-    function clearComboLink($type) {
+    function clearComboLink($type) 
+    {
         if ($type == YUI_CSS) {
             $this->cssComboLocation = null;
         } else if ($type == YUI_JS) {
@@ -1560,8 +1750,10 @@ class YAHOO_util_Loader {
     * @param {string} name The module name to add
     * @param {string} type Resource type (i.e.) YUI_JS or YUI_CSS
     */
-    function addToCombo($name, $type) {
-        $pathToModule = $this->comboDefaultVersion . '/build/' . $this->modules[$name][YUI_PATH];
+    function addToCombo($name, $type) 
+    {
+        $pathToModule = $this->comboDefaultVersion . '/build/' . 
+            $this->modules[$name][YUI_PATH];
         if ($type == YUI_CSS) {
             //If this is the first css component then add the combo base path
             if ($this->cssComboLocation === null) {
@@ -1586,17 +1778,20 @@ class YAHOO_util_Loader {
     * @method canJSON
     * @return boolean
     */
-    function canJSON() {
+    function canJSON() 
+    {
         return $this->jsonAvail;
     }
     
     /**
-    * Identifies what module(s) are provided by a given module name (e.g.) yaho-dom-event provides yahoo, dom, and event
+    * Identifies what module(s) are provided by a given module name (e.g.) 
+    * yahoo-dom-event provides yahoo, dom, and event
     * @method getProvides
     * @param {string} name Module name
     * @return {array}
     */
-    function getProvides($name) {
+    function getProvides($name) 
+    {
         $p = array($name);
         if (isset($this->modules[$name])) {
             $m = $this->modules[$name];
@@ -1611,11 +1806,13 @@ class YAHOO_util_Loader {
     }
     
     /**
-    * Identifies what module(s) have been loaded via the load method and/or marked as loaded via the setLoaded method
+    * Identifies what module(s) have been loaded via the load method and/or 
+    * marked as loaded via the setLoaded method
     * @method getLoadedModules
     * @return {array}
     */
-    function getLoadedModules() {
+    function getLoadedModules() 
+    {
         $loaded = array();
         foreach ($this->loaded as $i=>$value) {
             if (isset($this->modules[$i])) {
@@ -1632,11 +1829,13 @@ class YAHOO_util_Loader {
     }
 
     /**
-    * Identifies what module(s) have been loaded via the load method and/or marked as loaded via the setLoaded method
+    * Identifies what module(s) have been loaded via the load method and/or 
+    * marked as loaded via the setLoaded method
     * @method getLoadedModulesAsJSON
     * @return {json}
     */
-    function getLoadedModulesAsJSON() {
+    function getLoadedModulesAsJSON() 
+    {
         if (!$this->canJSON()) {
             return "{\"Error\", \"json library not available\"}";
         }
@@ -1644,5 +1843,3 @@ class YAHOO_util_Loader {
         return json_encode($this->getLoadedModules());
     }
 }
-
-?>
