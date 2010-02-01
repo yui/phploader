@@ -51,7 +51,6 @@ define('YUI_TAGS', 'TAGS');
 define('YUI_TYPE', 'type');
 define('YUI_URL', 'url');
 
-
 /**
  * The YUI PHP loader base class which provides dynamic server-side loading for
  * YUI
@@ -338,12 +337,14 @@ class YAHOO_util_Loader
     * @param {boolean} noYUI Pass true if you do not want the YUI metadata
     */
     function YAHOO_util_Loader(
-        $yuiVersion, $cacheKey=null, $modules=null, $noYUI=false
+        $yuiVersion, $cacheKey=null, $modules=null, $noYui=false
     ) 
     {
         if (!isset($yuiVersion)) {
-            die("Error: The first parameter of YAHOO_util_Loader must specify " 
-            . "which version of YUI to use!");
+            throw new Exception(
+                "Error: the first parameter of YAHOO_util_Loader must specify " . 
+                "which version of YUI to use!"
+            );
         }
         
         /* 
@@ -367,7 +368,7 @@ class YAHOO_util_Loader
             $inf = json_decode($jsonConfigString, true);
             $GLOBALS['yui_current'] = $inf;
         } else {
-            die("Unable to find a suitable YUI metadata file!");
+            throw new Exception("Unable to find a suitable YUI metadata file!");
         }
         
         global $yuiCurrent;
@@ -398,7 +399,7 @@ class YAHOO_util_Loader
             $this->filters = $cache[YUI_FILTERS];
         } else {
             // set up the YUI info for the current version of the lib
-            if ($noYUI) {
+            if ($noYui) {
                 $this->modules = array();
             } else {
                 $this->modules = $yuiCurrent['moduleInfo'];
