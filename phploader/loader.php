@@ -58,7 +58,7 @@ define('YUI_URL', 'url');
  * @class YAHOO_util_Loader
  * @namespace PHP
  */
-class YAHOO_util_Loader 
+class YAHOO_util_Loader
 {
     /**
     * The base directory
@@ -342,8 +342,8 @@ class YAHOO_util_Loader
     ) 
     {
         if (!isset($yuiVersion)) {
-            die("Error: The first parameter of YAHOO_util_Loader must specify " . 
-                "which version of YUI to use!");
+            die("Error: The first parameter of YAHOO_util_Loader must specify " 
+            . "which version of YUI to use!");
         }
         
         /* 
