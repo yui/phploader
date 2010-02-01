@@ -2455,4 +2455,4 @@ $GLOBALS['yui_current'] = array (
       'ext' => false,
     ),
   ),
-); ?>
+);

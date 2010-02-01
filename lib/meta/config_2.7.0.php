@@ -1,4 +1,4 @@
-<?PHP 
+<?php 
 /**
  *  Copyright (c) 2009, Yahoo! Inc. All rights reserved.
  *  Code licensed under the BSD License:
@@ -621,4 +621,4 @@ $GLOBALS['yui_current'] = array (
     'path' => 'skin.css',
     'rollup' => 3,
   ),
-); ?>
+);
