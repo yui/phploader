@@ -9,7 +9,7 @@
 //server(): Computes the base URL of the current page (protocol, server, path)
 //credit: http://code.google.com/p/simple-php-framework/ 
 //(modified version of full_url), license: MIT
-function server($includeRequestUri=false)
+function server($includeRequestURI=false)
 {
     $s = getenv('HTTPS') ? '' : (getenv('HTTPS') ==     'on') ? 's' : '';
     $protocol = substr(
@@ -19,7 +19,7 @@ function server($includeRequestUri=false)
     $port = (getenv('SERVER_PORT') == '80') ? '' : (":".getenv('SERVER_PORT'));
     $server = $protocol . "://" . getenv('HTTP_HOST') . $port;
     
-    if ($includeRequestUri === true) {
+    if ($includeRequestURI === true) {
         $server .= getenv('REQUEST_URI');
     }
     

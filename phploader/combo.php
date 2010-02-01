@@ -84,7 +84,7 @@ if (isset($queryString) && !empty($queryString)) {
             file_exists($localPathToBuild) === false || 
             is_readable($localPathToBuild) === false
         ) {
-            throw new Exception('Unable to locate the YUI build directory!');
+            die('<!-- Unable to locate the YUI build directory! -->');
         }
 
         //Detect and load the required components now
@@ -95,7 +95,7 @@ if (isset($queryString) && !empty($queryString)) {
                 //Add module to array for loading
                 $yuiComponents[] = $parts[2];
             } else {
-               throw new Exception('Unable to determine module name!'); 
+               die('<!-- Unable to determine module name! -->');
             }
         }
 
@@ -117,7 +117,7 @@ if (isset($queryString) && !empty($queryString)) {
             }
             echo $rawScript;
         } else {
-            $rawCss = '';
+            $rawCSS = '';
             $cssResourceList = $loader->css_data();
             foreach ($cssResourceList["css"] as $cssResource=>$val) {
                 foreach (
@@ -147,20 +147,20 @@ if (isset($queryString) && !empty($queryString)) {
                      ); // AlphaImageLoader relative paths (e.g.) 
                         // AlphaImageLoader(src='../../foo.png')
                      
-                     $rawCss .= $crtResourceContent;
+                     $rawCSS .= $crtResourceContent;
                 }
             }
             
             //Cleanup build path dups caused by relative paths that already
             //included the build directory
-            $rawCss = str_replace("/build/build/", "/build/", $rawCss);
+            $rawCSS = str_replace("/build/build/", "/build/", $rawCSS);
             
             if (APC_AVAIL === true) {
-                apc_store(server(true), $rawCss, APC_TTL);
+                apc_store(server(true), $rawCSS, APC_TTL);
             }
-            echo $rawCss;
+            echo $rawCSS;
         }
     }
 } else {
-    throw new Exception('No YUI modules defined!');
+    die('<!-- No YUI modules defined! -->');
 }
