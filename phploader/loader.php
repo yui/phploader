@@ -371,14 +371,14 @@ class YAHOO_util_Loader
             throw new Exception("Unable to find a suitable YUI metadata file!");
         }
         
-        global $yuiCurrent;
+        global $yui_current;
 
         $this->apcttl = 0;
         $this->curlAvail  = function_exists('curl_exec');
         $this->apcAvail   = function_exists('apc_fetch');
         $this->jsonAvail  = function_exists('json_encode');
         $this->customModulesInUse = empty($modules) ? false : true;
-        $this->base = $yuiCurrent[YUI_BASE];
+        $this->base = $yui_current[YUI_BASE];
         $this->comboDefaultVersion = $yuiVersion;
         $this->fullCacheKey = null;
         $cache = null;
@@ -402,7 +402,7 @@ class YAHOO_util_Loader
             if ($noYui) {
                 $this->modules = array();
             } else {
-                $this->modules = $yuiCurrent['moduleInfo'];
+                $this->modules = $yui_current['moduleInfo'];
             }
 
             if ($modules) {
@@ -411,7 +411,7 @@ class YAHOO_util_Loader
                 );
             }
 
-            $this->skin = $yuiCurrent[YUI_SKIN];
+            $this->skin = $yui_current[YUI_SKIN];
             $this->skin['overrides'] = array();
             $this->skin[YUI_PREFIX] = "skin-";
             $this->filters = array(
