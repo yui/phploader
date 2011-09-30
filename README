@@ -56,3 +56,5 @@ examples
 api_docs
     Contains the standard YUI API style documentation
 
+scripts
+    Scripts to build meta-data
