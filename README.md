@@ -1,6 +1,3 @@
-phploader README
-----------------
-
 IMPORTANT NOTE
 ==============
 
