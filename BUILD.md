@@ -1,5 +1,5 @@
 Building YUI 3 Metadata
------------------------
+=======================
 
 There are two scripts located in the `scripts` directory.
 
@@ -10,7 +10,7 @@ There are two scripts located in the `scripts` directory.
 
 
 Building
-========
+--------
 
    * Download an official release from here: http://yuilibrary.com/download/yui3/
    * Clone this repo: `git clone git://github.com/yui/phploader.git`

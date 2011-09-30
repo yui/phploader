@@ -1,4 +1,15 @@
 phploader README
+----------------
+
+IMPORTANT NOTE
+==============
+
+THE METADATA USED IN YUI 3 HAS CHANGED AS OF VERSION 3.4.0, THIS LOADER WILL
+NOT WORK IN IT'S CURRENT STATE WITH ANY VERSION OVER 3.3.0. IT NEEDS TO BE
+MODIFIED TO HANDLE THE NEW ALIAS SYSTEM IN ORDER TO FUNCTION PROPERLY.
+
+PULL REQUESTS ARE WELOME!
+
 
 The YUI PHP Loader Utility is a server-side utility that allows you to 
 load specific YUI components and their dependencies into your page via PHP.
@@ -13,17 +24,17 @@ The code for YUI phploader is provided under a BSD license:
 
 Project home page:
     http://developer.yahoo.com/yui/phploader
-    
 Source code:
     http://github.com/yui/phploader
 
 Issue tracker:
     http://yuilibrary.com/projects/phploader
-    
-Files:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-README
+
+Files
+-----
+
+README.md
     This file
 
 CHANGES
@@ -31,6 +42,9 @@ CHANGES
 
 INSTALL
     Installation instructions
+
+BUILD.md
+    Instructions for building meta data
 
 license.txt
     Open source license details.
@@ -49,10 +63,10 @@ phploader/combo.php
 
 phploader/tests
     Contains a number of tests and example loader scripts
-    
+
 examples
     Contains YUI PHP Loader example documentation and working code samples
-    
+
 api_docs
     Contains the standard YUI API style documentation
 
