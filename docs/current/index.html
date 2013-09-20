@@ -1,0 +1,982 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>YUI PHP Loader Utility [beta]</title>
+
+
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="assets/css/yui.css" >
+    <link rel="stylesheet" type="text/css" href="/yui/assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class=" yui-skin-sam">
+<div id="doc3" class="yui-t2">
+<div id="hd">
+    <div id="ygunav">
+        <p><em>
+            <a href="http://yuilibrary.com">YUI Home</a> <i> - </i>
+            <a href="http://yui.github.io/phploader">PHP Loader</a>
+            </em>
+        </p>
+        <form action="http://search.yahoo.com/search" id="sitesearchform">
+        <input name="vs" type="hidden" value="yui.github.io/phploader">
+        <div id="sitesearch">
+            <label for="searchinput">Site Search: </label>
+            <input type="text" id="searchinput" name="p">
+            <input type="submit" value="Search" id="searchsubmit" class="ygbt">
+        </div>
+        </form>
+    </div>
+
+    <div id="pagetitle"><h1>YUI PHP Loader Utility [beta]</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+
+  <div id="promo" class="component">
+    <h1>YUI PHP Loader Utility [beta]</h1>
+
+    <p>The YUI PHP Loader Utility is a <em>server-side utility</em> that allows you to load specific YUI components and their dependencies into your page via PHP.  YUI PHP Loader can operate as a holistic solution by loading all of your necessary YUI components, or it can be used to add one or more components to a page on which some YUI content already exists.</p>
+
+    <p>YUI also contains a <a href="../yuiloader/"><em>client-side loader</em></a>, which provides similar functionality from JavaScript.</p>
+
+<p>YUI PHP Loader adds value in the following ways:</p>
+<ol>
+  <li><strong>Reliable, sorted loading of dependencies:</strong> YUI comprises more than two-dozen components, many of which work together to provide the best possible compromise between compartmentalization and code reuse. Because of this, YUI components often need to load with specific dependencies in a specific order. YUI PHP Loader understands which components depend on one another, and based on this knowledge it ensures that the right resources are loaded in the right order.</li>
+  <li><strong>Automatic use of rolled-up files.</strong> YUI PHP Loader knows about all of the built-in rollup files that ship with YUI &mdash; like the <code>yahoo-dom-event.js</code> file that contains the <a href="http://developer.yahoo.com/yui/yahoo/">Yahoo Global Object</a>, the <a href="http://developer.yahoo.com/yui/dom/">Dom Collection</a>, and the <a href="http://developer.yahoo.com/yui/event/">Event Utility</a>, three components that are commonly used together. By automatically using rolled-up files when it makes sense to do so, the YUI PHP Loader helps you <a href="http://yuiblog.com/blog/2006/11/28/performance-research-part-1/">reduce HTTP requests</a> and thereby keep your page as efficient as possible.</li>
+
+</ol>
+
+<p>As you think about how you want to load YUI on the page, you may find it useful to refer to this overview of some of the most common loading strategies and their relative merits:</p>
+<ul>
+      <li>"<a href="http://yuiblog.com/blog/2008/10/17/loading-yui/">Loading YUI: Seeds, Core, and Combo-handling</a>", by Eric Miraglia on <a href="http://yuiblog.com/">YUIBlog</a>.<br />(<em>Note</em>: While this reference talks mostly about client side loading the basic concepts are still applicable)</li>
+</ul>
+
+<div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#using">Simple Use Case: Adding YUI Components to the Page with the <code>load()</code> Method</a> </li>
+      <li><a href="#config">Configuration Options</a> </li>
+      <li><a href="#modulenames">YUI Module Names</a>
+      <li><a href="#using2">Refining Our Use Case: Cutting out extra HTTP requests</a> </li>
+      <li><a href="#metainfo">Understanding the Metadata</a> </li>
+      <li><a href="#support">Support &amp; Community</a></li>
+      <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+  <div id="quicklinks">
+      <h4>Quick Links:</h4>
+      <ul>
+        <li><a href="http://yuilibrary.com/downloads/">Download YUI PHP Loader from YUILibrary.com</a></li>
+        <li><a href="http://yuilibrary.com/forum/viewforum.php?f=96">Visit the YUI PHP Loader discussion forum</a>
+        <li><a href="http://github.com/yui">Browse the latest source and/or contribute to YUI PHP Loader on GitHub</a>
+      </ul>
+    </div>
+</div>
+
+
+
+<h2 class="first" id="start">Getting Started</h2>
+
+<p>After downloading YUI PHP Loader, the archive needs to be extracted somewhere within the server's webroot (e.g. <code>htdocs/phploader</code>).  To begin using the Loader you must include the base class file and call the <code>YAHOO_util_Loader</code> constructor with a YUI version number to create an instance of the Loader.  The chosen version must have corresponding <a href="#metainfo">metadata</a> available within your local YUI PHP Loader installation.</p>
+<style>
+/**
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ */
+.php  {font-family:monospace;}
+.php .imp {font-weight: bold; color: red;}
+.php .kw1 {color: #b1b100;}
+.php .kw2 {color: #000000; font-weight: bold;}
+.php .kw3 {color: #990000;}
+.php .co1 {color: #666666; font-style: italic;}
+.php .co2 {color: #666666; font-style: italic;}
+.php .co3 {color: #0000cc; font-style: italic;}
+.php .co4 {color: #009933; font-style: italic;}
+.php .coMULTI {color: #666666; font-style: italic;}
+.php .es0 {color: #000099; font-weight: bold;}
+.php .es1 {color: #000099; font-weight: bold;}
+.php .es2 {color: #660099; font-weight: bold;}
+.php .es3 {color: #660099; font-weight: bold;}
+.php .es4 {color: #006699; font-weight: bold;}
+.php .es5 {color: #006699; font-weight: bold; font-style: italic;}
+.php .es6 {color: #009933; font-weight: bold;}
+.php .es_h {color: #000099; font-weight: bold;}
+.php .br0 {color: #009900;}
+.php .sy0 {color: #339933;}
+.php .sy1 {color: #000000; font-weight: bold;}
+.php .st0 {color: #0000ff;}
+.php .st_h {color: #0000ff;}
+.php .nu0 {color: #cc66cc;}
+.php .nu8 {color: #208080;}
+.php .nu12 {color: #208080;}
+.php .nu19 {color:#800080;}
+.php .me1 {color: #004000;}
+.php .me2 {color: #004000;}
+.php .re0 {color: #000088;}
+.php span.xtra { display:block; }
+
+</style>
+<div id="syntax-64c49bcacb2ce7e6c536a8e48443e35b" class="yui-syntax-highlight"><div class="numbers"><pre class="php" style="font-family:monospace;"><ol><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//Include the loader class file    </span></div></li><li class="li1"><div class="de1"><span class="kw1">include</span><span class="br0">&#40;</span><span class="st0">&quot;loader.php&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">//Get an instance   </span></div></li><li class="li1"><div class="de1"><span class="re0">$loader</span> <span class="sy0">=</span> <span class="kw2">new</span> YAHOO_util_Loader<span class="br0">&#40;</span><span class="st0">&quot;2.9.0&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="php" style="font-family:monospace;">&nbsp;
+<span class="co1">//Include the loader class file    </span>
+<span class="kw1">include</span><span class="br0">&#40;</span><span class="st0">&quot;loader.php&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//Get an instance   </span>
+<span class="re0">$loader</span> <span class="sy0">=</span> <span class="kw2">new</span> YAHOO_util_Loader<span class="br0">&#40;</span><span class="st0">&quot;2.9.0&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+&nbsp;</pre></div><textarea id="syntax-64c49bcacb2ce7e6c536a8e48443e35b-plain">
+//Include the loader class file
+include("loader.php");
+
+//Get an instance
+$loader = new YAHOO_util_Loader("2.9.0");
+
+</textarea></div>
+
+
+<h2 id="using">Simple Use Case: Adding YUI Components to the Page with the <code>load()</code> Method</a></h2>
+
+<p>YUI PHP Loader makes it a simple thing to get started using YUI components. After creating an instance of <code>YAHOO_util_Loader</code> tell it what you want to load, and let it sort out all of the dependencies on your behalf.  When you are ready to output the CSS and/or JavaScript files simply call the <code>tags()</code> method.  Since we will cover the benefits of using rollup files later in this document we will turn them off for this first example.</p>
+<style>
+/**
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ */
+.php  {font-family:monospace;}
+.php .imp {font-weight: bold; color: red;}
+.php .kw1 {color: #b1b100;}
+.php .kw2 {color: #000000; font-weight: bold;}
+.php .kw3 {color: #990000;}
+.php .co1 {color: #666666; font-style: italic;}
+.php .co2 {color: #666666; font-style: italic;}
+.php .co3 {color: #0000cc; font-style: italic;}
+.php .co4 {color: #009933; font-style: italic;}
+.php .coMULTI {color: #666666; font-style: italic;}
+.php .es0 {color: #000099; font-weight: bold;}
+.php .es1 {color: #000099; font-weight: bold;}
+.php .es2 {color: #660099; font-weight: bold;}
+.php .es3 {color: #660099; font-weight: bold;}
+.php .es4 {color: #006699; font-weight: bold;}
+.php .es5 {color: #006699; font-weight: bold; font-style: italic;}
+.php .es6 {color: #009933; font-weight: bold;}
+.php .es_h {color: #000099; font-weight: bold;}
+.php .br0 {color: #009900;}
+.php .sy0 {color: #339933;}
+.php .sy1 {color: #000000; font-weight: bold;}
+.php .st0 {color: #0000ff;}
+.php .st_h {color: #0000ff;}
+.php .nu0 {color: #cc66cc;}
+.php .nu8 {color: #208080;}
+.php .nu12 {color: #208080;}
+.php .nu19 {color:#800080;}
+.php .me1 {color: #004000;}
+.php .me2 {color: #004000;}
+.php .re0 {color: #000088;}
+.php span.xtra { display:block; }
+
+</style>
+<div id="syntax-db612302467a5e29414d647ef2373d0b" class="yui-syntax-highlight"><div class="numbers"><pre class="php" style="font-family:monospace;"><ol><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw1">include</span><span class="br0">&#40;</span><span class="st0">&quot;loader.php&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="re0">$loader</span> <span class="sy0">=</span> <span class="kw2">new</span> YAHOO_util_Loader<span class="br0">&#40;</span><span class="st0">&quot;2.9.0&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">//Turn off rollups</span></div></li><li class="li1"><div class="de1"><span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">allowRollups</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//Specify YUI components to load</span></div></li><li class="li1"><div class="de1"><span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">load</span><span class="br0">&#40;</span><span class="st0">&quot;yahoo&quot;</span><span class="sy0">,</span> <span class="st0">&quot;dom&quot;</span><span class="sy0">,</span> <span class="st0">&quot;event&quot;</span><span class="sy0">,</span> <span class="st0">&quot;tabview&quot;</span><span class="sy0">,</span> <span class="st0">&quot;grids&quot;</span><span class="sy0">,</span> <span class="st0">&quot;fonts&quot;</span><span class="sy0">,</span> <span class="st0">&quot;reset&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//Output the tags (this call would most likely be placed in the document head)</span></div></li><li class="li1"><div class="de1"><span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">tags</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">This call will produce an output similar to the following:</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css&quot; /&gt;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/2.9.0/build/grids/grids-min.css&quot; /&gt;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css&quot; /&gt;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/2.9.0/build/tabview/assets/skins/sam/tabview.css&quot; /&gt;</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;&gt;&lt;/script&gt;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js&quot;&gt;&lt;/script&gt;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/event/event-min.js&quot;&gt;&lt;/script&gt;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;&gt;&lt;/script&gt;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/tabview/tabview-min.js&quot;&gt;&lt;/script&gt;</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">*/</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="php" style="font-family:monospace;">&nbsp;
+<span class="kw1">include</span><span class="br0">&#40;</span><span class="st0">&quot;loader.php&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="re0">$loader</span> <span class="sy0">=</span> <span class="kw2">new</span> YAHOO_util_Loader<span class="br0">&#40;</span><span class="st0">&quot;2.9.0&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//Turn off rollups</span>
+<span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">allowRollups</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//Specify YUI components to load</span>
+<span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">load</span><span class="br0">&#40;</span><span class="st0">&quot;yahoo&quot;</span><span class="sy0">,</span> <span class="st0">&quot;dom&quot;</span><span class="sy0">,</span> <span class="st0">&quot;event&quot;</span><span class="sy0">,</span> <span class="st0">&quot;tabview&quot;</span><span class="sy0">,</span> <span class="st0">&quot;grids&quot;</span><span class="sy0">,</span> <span class="st0">&quot;fonts&quot;</span><span class="sy0">,</span> <span class="st0">&quot;reset&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//Output the tags (this call would most likely be placed in the document head)</span>
+<span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">tags</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="coMULTI">/*
+This call will produce an output similar to the following:
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css&quot; /&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/2.9.0/build/grids/grids-min.css&quot; /&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css&quot; /&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/2.9.0/build/tabview/assets/skins/sam/tabview.css&quot; /&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/event/event-min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/tabview/tabview-min.js&quot;&gt;&lt;/script&gt;
+*/</span>
+&nbsp;
+&nbsp;</pre></div><textarea id="syntax-db612302467a5e29414d647ef2373d0b-plain">
+include("loader.php");
+$loader = new YAHOO_util_Loader("2.9.0");
+
+//Turn off rollups
+$loader->allowRollups = false;
+
+//Specify YUI components to load
+$loader->load("yahoo", "dom", "event", "tabview", "grids", "fonts", "reset");
+
+//Output the tags (this call would most likely be placed in the document head)
+$loader->tags();
+
+/*
+This call will produce an output similar to the following:
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/grids/grids-min.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/tabview/assets/skins/sam/tabview.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/tabview/tabview-min.js"></script>
+*/
+
+</textarea></div>
+
+<h2 id="config">Configuration Options</h2>
+
+<p>The following configuration options are supported by the YUI PHP Loader Utility.
+These can be set individually on a Loader instance:</p>
+
+<div class="apisummary">
+<table>
+    <thead>
+        <tr>
+            <th>Configuration Option</th>
+            <th>Purpose</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>base</td>
+            <td>(string) Allows you to specify a different location (as a full or relative filepath) for the YUI build directory. By default, YUI PHP Loader will <a href="http://developer.yahoo.com/yui/articles/hosting/">serve files from Yahoo's servers</a>.</td>
+        </tr>
+        <tr class="odd">
+            <td>filter</td>
+            <td>
+             (string) A filter to apply to result urls.  This filter will modify the default
+             path for all modules.  The default path for the YUI library is the
+             minified version of the files (e.g., <code>event-min.js</code>).  The valid filters are:
+             <dl>
+               <dt><code>YUI_DEBUG</code></dt>
+               <dd>Selects the debug versions of the library (e.g., <code>event-debug.js</code>).
+                  This option will automatically include the logger widget</dd>
+                  <dt><code>YUI_RAW</code></dt>
+                  <dd>Selects the non-minified version of the library (e.g., <code>event.js</code>).
+             </dl>
+            </td>
+        </tr>
+        <tr>
+            <td>allowRollups</td>
+            <td>(boolean) Should Loader use aggregate files (like <code>yahoo-dom-event.js</code> or <code>utilities.js</code>) that combine several YUI components in a single HTTP request?  Default: <code>true</code>.</td>
+        </tr>
+        <tr class="odd">
+            <td>loadOptional</td>
+            <td>(boolean) Should loader load optional dependencies for the components you're requesting? (Note: If you only want <em>some</em> but not <em>all</em> optional dependencies, you can list out the dependencies you want as part of your <code>required</code> list.) Default: <code>false</code>.</td>
+        </tr>
+        <tr>
+            <td>combine</td>
+
+            <td>(boolean) If set to true, YUI files will be combined into a single request using the combo service provided on the Yahoo! CDN</td>
+        </tr>
+        <tr class="odd">
+            <td>comboBase</td>
+            <td>
+              (string) The base path to the Yahoo! CDN service.  Default: <code>"http://yui.yahooapis.com/combo?</code> <strong>Note:</strong> YUI PHP Loader also ships with an intrinsic, lightweight combo-handler (see <code>combo.php</code>).  Refer to the included examples for example code and an illustration of how you might want to use this functionality.
+            </td>
+        </tr>
+    </tbody>
+    </table>
+</div>
+
+<h2 id="modulenames">YUI Module Names</h2>
+
+<p>Each YUI component has a corresponding module name that is used as a unique identifier within YUI scripts.  For example, the <a href="http://developer.yahoo.com/yui/event/">Event Utility</a> is internally referred to as <code>"event"</code>.  YUI PHP Loader loads components based on these unique module names.  Here is the full list of YUI module names.  All except YUI PHP Loader itself can be loaded via the Loader component.</p>
+
+<div class="apisummary">
+
+
+
+   <table>
+        <thead>
+            <tr>
+                <th>YUI Component</th>
+
+                <th>Module Name</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/animation/'>Animation
+                    Utility</a>
+                </td>
+
+                <td>animation</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/autocomplete/'>AutoComplete
+                    Control</a>
+                </td>
+
+                <td>autocomplete</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/base/'>Base CSS
+                    Style Foundation</a>
+                </td>
+
+                <td>base</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/button/'>Button
+                    Control</a>
+                </td>
+
+                <td>button</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/calendar/'>Calendar
+                    Control</a>
+                </td>
+
+                <td>calendar</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/carousel/'>Carousel
+                    Control</a>
+                </td>
+
+                <td>carousel</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/charts/'>Charts
+                    Control</a>
+                </td>
+
+                <td>charts</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/colorpicker/'>Color
+                    Picker Control</a>
+                </td>
+
+                <td>colorpicker</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/connection/'>Connection
+                    Manager</a>
+                </td>
+
+                <td>connection</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/cookie/'>Cookie
+                    Utility</a>
+                </td>
+
+                <td>cookie</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/container/'>Container
+                    Family Core (Module, Overlay)</a>
+                </td>
+
+                <td>containercore</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/container/'>Container
+                    Family (Module, Overlay Panel, Tooltip, Dialog,
+                    SimpleDialog)</a>
+                </td>
+
+                <td>container</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/datasource/'>DataSource
+                    Utility</a>
+                </td>
+
+                <td>datasource</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/datatable/'>DataTable
+                    Control</a>
+                </td>
+
+                <td>datatable</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/dom/'>Dom
+                    Collection</a>
+                </td>
+
+                <td>dom</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/dragdrop/'>Drag
+                    &amp; Drop Utility</a>
+                </td>
+
+                <td>dragdrop</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/editor/'>Rich Text
+                    Editor</a>
+                </td>
+
+                <td>editor</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/element/'>Element
+                    Utility</a>
+                </td>
+
+                <td>element</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/event/'>Event
+                    Utility</a>
+                </td>
+
+                <td>event</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/fonts/'>Fonts
+                    CSS</a>
+                </td>
+
+                <td>fonts</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/get/'>Get
+                    Utility</a>
+                </td>
+
+                <td>get</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/grids/'>Grids CSS
+                    Kit</a>
+                </td>
+
+                <td>grids</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/history/'>Browser
+                    History Manager</a>
+                </td>
+
+                <td>history</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/imageloader/'>ImageLoader
+                    Utility</a>
+                </td>
+
+                <td>imageloader</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/imagecropper/'>ImageCropper
+                    Control</a>
+                </td>
+
+                <td>imagecropper</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/json/'>JSON
+                    Utility</a>
+                </td>
+
+                <td>json</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/layout/'>Layout
+                    Manager</a>
+                </td>
+
+                <td>layout</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/logger/'>Logger
+                    Control</a>
+                </td>
+
+                <td>logger</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/menu/'>Menu
+                    Control</a>
+                </td>
+
+                <td>menu</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/paginator/'>Paginator</a>
+                </td>
+
+                <td>paginator</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/profiler/'>Profiler</a>
+                </td>
+
+                <td>profiler</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/profilerviewer/'>ProfilerViewer
+                    Control</a>
+                </td>
+
+                <td>profilerviewer</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/progressbar/'>ProgressBar
+                    Control</a>
+                </td>
+
+                <td>progressbar</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/resize/'>Resize
+                    Utility</a>
+                </td>
+
+                <td>resize</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/reset/'>Reset
+                    CSS</a>
+                </td>
+
+                <td>reset</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/selector/'>Selector
+                    Utility</a>
+                </td>
+
+                <td>selector</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/editor/'>Simple
+                    Editor</a>
+                </td>
+
+                <td>simpleeditor</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/slider/'>Slider
+                    Control</a>
+                </td>
+
+                <td>slider</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/storage/'>Storage
+                    Utility</a>
+                </td>
+
+                <td>storage</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/swf/'>Swf
+                    Utility</a>
+                </td>
+
+                <td>swf</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/swf/'>SwfDetect
+                    Utility</a>
+                </td>
+
+                <td>swfdetect</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/swfstore/'>SwfStore
+                    Utility</a>
+                </td>
+
+                <td>swfstore</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href=
+                    'http://developer.yahoo.com/yui/stylesheet/'>StyleSheet
+                    Utility</a>
+                </td>
+
+                <td>stylesheet</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/tabview/'>TabView
+                    Control</a>
+                </td>
+
+                <td>tabview</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/treeview/'>TreeView
+                    Control</a>
+                </td>
+
+                <td>treeview</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/uploader/'>Uploader
+                    Control</a>
+                </td>
+
+                <td>uploader</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/yahoo/'>YAHOO
+                    Global Object</a>
+                </td>
+
+                <td>yahoo</td>
+            </tr>
+
+            <tr class='odd'>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/yuiloader/'>YUI
+                    Loader Utility</a>
+                </td>
+
+                <td>yuiloader</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href='http://developer.yahoo.com/yui/yuitest/'>YUI
+                    Test</a>
+                </td>
+
+                <td>yuitest</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+<p>YUI ships with some aggregate or "rollup" files, each comprising two or more modules, to help you reduce the number of HTTP requests you make while loading YUI content.  Each aggregate file has its own module name.  Moreover, some modules provide the functionality of one or more modules in the above list.</p>
+
+<p>When you choose to <code><a href="http://developer.yahoo.com/yui/docs/YAHOO.util.YUILoader.html#property_allowRollup">allowRollup</a></code>s, YUI PHP Loader will choose the most appropriate set of files to meet your requirements while using the smallest number of included files. You can also specify an aggregate file directly as a requirement by requesting it by its own module name.  The following is a list of modules that aggregate or include multiple modules:</p>
+
+<div class="apisummary">
+<table><thead><tr><th>YUI Rollup</th><th>Provides</th></tr></thead><tbody><tr><td>container</td><td>containercore</td></tr><tr class='odd'><td>editor</td><td>simpleeditor</td></tr><tr><td>reset-fonts</td><td>reset, fonts</td></tr><tr class='odd'><td>reset-fonts-grids</td><td>reset, fonts, grids, reset-fonts</td></tr><tr><td>utilities</td><td>yahoo, event, dragdrop, animation, dom, connection, element, get, yuiloader, yahoo-dom-event</td></tr><tr class='odd'><td>yahoo-dom-event</td><td>yahoo, dom, event</td></tr><tr><td>yuiloader</td><td>yahoo, get</td></tr><tr class='odd'><td>yuiloader-dom-event</td><td>yahoo, dom, event, get, yuiloader, yahoo-dom-event</td></tr></tbody></table></div>
+
+<h2 id="using2">Refining Our Use Case: Cutting out extra HTTP requests</h2>
+
+<p>As noted in the <a href="#config">configuration table</a> the YUI PHP Loader provides some additional parameters that give us even more control over the loading and performance of our component selections.  By simply enabling rollups in this example we can cut down the total HTTP requests from 9 to 5.  If we enabled combo handling in addition to rollups we can reduce this down to just 2 HTTP requests; one per tag type (i.e.) link and script.  When combo-handling is enabled, it is often most efficient to disallow rollups, whose principal purpose is to reduce HTTP requests; because combo-handling minimizes requests at a foundational level, allowing rollups may increase the size of your JS/CSS payload without delivering any addtional functionality required by your application.</p>
+<style>
+/**
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ */
+.php  {font-family:monospace;}
+.php .imp {font-weight: bold; color: red;}
+.php .kw1 {color: #b1b100;}
+.php .kw2 {color: #000000; font-weight: bold;}
+.php .kw3 {color: #990000;}
+.php .co1 {color: #666666; font-style: italic;}
+.php .co2 {color: #666666; font-style: italic;}
+.php .co3 {color: #0000cc; font-style: italic;}
+.php .co4 {color: #009933; font-style: italic;}
+.php .coMULTI {color: #666666; font-style: italic;}
+.php .es0 {color: #000099; font-weight: bold;}
+.php .es1 {color: #000099; font-weight: bold;}
+.php .es2 {color: #660099; font-weight: bold;}
+.php .es3 {color: #660099; font-weight: bold;}
+.php .es4 {color: #006699; font-weight: bold;}
+.php .es5 {color: #006699; font-weight: bold; font-style: italic;}
+.php .es6 {color: #009933; font-weight: bold;}
+.php .es_h {color: #000099; font-weight: bold;}
+.php .br0 {color: #009900;}
+.php .sy0 {color: #339933;}
+.php .sy1 {color: #000000; font-weight: bold;}
+.php .st0 {color: #0000ff;}
+.php .st_h {color: #0000ff;}
+.php .nu0 {color: #cc66cc;}
+.php .nu8 {color: #208080;}
+.php .nu12 {color: #208080;}
+.php .nu19 {color:#800080;}
+.php .me1 {color: #004000;}
+.php .me2 {color: #004000;}
+.php .re0 {color: #000088;}
+.php span.xtra { display:block; }
+
+</style>
+<div id="syntax-004f7b7f4ced9feba995d0fbffa876a1" class="yui-syntax-highlight"><div class="numbers"><pre class="php" style="font-family:monospace;"><ol><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw1">include</span><span class="br0">&#40;</span><span class="st0">&quot;loader.php&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="re0">$loader</span> <span class="sy0">=</span> <span class="kw2">new</span> YAHOO_util_Loader<span class="br0">&#40;</span><span class="st0">&quot;2.9.0&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">//Turn on rollups (this is actually on by default)</span></div></li><li class="li1"><div class="de1"><span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">allowRollups</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//Specify YUI components to load</span></div></li><li class="li1"><div class="de1"><span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">load</span><span class="br0">&#40;</span><span class="st0">&quot;yahoo&quot;</span><span class="sy0">,</span> <span class="st0">&quot;dom&quot;</span><span class="sy0">,</span> <span class="st0">&quot;event&quot;</span><span class="sy0">,</span> <span class="st0">&quot;tabview&quot;</span><span class="sy0">,</span> <span class="st0">&quot;grids&quot;</span><span class="sy0">,</span> <span class="st0">&quot;fonts&quot;</span><span class="sy0">,</span> <span class="st0">&quot;reset&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">A call to tags method here would produce an output similar to the following:</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/2.9.0/build/reset-fonts-grids/reset-fonts-grids.css&quot; /&gt;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/2.9.0/build/tabview/assets/skins/sam/tabview.css&quot; /&gt;</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;&gt;&lt;/script&gt;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;&gt;&lt;/script&gt;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/tabview/tabview-min.js&quot;&gt;&lt;/script&gt;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">*/</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">//Enable combo handling</span></div></li><li class="li1"><div class="de1"><span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">combine</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//Output the tags (this call would most likely be placed in the document head)</span></div></li><li class="li1"><div class="de1"><span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">tags</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">The final output would now be similar to the following, a single HTTP request for each type (i.e.) CSS and JavaScript:</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/combo?2.9.0/build/reset-fonts-grids/reset-fonts-grids.css&amp;2.9.0/build/tabview/assets/skins/sam/tabview.css&quot; /&gt;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/combo?2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&amp;2.9.0/build/element/element-min.js&amp;2.9.0/build/tabview/tabview-min.js&quot;&gt;&lt;/script&gt;&lt;/head&gt;</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">*/</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="php" style="font-family:monospace;">&nbsp;
+<span class="kw1">include</span><span class="br0">&#40;</span><span class="st0">&quot;loader.php&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="re0">$loader</span> <span class="sy0">=</span> <span class="kw2">new</span> YAHOO_util_Loader<span class="br0">&#40;</span><span class="st0">&quot;2.9.0&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//Turn on rollups (this is actually on by default)</span>
+<span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">allowRollups</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//Specify YUI components to load</span>
+<span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">load</span><span class="br0">&#40;</span><span class="st0">&quot;yahoo&quot;</span><span class="sy0">,</span> <span class="st0">&quot;dom&quot;</span><span class="sy0">,</span> <span class="st0">&quot;event&quot;</span><span class="sy0">,</span> <span class="st0">&quot;tabview&quot;</span><span class="sy0">,</span> <span class="st0">&quot;grids&quot;</span><span class="sy0">,</span> <span class="st0">&quot;fonts&quot;</span><span class="sy0">,</span> <span class="st0">&quot;reset&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="coMULTI">/*
+A call to tags method here would produce an output similar to the following:
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/2.9.0/build/reset-fonts-grids/reset-fonts-grids.css&quot; /&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/2.9.0/build/tabview/assets/skins/sam/tabview.css&quot; /&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/2.9.0/build/tabview/tabview-min.js&quot;&gt;&lt;/script&gt;
+*/</span>
+&nbsp;
+<span class="co1">//Enable combo handling</span>
+<span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">combine</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//Output the tags (this call would most likely be placed in the document head)</span>
+<span class="re0">$loader</span><span class="sy0">-&gt;</span><span class="me1">tags</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="coMULTI">/*
+The final output would now be similar to the following, a single HTTP request for each type (i.e.) CSS and JavaScript:
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/combo?2.9.0/build/reset-fonts-grids/reset-fonts-grids.css&amp;2.9.0/build/tabview/assets/skins/sam/tabview.css&quot; /&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://yui.yahooapis.com/combo?2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&amp;2.9.0/build/element/element-min.js&amp;2.9.0/build/tabview/tabview-min.js&quot;&gt;&lt;/script&gt;&lt;/head&gt;
+*/</span>
+&nbsp;
+&nbsp;</pre></div><textarea id="syntax-004f7b7f4ced9feba995d0fbffa876a1-plain">
+include("loader.php");
+$loader = new YAHOO_util_Loader("2.9.0");
+
+//Turn on rollups (this is actually on by default)
+$loader->allowRollups = true;
+
+//Specify YUI components to load
+$loader->load("yahoo", "dom", "event", "tabview", "grids", "fonts", "reset");
+
+/*
+A call to tags method here would produce an output similar to the following:
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/reset-fonts-grids/reset-fonts-grids.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/tabview/assets/skins/sam/tabview.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/tabview/tabview-min.js"></script>
+*/
+
+//Enable combo handling
+$loader->combine = true;
+
+//Output the tags (this call would most likely be placed in the document head)
+$loader->tags();
+
+/*
+The final output would now be similar to the following, a single HTTP request for each type (i.e.) CSS and JavaScript:
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.9.0/build/reset-fonts-grids/reset-fonts-grids.css&2.9.0/build/tabview/assets/skins/sam/tabview.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&2.9.0/build/element/element-min.js&2.9.0/build/tabview/tabview-min.js"></script></head>
+*/
+
+</textarea></div>
+<p>In addition to the <code>tags()</code> method, there are a number of other class methods that will allow you to do things like embed the code inline and fetch the CSS and JavaScript seperately (which is not a bad idea since there are <a href="http://developer.yahoo.com/performance/rules.html">well known performance benefits</a> to placing CSS in the document head and JavaScript near the bottom of your document).  For more information on these and other methods, please refer to the API documents.</p>
+
+<h2 id="metainfo">Understanding the Metadata</h2>
+
+<p>YUI PHP Loader relies on metadata files to calculate module dependencies, rollups, sort order, etc.  The metadata files are located in the lib/meta folder.  By default YUI PHP Loader ships with metadata for the latest YUI releases; both versions 2 and 3.  Additional metadata can be added as needed to support older and/or newer YUI releases.  YUI PHP Loader uses pre-built PHP config files first, but is capable of parsing YUI JSON metadata files if no PHP config file is available.  The naming convention for PHP config files is <code>config_{yui version}.php</code> (e.g. <code>config_2.9.0.php</code>).  The naming convention for JSON config files is <code>json_{yui version}.txt</code> (e.g. <code>json_2.9.0.txt</code>).</p>
+
+    <h2 id="support">Support &amp; Community</h2>
+    <p>The YUI Library and related topics are discussed on the on the <a href="http://yuilib.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+
+    <h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+
+    <p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="/yui/articles/reportingbugs/">our reporting guidelines</a>.</p>
+
+
+</div>
+
+<div class="yui-u">
+  <!-- del.icio.us link removed -->
+</div>
+
+
+</div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="/yui/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="/yui/3/">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="/yui/license.html">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- proven and robust." href="/yui/2/">YUI 2</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="/yui/examples/">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="/yui/docs/">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="http://yuilibrary.com/forum/viewforum.php?f=4">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="item"><a title="Configure your YUI implementation; serve YUI source files from Yahoo! -- free, fast, and simple" href="/yui/articles/hosting/">Dependency Configurator</a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="/yui/animation/">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="/yui/autocomplete/">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="/yui/history/">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="/yui/button/">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="/yui/calendar/">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="/yui/carousel/">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="/yui/charts/">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="/yui/colorpicker/">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="/yui/connection/">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="/yui/container/">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="/yui/cookie/">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="/yui/datasource/">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="/yui/datatable/">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="/yui/dom/">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="/yui/dragdrop/">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="/yui/element/">Element</a></li><li class="item"><a title="The YUI Event Utility" href="/yui/event/">Event</a></li><li class="item"><a title="The YUI Get Utility" href="/yui/get/">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="/yui/imagecropper/">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="/yui/imageloader/">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="/yui/json/">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="/yui/layout/">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="/yui/logger/">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="/yui/menu/">Menu</a></li><li class="item"><a title="The YUI Paginator" href="/yui/paginator/">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="/yui/profiler/">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="/yui/profilerviewer/">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="/yui/progressbar/">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="/yui/resize/">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="/yui/editor/">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="/yui/selector/">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="/yui/slider/">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="/yui/storage/">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="/yui/stylesheet/">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="/yui/swf/">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="/yui/swfstore/">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="/yui/tabview/">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="/yui/treeview/">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="/yui/uploader/">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="/yui/yahoo/">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="/yui/yuiloader/">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="/yui/yuitest/">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="/yui/reset/">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="/yui/base/">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="/yui/fonts/">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="/yui/grids/">Grids CSS</a></li></ul>
+</div>
+</div>
+
+    <div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+    </div>
+</div>
+
+<script src="/yui/assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->   <script type="text/javascript" src="/yui/inc/yuiModuleMeta.js?v=3"></script>
+    <script type="text/javascript" src="/yui/docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="/yui/3/assets/syntax.js"></script>
+
+
+
+</body>
+</html>
