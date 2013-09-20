@@ -17,7 +17,7 @@ ol,ul,dl {
 	margin-left:2em;
 }
 ol li {
-	list-style: decimal outside;	
+	list-style: decimal outside;
 }
 ul li {
 	list-style: disc outside;
@@ -45,7 +45,7 @@ ol {list-style:decimal;}
 strong {font-weight:bold;}
 em {font-style:italic;}
 
-a, a code {color:#0000de;} 
+a, a code {color:#0000de;}
 a:visited, a:visited code {color:#639;}
 a:active, a:active code {color: #f00;}
 
@@ -206,8 +206,8 @@ firstContent {margin-top:0; padding-top:0;}
 .example-container>.bd:after {content:'.';visibility:hidden;clear:left;height:0;display:block;}
 .example-container .exampleHd {background: url(example-hd-bg.gif) 0 0 repeat-x #4E4D4C; }
 .example-container h3 {margin:.2em 0 .4em 0;}
-.example .example-container h1, .example .example-container h2, .example .example-container h3, .example .example-container h4, .example .example-container h5, .example .example-container h6 {color:#E76300; font-weight:bold;} 
-.example-container a {color:#000;} 
+.example .example-container h1, .example .example-container h2, .example .example-container h3, .example .example-container h4, .example .example-container h5, .example .example-container h6 {color:#E76300; font-weight:bold;}
+.example-container a {color:#000;}
 .example-container a:visited, .example-container a:visited code {color:#000;}
 .example-container a:active, .example-container a:active code {color: #000;}
 
@@ -264,8 +264,8 @@ p.loggerButton {text-align:center;}
  word-wrap: break-word;       /* Internet Explorer 5.5+ */
  font-size: 100%;
  color:#000033;}
- 
-/*ed eliot's server-side delicious badge css*/ 
+
+/*ed eliot's server-side delicious badge css*/
  #delicious-badge {margin-top:.6em; font: 85% Arial, sans-serif; border: 1px solid #b1b1b1; }
 #delicious-badge .bookmark { background: url(http://images.del.icio.us/static/img/delicious.small.gif) no-repeat left center; padding-left: 15px; font-weight: bold; }
 #delicious-badge p, #delicious-badge div { padding: 7px; margin: 0; text-align: center; }
@@ -414,3 +414,9 @@ p.loggerButton {text-align:center;}
 .yui-syntax-highlight .css .re3 {color: #933;}
 .yui-syntax-highlight .css span.xtra { display:block; }
 
+
+/* repo styles */
+
+.yui-ge div.first {
+    width: 100%;
+}
