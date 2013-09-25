@@ -17,15 +17,17 @@ to a page on which some YUI content already exists.
 phploader requires a webserver with support for PHP 4.3.0+ or PHP 5+.
 
 The code for YUI phploader is provided under a BSD license:
-    http://developer.yahoo.net/yui/license.html
+    http://yuilibrary.com/license/
 
 Project home page:
-    http://developer.yahoo.com/yui/phploader
+    http://yui.github.io/phploader
+
+Archived documentation:
+    http://yui.github.io/phploader/docs/current
+    
 Source code:
     http://github.com/yui/phploader
 
-Issue tracker:
-    http://yuilibrary.com/projects/phploader
 
 
 Files
