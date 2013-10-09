@@ -8,15 +8,15 @@ MODIFIED TO HANDLE THE NEW ALIAS SYSTEM IN ORDER TO FUNCTION PROPERLY.
 PULL REQUESTS ARE WELCOME!
 
 
-The YUI PHP Loader Utility is a server-side utility that allows you to 
+The YUI PHP Loader Utility is a server-side utility that allows you to
 load specific YUI components and their dependencies into your page via PHP.
-YUI PHP Loader can operate as a holistic solution by loading all of your 
-necessary YUI components, or it can be used to add one or more components 
+YUI PHP Loader can operate as a holistic solution by loading all of your
+necessary YUI components, or it can be used to add one or more components
 to a page on which some YUI content already exists.
 
-phploader requires a webserver with support for PHP 4.3.0+ or PHP 5+.
+YUI PHP Loader requires a webserver with support for PHP 4.3.0+ or PHP 5+.
 
-The code for YUI phploader is provided under a BSD license:
+The code for YUI PHP Loader is provided under a BSD license:
     http://yuilibrary.com/license/
 
 Project home page:
@@ -24,7 +24,7 @@ Project home page:
 
 Archived documentation:
     http://yui.github.io/phploader/docs/current
-    
+
 Source code:
     http://github.com/yui/phploader
 
@@ -57,7 +57,7 @@ phploader/loader.php
     The main YUI PHP Loader class file
 
 phploader/combo.php
-    Local lightweight combo handling service that will allow PHP Loader to 
+    Local lightweight combo handling service that will allow PHP Loader to
     combine files without relying on a remote combo-service.
 
 phploader/tests
