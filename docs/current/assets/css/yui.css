@@ -420,3 +420,30 @@ p.loggerButton {text-align:center;}
 .yui-ge div.first {
     width: 100%;
 }
+
+/* deprecation styles */
+
+#deprecatemsg {
+    background-color: #355E95;
+    margin: 0px;
+    padding: .8em;
+    color: #FFF;
+}
+
+#deprecatemsg a {
+    text-decoration: none;
+    color: #F29752;
+}
+
+#deprecatemsg div {
+    margin: .5em;
+}
+
+#deprecatemsg div.dep-subhd,
+#deprecatemsg div.dep-details {
+    font-size: 120%;
+}
+
+#deprecatemsg div.dep-hd {
+    font-size: 177%;
+}
