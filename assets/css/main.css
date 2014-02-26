@@ -3,3 +3,35 @@ body {
 }
 
 
+#notice {
+
+
+    background: #faf3d1;
+    border: 1px solid #eac9a9;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: px;
+    padding: 0 1em 0 1em;
+
+    -moz-box-shadow: 0 0 5px #ccc8b3;
+    -webkit-box-shadow: 0 0 5px #ccc8b3;
+    box-shadow: 0 0 5px #ccc8b3;
+    xmargin: 15px;
+}
+
+#notice ul {
+    display: block;
+    padding-left: 2em;
+    padding-top: .1em;
+}
+
+#notice ul li {
+    margin-left: 1em;
+    list-style-type: disc;
+}
+
+#notice strong {
+    font-weight: bold;
+}
+
+
