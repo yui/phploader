@@ -1,7 +1,14 @@
 body {
     font-family: sans-serif;
+    color: #666;
+    font-size: 114%;
 }
 
+#loadertitle {
+    text-align: center;
+    color: #555;
+
+}
 
 #notice {
 
