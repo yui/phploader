@@ -1,13 +1,22 @@
 body {
     font-family: sans-serif;
     color: #666;
-    font-size: 114%;
+    font-size: 108%;
 }
 
 #loadertitle {
     text-align: center;
     color: #555;
 
+}
+
+a {
+    color: #265778;
+    text-decoration: none;
+}
+
+#content {
+    font-family: 'Open Sans', sans-serif;
 }
 
 #notice {
